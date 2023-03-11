@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/iCITMA/dpkeys
+/iCITMA/Migrations
+/iCITMA/wwwroot/media/images
+/iCITMA/appsettings.Development.json
+/iCITMA/appsettings.json
+/iCITMA/appsettings.Staging.json
