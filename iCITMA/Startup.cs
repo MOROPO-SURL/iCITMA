@@ -49,6 +49,8 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.PerformMiddlewareSecurityIdentityWebBackendServiceRegistration();
             services.PerformMiddlewareMediaWebCommonRelativePathFileManagementServiceRegistration();
 
+            services.AddSingleton<SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
+
             services.AddAuthentication(config =>
             {
                 config.DefaultScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;

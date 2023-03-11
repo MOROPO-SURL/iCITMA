@@ -58,5 +58,47 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF
         public DbSet<OrganizationIdentity> OrganizationIdentities { get; set; }
         public DbSet<OrganizationSocialContactItemBridge> OrganizationSocialContactItemBridges { get; set; }
         public DbSet<OrganizationWebSiteContactItemBridge> OrganizationWebSiteContactItemBridges { get; set; }
+
+        public DbSet<Entities.Currency> Currencies { get; set; }
+        public DbSet<Entities.Document> Documents { get; set; }
+        public DbSet<Entities.Funding> Fundings { get; set; }
+        public DbSet<Entities.FundingSource> FundingSources { get; set; }
+        public DbSet<Entities.ImpactIndicator> ImpactIndicators { get; set; }
+        public DbSet<Entities.Institution> Institutions { get; set; }
+        public DbSet<Entities.KeyWord> KeyWords { get; set; }
+        public DbSet<Entities.ODSIndicator> ODSIndicators { get; set; }
+        public DbSet<Entities.OutputKind> OutputKinds { get; set; }
+        public DbSet<Entities.Person> Persons { get; set; }
+        public DbSet<Entities.PersonInstitutionBridge> PersonInstitutionBridges { get; set; }
+        public DbSet<Entities.PersonResearchAreaDoctorateBridge> PersonResearchAreaDoctorateBridges { get; set; }
+        public DbSet<Entities.PersonResearchAreaMasteryBridge> PersonResearchAreaMasteryBridges { get; set; }
+        public DbSet<Entities.PersonResearchAreaSpecializationBridge> PersonResearchAreaSpecializationBridges { get; set; }
+        public DbSet<Entities.Program> Programs { get; set; }
+        public DbSet<Entities.ProgramCategory> ProgramCategories { get; set; }
+        public DbSet<Entities.ProgramDocumentBridge> ProgramDocumentBridges { get; set; }
+        public DbSet<Entities.ProgramExpectResult> ProgramExpectResults { get; set; }
+        public DbSet<Entities.ProgramImpactIndicatorBridge> ProgramImpactIndicatorBridges { get; set; }
+        public DbSet<Entities.ProgramKeyWordBridge> ProgramKeyWordBridges { get; set; }
+        public DbSet<Entities.ProgramPersonExpertBridge> ProgramPersonExpertBridges { get; set; }
+        public DbSet<Entities.Project> Projects { get; set; }
+        public DbSet<Entities.ProjectCategory> ProjectCategories { get; set; }
+        public DbSet<Entities.ProjectCurrencyBudgetBridge> ProjectCurrencyBudgetBridges { get; set; }
+        public DbSet<Entities.ProjectImpact> ProjectImpacts { get; set; }
+        public DbSet<Entities.ProjectImpactODSIndicatorBridge> ProjectImpactODSIndicatorBridges { get; set; }
+        public DbSet<Entities.ProjectImpactProgramExpectResultBridge> ProjectImpactProgramExpectResultBridges { get; set; }
+        public DbSet<Entities.ProjectInstitutionClientBridge> ProjectInstitutionClientBridges { get; set; }
+        public DbSet<Entities.ProjectInstitutionParticipationBridge> ProjectInstitutionParticipationBridges { get; set; }
+        public DbSet<Entities.ProjectKeyWordBridge> ProjectKeyWordBridges { get; set; }
+        public DbSet<Entities.ProjectOutput> ProjectOutputs { get; set; }
+        public DbSet<Entities.ProjectPersonParticipationBridge> ProjectPersonParticipationBridges { get; set; }
+        public DbSet<Entities.ProjectProgramExpectResultBridge> ProjectProgramExpectResultBridges { get; set; }
+        public DbSet<Entities.ProjectSpecificObjective> ProjectSpecificObjectives { get; set; }
+        public DbSet<Entities.ProjectState> ProjectStates { get; set; }
+        public DbSet<Entities.ProyectSpectResult> ProyectSpectResults { get; set; }
+        public DbSet<Entities.ResearchArea> ResearchAreas { get; set; }
+        public DbSet<Entities.ResearcherCategory> ResearcherCategories { get; set; }
+        public DbSet<Entities.SceneryKind> SceneryKinds { get; set; }
+        public DbSet<Entities.TeachingCategory> TeachingCategories { get; set; }
+        public DbSet<Entities.ProgramInstitutionResponsibleBridge> ProgramInstitutionResponsibleBridges { get; set; }
     }
 }
