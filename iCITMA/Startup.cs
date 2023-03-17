@@ -11,7 +11,10 @@ using MOROPO.CITMA.CMG.iCITMA.Managers;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Options;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.EF;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.SAPRESSC.Core.Persistence.EF.Extensions;
+using MOROPO.SAPRESSC.Core.Persistence.Repositories;
 using MOROPO.SAPRESSC.Core.Security.Common.Web.Frontend.Extensions;
 using MOROPO.SAPRESSC.Middleware.Media.Web.Common.Extensions;
 using MOROPO.SAPRESSC.Middleware.Security.Identity.Persistence.EF.Extensions;
@@ -49,7 +52,11 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.PerformMiddlewareSecurityIdentityWebBackendServiceRegistration();
             services.PerformMiddlewareMediaWebCommonRelativePathFileManagementServiceRegistration();
 
+            services.AddScoped<IEntityRepository<ImpactIndicator, System.Guid>, ImpactIndicatorRepository>();
+
             services.AddSingleton<SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
+
+            services.AddSingleton<SAPRESSC.Core.Persistence.EF.Helpers.Facade.IDataInitializationHelper, Helpers.ApplicationDataInitializationHelper>();
 
             services.AddAuthentication(config =>
             {

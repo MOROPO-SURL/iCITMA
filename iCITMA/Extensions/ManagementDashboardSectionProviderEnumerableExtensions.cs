@@ -17,9 +17,22 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                 }
             }
 
+            var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
+            {
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Inicador de Impacto",
+                  Controller = "ImpactIndicators",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ImpactIndicatorViewer
+              }
+            };
+
             return new Dictionary<string, ICollection<ManagementDashboardSectionViewModel>>
             {
-                { "Seguridad", securitySections }
+                { "Seguridad", securitySections },
+                { "Auxiliares", auxiliaresSections },
             };
         }
     }
