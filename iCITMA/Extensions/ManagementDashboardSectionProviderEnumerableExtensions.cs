@@ -21,8 +21,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
             {
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Inicador de Impacto",
+                  Title = "Indicador de Impacto",
                   Controller = "ImpactIndicators",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ImpactIndicatorViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Estados de Proyecto",
+                  Controller = "ProjectStates",
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ImpactIndicatorViewer

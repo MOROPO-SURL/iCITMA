@@ -33,6 +33,25 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
                 permissionDbSet.Add(Security.Authorization.Permission.ImpactIndicatorRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ImpactIndicatorManagement));
             }
             #endregion
+
+            #region ProjectState
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ProjectStateViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ProjectStateCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ProjectStateEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ProjectStateRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
+            }
+            #endregion
         }
     }
 }

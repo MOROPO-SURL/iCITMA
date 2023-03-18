@@ -15,5 +15,17 @@
         public const string ImpactIndicatorRemover = "impact-indicator-remover";
 
         #endregion
+
+        #region ProjectState
+
+        public const string ProjectStateViewer = "project-state-viewer";
+
+        public const string ProjectStateCreator = "project-state-creator";
+
+        public const string ProjectStateEditor = "project-state-editor";
+
+        public const string ProjectStateRemover = "project-state-remover";
+
+        #endregion
     }
 }

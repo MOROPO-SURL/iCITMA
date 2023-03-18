@@ -53,6 +53,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.PerformMiddlewareMediaWebCommonRelativePathFileManagementServiceRegistration();
 
             services.AddScoped<IEntityRepository<ImpactIndicator, System.Guid>, ImpactIndicatorRepository>();
+            services.AddScoped<IEntityRepository<ProjectState, System.Guid>, ProjectStateRepository>();
 
             services.AddSingleton<SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
 

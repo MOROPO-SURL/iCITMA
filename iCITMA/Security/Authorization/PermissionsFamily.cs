@@ -3,5 +3,7 @@
     internal static class PermissionsFamily
     {
         internal const string ImpactIndicatorManagement = "impact-indicator-management";
+
+        internal const string ProjectStateManagement = "project-state-management";
     }
 }
