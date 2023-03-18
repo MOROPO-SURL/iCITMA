@@ -54,6 +54,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
 
             services.AddScoped<IEntityRepository<ImpactIndicator, System.Guid>, ImpactIndicatorRepository>();
             services.AddScoped<IEntityRepository<ProjectState, System.Guid>, ProjectStateRepository>();
+            services.AddScoped<IEntityRepository<ResearchArea, System.Guid>, ResearchAreaRepository>();
 
             services.AddSingleton<SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
 

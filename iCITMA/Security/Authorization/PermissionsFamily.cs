@@ -5,5 +5,7 @@
         internal const string ImpactIndicatorManagement = "impact-indicator-management";
 
         internal const string ProjectStateManagement = "project-state-management";
+
+        internal const string ResearchManagement = "research-area-management";
     }
 }

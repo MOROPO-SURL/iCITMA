@@ -33,7 +33,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Controller = "ProjectStates",
                   Action = "index",
                   Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ImpactIndicatorViewer
+                  Role = Security.Authorization.Permission.ProjectStateViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Areas de Investigación",
+                  Controller = "ResearchAreas",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ResearchAreaViewer
               }
             };
 

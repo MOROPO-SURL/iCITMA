@@ -27,5 +27,17 @@
         public const string ProjectStateRemover = "project-state-remover";
 
         #endregion
+
+        #region ResearchArea
+
+        public const string ResearchAreaViewer = "research-area-viewer";
+
+        public const string ResearchAreaCreator = "research-area-creator";
+
+        public const string ResearchAreaEditor = "research-area-editor";
+
+        public const string ResearchAreaRemover = "research-area-remover";
+
+        #endregion
     }
 }
