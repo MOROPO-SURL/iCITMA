@@ -42,6 +42,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ResearchAreaViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Gestión de Tipo de Salida",
+                  Controller = "OutputKinds",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ResearchAreaViewer
               }
             };
 

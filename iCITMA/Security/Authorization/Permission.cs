@@ -39,5 +39,17 @@
         public const string ResearchAreaRemover = "research-area-remover";
 
         #endregion
+
+        #region OutputKind
+
+        public const string OutputKindViewer = "output-kind-viewer";
+
+        public const string OutputKindCreator = "output-kind-creator";
+
+        public const string OutputKindEditor = "output-kind-editor";
+
+        public const string OutputKindRemover = "output-kind-remover";
+
+        #endregion
     }
 }

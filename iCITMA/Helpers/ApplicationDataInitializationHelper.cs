@@ -57,19 +57,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaViewer)).Result)
             {
-                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchManagement));
+                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaCreator)).Result)
             {
-                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchManagement));
+                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaEditor)).Result)
             {
-                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchManagement));
+                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaRemover)).Result)
             {
-                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchManagement));
+                permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
             #endregion
         }
