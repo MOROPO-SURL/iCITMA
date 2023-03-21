@@ -8,6 +8,8 @@
 
         internal const string ResearchAreaManagement = "research-area-management";
 
-        internal const string OutKindManagement = "out-kind-management";
+        internal const string OutputKindManagement = "output-kind-management";
+
+        internal const string SceneryKindManagement = "scenery-kind-management";
     }
 }

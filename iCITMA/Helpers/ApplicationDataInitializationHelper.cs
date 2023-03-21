@@ -72,6 +72,46 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
                 permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
             #endregion
+
+            #region OutputKind
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.OutputKindViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.OutputKindCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.OutputKindEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.OutputKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
+            }
+            #endregion
+
+            #region SceneryKind
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.SceneryKindViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.SceneryKindCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.SceneryKindEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
+            }
+            #endregion
         }
     }
 }

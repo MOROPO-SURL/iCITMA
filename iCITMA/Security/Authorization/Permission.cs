@@ -51,5 +51,17 @@
         public const string OutputKindRemover = "output-kind-remover";
 
         #endregion
+        
+        #region SceneryKind
+
+        public const string SceneryKindViewer = "scenery-kind-viewer";
+
+        public const string SceneryKindCreator = "scenery-kind-creator";
+
+        public const string SceneryKindEditor = "scenery-kind-editor";
+
+        public const string SceneryKindRemover = "scenery-kind-remover";
+
+        #endregion
     }
 }

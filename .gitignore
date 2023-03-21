@@ -354,3 +354,5 @@ MigrationBackup/
 /iCITMA/appsettings.Development.json
 /iCITMA/appsettings.json
 /iCITMA/appsettings.Staging.json
+/.vscode/launch.json
+/.vscode/tasks.json

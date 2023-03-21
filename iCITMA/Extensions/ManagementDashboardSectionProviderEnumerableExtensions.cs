@@ -49,7 +49,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Controller = "OutputKinds",
                   Action = "index",
                   Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ResearchAreaViewer
+                  Role = Security.Authorization.Permission.OutputKindViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Gestión de Tipos de Escenario",
+                  Controller = "SceneryKinds",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.SceneryKindViewer
               }
             };
 
