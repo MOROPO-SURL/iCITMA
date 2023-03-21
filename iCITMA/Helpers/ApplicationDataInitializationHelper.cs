@@ -112,6 +112,26 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
             }
             #endregion
+
+            #region SceneryKind
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.FundingSourceViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.FundingSourceCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.FundingSourceEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
+            }
+            #endregion
         }
     }
 }

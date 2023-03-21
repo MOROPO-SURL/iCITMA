@@ -62,6 +62,18 @@
 
         public const string SceneryKindRemover = "scenery-kind-remover";
 
+        #endregion 
+
+        #region FundingSource
+
+        public const string FundingSourceViewer = "funding-source-viewer";
+
+        public const string FundingSourceCreator = "funding-source-creator";
+
+        public const string FundingSourceEditor = "funding-source-editor";
+
+        public const string FundingSourceRemover = "funding-source-remover";
+
         #endregion
     }
 }

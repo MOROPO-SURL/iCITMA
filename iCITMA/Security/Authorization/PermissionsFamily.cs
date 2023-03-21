@@ -10,6 +10,8 @@
 
         internal const string OutputKindManagement = "output-kind-management";
 
-        internal const string SceneryKindManagement = "scenery-kind-management";
+        internal const string SceneryKindManagement = "scenery-kind-management"; 
+
+        internal const string FundingSourceManagement = "funding-source-management";
     }
 }

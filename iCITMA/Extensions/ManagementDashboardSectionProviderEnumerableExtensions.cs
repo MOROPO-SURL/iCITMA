@@ -58,6 +58,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.SceneryKindViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Gestión de Fuentes de Presupuesto",
+                  Controller = "FundingSources",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.FundingSourceViewer
               }
             };
 
