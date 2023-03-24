@@ -17,6 +17,7 @@ using MOROPO.SAPRESSC.Core.Persistence.EF.Extensions;
 using MOROPO.SAPRESSC.Core.Persistence.Repositories;
 using MOROPO.SAPRESSC.Core.Security.Common.Web.Frontend.Extensions;
 using MOROPO.SAPRESSC.Middleware.Media.Web.Common.Extensions;
+using MOROPO.SAPRESSC.Middleware.Region.Web.SecurityLocal.Extensions;
 using MOROPO.SAPRESSC.Middleware.Security.Identity.Persistence.EF.Extensions;
 using MOROPO.SAPRESSC.Middleware.Security.Identity.Web.Backend.Extensions;
 using MOROPO.SAPRESSC.Middleware.Security.Identity.Web.Common.Extensions;
@@ -51,6 +52,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.PerformMiddlewareSecurityIdentityWebCommonServiceRegistration();
             services.PerformMiddlewareSecurityIdentityWebBackendServiceRegistration();
             services.PerformMiddlewareMediaWebCommonRelativePathFileManagementServiceRegistration();
+            services.PerformMiddlewareRegionWebSecurityLocalServiceRegistration();
 
             services.AddScoped<IEntityRepository<ImpactIndicator, System.Guid>, ImpactIndicatorRepository>();
             services.AddScoped<IEntityRepository<ProjectState, System.Guid>, ProjectStateRepository>();

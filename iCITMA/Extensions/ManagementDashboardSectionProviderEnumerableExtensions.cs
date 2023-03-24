@@ -14,6 +14,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                 if (provider is SAPRESSC.Middleware.Security.Identity.Web.Backend.Providers.ManagementDashboardSectionProvider)
                 {
                     securitySections.AddRange(provider.GetManagementDashboardSections());
+                    
                 }
             }
 
@@ -66,6 +67,22 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.FundingSourceViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Provincias",
+                  Controller = "states",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = SAPRESSC.Middleware.Region.Security.Constants.Roles.StateViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Municipios",
+                  Controller = "municipalities",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = SAPRESSC.Middleware.Region.Security.Constants.Roles.MunicipalityViewer
               }
             };
 

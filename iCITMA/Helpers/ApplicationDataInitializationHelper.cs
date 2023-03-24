@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MOROPO.SAPRESSC.Core.Security.Common.Persistence.Entities;
 using MOROPO.SAPRESSC.Core.Security.Common.Persistence.EF.Extensions;
+using MOROPO.SAPRESSC.Middleware.Region.Persistence.Entities;
+using System.Linq;
+using MOROPO.CITMA.CMG.iCITMA.RegionConst;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 {
     public class ApplicationDataInitializationHelper : SAPRESSC.Core.Persistence.EF.Helpers.Facade.IDataInitializationHelper
     {
+        private const string CUBA_COUNTRY_NAME = "Cuba";
         public void InitialiseData(DbContext dbContext)
         {
             var permissionDbSet = dbContext.Set<Permission>();
@@ -132,6 +136,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
             }
             #endregion
+
+            var countryDbSet = dbContext.Set<Country>();
+
+            var country = countryDbSet.FirstOrDefault(e => e.Name.Equals(CUBA_COUNTRY_NAME));
+
+            if (country == null)
+            {
+                country = new Country { Name = CUBA_COUNTRY_NAME, IsoCode = "cu", Id = RegionInitConstant.MY_COUNTRY };
+
+                countryDbSet.Add(country);
+            }
+
+            dbContext.SaveChanges();
         }
     }
 }

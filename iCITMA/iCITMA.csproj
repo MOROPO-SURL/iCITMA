@@ -23,6 +23,8 @@
 	<PackageReference Include="SAPRESSC.Core.Security.Common.Web.Backend" Version="2.2.6.6" />
 	<PackageReference Include="SAPRESSC.Core.Security.Common.Web.Frontend" Version="2.2.6.6" />
 	<PackageReference Include="SAPRESSC.Middleware.Media.Web.Common" Version="2.2.6.6" />
+	<PackageReference Include="SAPRESSC.Middleware.Region.Web.Backend" Version="2.2.6.5" />
+	<PackageReference Include="SAPRESSC.Middleware.Region.Web.SecurityLocal" Version="2.2.6.6" />
 	<PackageReference Include="SAPRESSC.Middleware.Security.Identity.Web.Backend" Version="2.2.6.6" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
 	<PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
@@ -33,6 +35,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iCITMA.Persistence\iCITMA.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
