@@ -75,5 +75,17 @@
         public const string FundingSourceRemover = "funding-source-remover";
 
         #endregion
+
+        #region FundingSource
+
+        public const string ResearcherCategoryViewer = "researcher-category-viewer";
+
+        public const string ResearcherCategoryCreator = "researcher-category-creator";
+
+        public const string ResearcherCategoryEditor = "researcher-category-editor";
+
+        public const string ResearcherCategoryRemover = "researcher-category-remover";
+
+        #endregion
     }
 }

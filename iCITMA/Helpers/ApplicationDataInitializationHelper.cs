@@ -117,7 +117,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
-            #region SceneryKind
+            #region FundingSource
 
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceViewer)).Result)
             {
@@ -134,6 +134,26 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceRemover)).Result)
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
+            }
+            #endregion
+
+            #region ResearcherCategory
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
             }
             #endregion
 

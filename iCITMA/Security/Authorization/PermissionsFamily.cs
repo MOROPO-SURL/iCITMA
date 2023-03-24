@@ -13,5 +13,7 @@
         internal const string SceneryKindManagement = "scenery-kind-management"; 
 
         internal const string FundingSourceManagement = "funding-source-management";
+
+        internal const string ResearcherCategoryManagement = "researcher-category-management";
     }
 }

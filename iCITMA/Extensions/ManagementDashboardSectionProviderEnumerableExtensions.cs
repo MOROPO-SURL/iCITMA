@@ -70,6 +70,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Categorías de Investigador",
+                  Controller = "researchercategories",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ResearcherCategoryViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Provincias",
                   Controller = "states",
                   Action = "index",

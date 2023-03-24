@@ -22,6 +22,8 @@
 
             if (target.Controller == "FundingSources") return new Microsoft.AspNetCore.Html.HtmlString("<span class=\"mdi mdi-palette\"></span>");
 
+            if (target.Controller == "researchercategories") return new Microsoft.AspNetCore.Html.HtmlString("<span class=\"mdi mdi-palette\"></span>");
+
             if (target.Controller == "states") return new Microsoft.AspNetCore.Html.HtmlString("<span class=\"mdi mdi-account\"></span>");
 
             if (target.Controller == "municipalities") return new Microsoft.AspNetCore.Html.HtmlString("<span class=\"mdi mdi-account\"></span>");
