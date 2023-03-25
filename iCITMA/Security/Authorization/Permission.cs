@@ -76,7 +76,7 @@
 
         #endregion
 
-        #region FundingSource
+        #region ResearcherCategory
 
         public const string ResearcherCategoryViewer = "researcher-category-viewer";
 
@@ -85,6 +85,18 @@
         public const string ResearcherCategoryEditor = "researcher-category-editor";
 
         public const string ResearcherCategoryRemover = "researcher-category-remover";
+
+        #endregion
+
+        #region TeachingCategory
+
+        public const string TeachingCategoryViewer = "teaching-category-viewer";
+
+        public const string TeachingCategoryCreator = "teaching-category-creator";
+
+        public const string TeachingCategoryEditor = "teaching-category-editor";
+
+        public const string TeachingCategoryRemover = "teaching-category-remover";
 
         #endregion
     }

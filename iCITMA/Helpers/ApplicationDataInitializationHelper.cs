@@ -157,6 +157,26 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
+            #region TeachingCategory
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
+            }
+            #endregion
+
             var countryDbSet = dbContext.Set<Country>();
 
             var country = countryDbSet.FirstOrDefault(e => e.Name.Equals(CUBA_COUNTRY_NAME));

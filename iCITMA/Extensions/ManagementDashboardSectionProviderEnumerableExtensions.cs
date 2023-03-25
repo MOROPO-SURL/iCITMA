@@ -78,6 +78,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Categorías Docentes",
+                  Controller = "teachingcategories",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.TeachingCategoryViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Provincias",
                   Controller = "states",
                   Action = "index",

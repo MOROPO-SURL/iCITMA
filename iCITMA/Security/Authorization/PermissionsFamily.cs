@@ -15,5 +15,7 @@
         internal const string FundingSourceManagement = "funding-source-management";
 
         internal const string ResearcherCategoryManagement = "researcher-category-management";
+
+        internal const string TeachingCategoryManagement = "teaching-category-management";
     }
 }
