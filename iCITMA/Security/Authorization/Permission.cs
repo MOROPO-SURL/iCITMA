@@ -111,5 +111,17 @@
         public const string ProjectCategoryRemover = "project-category-remover";
 
         #endregion
+
+        #region ProgramCategory
+
+        public const string ProgramCategoryViewer = "program-category-viewer";
+
+        public const string ProgramCategoryCreator = "program-category-creator";
+
+        public const string ProgramCategoryEditor = "program-category-editor";
+
+        public const string ProgramCategoryRemover = "program-category-remover";
+
+        #endregion
     }
 }

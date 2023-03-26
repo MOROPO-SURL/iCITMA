@@ -19,5 +19,7 @@
         internal const string TeachingCategoryManagement = "teaching-category-management";
 
         internal const string ProjectCategoryManagement = "project-category-management";
+
+        internal const string ProgramCategoryManagement = "program-category-management";
     }
 }
