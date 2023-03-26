@@ -123,5 +123,17 @@
         public const string ProgramCategoryRemover = "program-category-remover";
 
         #endregion
+
+        #region KeyWord
+
+        public const string KeyWordViewer = "key-word-viewer";
+
+        public const string KeyWordCreator = "key-word-creator";
+
+        public const string KeyWordEditor = "key-word-editor";
+
+        public const string KeyWordRemover = "key-word-remover";
+
+        #endregion
     }
 }

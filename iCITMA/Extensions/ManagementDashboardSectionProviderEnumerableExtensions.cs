@@ -102,6 +102,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Palabras Claves",
+                  Controller = "keywords",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.KeyWordViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Provincias",
                   Controller = "states",
                   Action = "index",

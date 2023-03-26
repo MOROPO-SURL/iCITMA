@@ -21,5 +21,7 @@
         internal const string ProjectCategoryManagement = "project-category-management";
 
         internal const string ProgramCategoryManagement = "program-category-management";
+
+        internal const string KeyWordManagement = "key-word-management";
     }
 }

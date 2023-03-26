@@ -217,6 +217,26 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
+            #region KeyWord
+
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordViewer)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.KeyWordViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordCreator)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.KeyWordCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordEditor)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.KeyWordEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
+            }
+            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordRemover)).Result)
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.KeyWordRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
+            }
+            #endregion
+
             var countryDbSet = dbContext.Set<Country>();
 
             var country = countryDbSet.FirstOrDefault(e => e.Name.Equals(CUBA_COUNTRY_NAME));
