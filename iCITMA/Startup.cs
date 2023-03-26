@@ -62,6 +62,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<FundingSource, System.Guid>, FundingSourceRepository>();
             services.AddScoped<IEntityRepository<ResearcherCategory, System.Guid>, ResearcherCategoryRepository>();
             services.AddScoped<IEntityRepository<TeachingCategory, System.Guid>, TeachingCategoryRepository>();
+            services.AddScoped<IEntityRepository<ProjectCategory, System.Guid>, ProjectCategoryRepository>();
 
             services.AddSingleton<SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
 

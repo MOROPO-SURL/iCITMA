@@ -99,5 +99,17 @@
         public const string TeachingCategoryRemover = "teaching-category-remover";
 
         #endregion
+
+        #region ProjectCategory
+
+        public const string ProjectCategoryViewer = "project-category-viewer";
+
+        public const string ProjectCategoryCreator = "project-category-creator";
+
+        public const string ProjectCategoryEditor = "project-category-editor";
+
+        public const string ProjectCategoryRemover = "project-category-remover";
+
+        #endregion
     }
 }

@@ -86,6 +86,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Categorías de Proyectos",
+                  Controller = "projectcategories",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ProjectCategoryViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Provincias",
                   Controller = "states",
                   Action = "index",
