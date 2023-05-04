@@ -3,7 +3,7 @@ using System;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ProjectStateInputViewModel: SAPRESSC.Core.Persistence.Models.IEntityInputModel<ProjectState, System.Guid>
+    public class ProjectStateInputViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<ProjectState, System.Guid>
     {
         public Guid Id { get; set; }
 

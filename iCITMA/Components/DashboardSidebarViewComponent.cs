@@ -5,9 +5,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Components
 {
     public class DashboardSidebarViewComponent : ViewComponent
     {
-        private readonly System.Collections.Generic.IEnumerable<SAPRESSC.Core.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> managementDashboardSectionProviders;
+        private readonly System.Collections.Generic.IEnumerable<Framework.Guama.Core.Presentation.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> managementDashboardSectionProviders;
 
-        public DashboardSidebarViewComponent(System.Collections.Generic.IEnumerable<SAPRESSC.Core.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> managementDashboardSectionProviders)
+        public DashboardSidebarViewComponent(System.Collections.Generic.IEnumerable<Framework.Guama.Core.Presentation.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> managementDashboardSectionProviders)
         {
             this.managementDashboardSectionProviders = managementDashboardSectionProviders;
         }

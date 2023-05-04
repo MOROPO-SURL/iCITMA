@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class ProjectImpact : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class ProjectImpact : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public ProjectImpact()
         {

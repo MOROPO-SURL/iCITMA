@@ -1,6 +1,6 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Funding : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Funding : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Funding()
         {

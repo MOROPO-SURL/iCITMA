@@ -1,22 +1,20 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using MOROPO.SAPRESSC.Core.Web.Frontend.Controllers;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
-    [Microsoft.AspNetCore.Mvc.Area("Auxiliares")]
-    public class OutputKindsController : SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController<OutputKind, System.Guid, OutputKindInputViewModel, OutputKindDisplayViewModel>
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
+    [Area("Auxiliares")]
+    public class OutputKindsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<OutputKind, System.Guid, OutputKindInputViewModel, OutputKindDisplayViewModel>
     {
-        public OutputKindsController(IEntityRepository<OutputKind, Guid> repository, IStringLocalizer<OutputKindsController> localizer, ILogger<OutputKindsController> logger) : base(repository, localizer, logger)
+        public OutputKindsController(IEntityRepository<OutputKind, System.Guid> repository, IStringLocalizer<OutputKindsController> localizer, ILogger<OutputKindsController> logger) : base(repository, localizer, logger)
         {
         }
 

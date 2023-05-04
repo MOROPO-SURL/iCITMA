@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class KeyWordDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<KeyWord, System.Guid>
+    public class KeyWordDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<KeyWord, System.Guid>
     {
         public System.Guid Id { get; set; }
 

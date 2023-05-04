@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ResearcherCategoryDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<ResearcherCategory, System.Guid>
+    public class ResearcherCategoryDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<ResearcherCategory, System.Guid>
     {
         public System.Guid Id { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Contract
 {
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public abstract class AbstractNomenclator : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public abstract class AbstractNomenclator : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public AbstractNomenclator()
         {

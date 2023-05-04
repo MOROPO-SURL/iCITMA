@@ -1,57 +1,55 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MOROPO.SAPRESSC.Core.Security.Common.Persistence.Entities;
-using MOROPO.SAPRESSC.Core.Security.Common.Persistence.EF.Extensions;
-using MOROPO.SAPRESSC.Middleware.Region.Persistence.Entities;
 using System.Linq;
-using MOROPO.CITMA.CMG.iCITMA.RegionConst;
+using MOROPO.Framework.Guama.Core.Security.Common.Persistence.Entities;
+using MOROPO.Framework.Guama.Core.Security.Common.Persistence.ORM.EF.Extensions;
+using MOROPO.Framework.Guama.Location.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 {
-    public class ApplicationDataInitializationHelper : SAPRESSC.Core.Persistence.EF.Helpers.Facade.IDataInitializationHelper
+    public class ApplicationDataInitializationHelper : Framework.Guama.Core.Persistence.ORM.EF.Helpers.Facade.IDataInitializationHelper
     {
-        private const string CUBA_COUNTRY_NAME = "Cuba";
         public void InitialiseData(DbContext dbContext)
         {
             var permissionDbSet = dbContext.Set<Permission>();
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TraceViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.TraceViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.TraceViewer.ToPermissionEntity());
             }
 
             #region ImpactIndicator
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ImpactIndicatorViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ImpactIndicatorManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ImpactIndicatorCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ImpactIndicatorManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ImpactIndicatorEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ImpactIndicatorManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ImpactIndicatorRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ImpactIndicatorRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ImpactIndicatorManagement));
             }
             #endregion
 
             #region ProjectState
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectStateViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectStateCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectStateEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectStateRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectStateRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectStateManagement));
             }
@@ -59,19 +57,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region ResearchArea
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearchAreaRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearchAreaRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearchAreaManagement));
             }
@@ -79,19 +77,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region OutputKind
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.OutputKindViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.OutputKindViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.OutputKindCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.OutputKindCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.OutputKindEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.OutputKindEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.OutputKindRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.OutputKindRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.OutputKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.OutputKindManagement));
             }
@@ -99,19 +97,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region SceneryKind
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.SceneryKindRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.SceneryKindManagement));
             }
@@ -119,19 +117,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region FundingSource
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.FundingSourceViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.FundingSourceCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.FundingSourceEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.FundingSourceRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.SceneryKindRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.FundingSourceManagement));
             }
@@ -139,19 +137,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region ResearcherCategory
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ResearcherCategoryRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ResearcherCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ResearcherCategoryManagement));
             }
@@ -159,19 +157,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region TeachingCategory
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.TeachingCategoryRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.TeachingCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.TeachingCategoryManagement));
             }
@@ -179,19 +177,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region ProjectCategory
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProjectCategoryRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProjectCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProjectCategoryManagement));
             }
@@ -199,19 +197,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region ProgramCategory
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProgramCategoryViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProgramCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProgramCategoryCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProgramCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProgramCategoryEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProgramCategoryManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ProgramCategoryRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.ProgramCategoryRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ProgramCategoryManagement));
             }
@@ -219,19 +217,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             #region KeyWord
 
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordViewer)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.KeyWordViewer)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.KeyWordViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordCreator)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.KeyWordCreator)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.KeyWordCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordEditor)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.KeyWordEditor)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.KeyWordEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
             }
-            if (!permissionDbSet.AnyAsync(role => role.Code.Equals(Security.Authorization.Permission.KeyWordRemover)).Result)
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.KeyWordRemover)))
             {
                 permissionDbSet.Add(Security.Authorization.Permission.KeyWordRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.KeyWordManagement));
             }
@@ -239,16 +237,19 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 
             var countryDbSet = dbContext.Set<Country>();
 
-            var country = countryDbSet.FirstOrDefault(e => e.Name.Equals(CUBA_COUNTRY_NAME));
-
-            if (country == null)
+            if (!countryDbSet.Any(entity => entity.IsoCode.Equals(Constants.Countries.CUBA_COUNTRY_ISO_CODE)))
             {
-                country = new Country { Name = CUBA_COUNTRY_NAME, IsoCode = "cu", Id = RegionInitConstant.MY_COUNTRY };
-
-                countryDbSet.Add(country);
+                countryDbSet.Add(new Country { Name = "Cuba", IsoCode = Constants.Countries.CUBA_COUNTRY_ISO_CODE });
             }
 
-            dbContext.SaveChanges();
+            if (dbContext is Framework.Guama.Core.Persistence.ORM.EF.Context.Contract.ITraceableDbContext)
+            {
+                (dbContext as Framework.Guama.Core.Persistence.ORM.EF.Context.Contract.ITraceableDbContext).SaveChanges("system");
+            }
+            else
+            {
+                dbContext.SaveChanges();
+            }
         }
     }
 }

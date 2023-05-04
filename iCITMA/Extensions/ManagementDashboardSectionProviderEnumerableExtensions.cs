@@ -1,20 +1,19 @@
-﻿using MOROPO.SAPRESSC.Core.Web.Backend.Models.View;
+﻿using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
 using System.Collections.Generic;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Extensions
 {
     public static class ManagementDashboardSectionProviderEnumerableExtensions
     {
-        public static Dictionary<string, ICollection<ManagementDashboardSectionViewModel>> ToManagementDashboardSectionGroups(this IEnumerable<SAPRESSC.Core.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> self)
+        public static Dictionary<string, ICollection<ManagementDashboardSectionViewModel>> ToManagementDashboardSectionGroups(this IEnumerable<Framework.Guama.Core.Presentation.Web.Backend.Providers.Facade.IManagementDashboardSectionProviderFacade> self)
         {
             var securitySections = new List<ManagementDashboardSectionViewModel>();
 
             foreach (var provider in self)
             {
-                if (provider is SAPRESSC.Middleware.Security.Identity.Web.Backend.Providers.ManagementDashboardSectionProvider)
+                if (provider is Framework.Guama.Security.Personal.Presentation.Web.Backend.Providers.ManagementDashboardSectionProvider)
                 {
-                    securitySections.AddRange(provider.GetManagementDashboardSections());
-                    
+                    securitySections.AddRange(provider.GetManagementDashboardSections());                    
                 }
             }
 
@@ -110,19 +109,27 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Regiones",
+                  Controller = "regions",
+                  Action = "index",
+                  Area = "location",
+                  Role = Framework.Guama.Location.Presentation.Constants.Permissions.RegionViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Provincias",
                   Controller = "states",
                   Action = "index",
-                  Area = "Auxiliares",
-                  Role = SAPRESSC.Middleware.Region.Security.Constants.Roles.StateViewer
+                  Area = "location",
+                  Role = Framework.Guama.Location.Presentation.Constants.Permissions.StateViewer
               },
               new ManagementDashboardSectionViewModel
               {
                   Title = "Municipios",
                   Controller = "municipalities",
                   Action = "index",
-                  Area = "Auxiliares",
-                  Role = SAPRESSC.Middleware.Region.Security.Constants.Roles.MunicipalityViewer
+                  Area = "location",
+                  Role = Framework.Guama.Location.Presentation.Constants.Permissions.MunicipalityViewer
               }
             };
 

@@ -4,19 +4,17 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using MOROPO.SAPRESSC.Core.Web.Frontend.Controllers;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
-using System;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("Auxiliares")]
-    public class ProjectStatesController : SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController<ProjectState, System.Guid, ProjectStateInputViewModel, ProjectStateDisplayViewModel>
+    public class ProjectStatesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ProjectState, System.Guid, ProjectStateInputViewModel, ProjectStateDisplayViewModel>
     {
-        public ProjectStatesController(IEntityRepository<ProjectState, Guid> repository, IStringLocalizer<ProjectStatesController> localizer, ILogger<ProjectStatesController> logger) : base(repository, localizer, logger)
+        public ProjectStatesController(IEntityRepository<ProjectState, System.Guid> repository, IStringLocalizer<ProjectStatesController> localizer, ILogger<ProjectStatesController> logger) : base(repository, localizer, logger)
         {
         }        
 

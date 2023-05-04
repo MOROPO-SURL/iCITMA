@@ -1,13 +1,13 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class PersonResearchAreaDoctorateBridge
+    public class PersonResearchAreaDoctorateBridge : Framework.Guama.Core.Persistence.Entities.Contract.IBridge<Person, System.Guid, ResearchArea, System.Guid>
     {
-        public System.Guid PersonId { get; set; }
+        public System.Guid ProwId { get; set; }
 
-        public System.Guid ResearchAreaId { get; set; }
+        public Person Prow { get; set; }
 
-        public Person Person { get; set; }
+        public System.Guid SternId { get; set; }
 
-        public ResearchArea ResearchArea { get; set; }
+        public ResearchArea Stern { get; set; }
     }
 }

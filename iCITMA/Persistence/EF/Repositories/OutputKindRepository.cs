@@ -1,11 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class OutputKindRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<OutputKind, System.Guid>
+    public class OutputKindRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.OutputKind, System.Guid>
     {
-        public OutputKindRepository(DbContext dbContext) : base(dbContext)
+        public OutputKindRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
     }

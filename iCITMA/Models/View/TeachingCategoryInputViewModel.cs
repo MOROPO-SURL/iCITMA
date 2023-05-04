@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class TeachingCategoryInputViewModel : SAPRESSC.Core.Persistence.Models.IEntityInputModel<TeachingCategory, System.Guid>
+    public class TeachingCategoryInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<TeachingCategory, System.Guid>
     {
         public System.Guid Id { get; set; }
 

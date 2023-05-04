@@ -1,22 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
-namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
+﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class ImpactIndicatorRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<ImpactIndicator, System.Guid>
+    public class ImpactIndicatorRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.ImpactIndicator, System.Guid>
     {
-        public ImpactIndicatorRepository(DbContext dbContext) : base(dbContext)
+        public ImpactIndicatorRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
 
-        public override System.Func<ImpactIndicator, object> GetPagingOrderSelector()
+        public override System.Func<Entities.ImpactIndicator, object> GetPagingOrderSelector()
         {
             return entity => entity.Name;
-        }
-
-        protected override System.Linq.IQueryable<ImpactIndicator> GetQueryableDbSet()
-        {
-            return base.GetQueryableDbSet();
         }
     }
 }

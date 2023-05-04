@@ -1,6 +1,6 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Currency : SAPRESSC.Core.Persistence.Entities.INamedEntity<int>
+    public class Currency : Framework.Guama.Core.Persistence.Entities.Contract.INamedEntity<int>
     {
         [System.ComponentModel.DataAnnotations.Key]
         public int Id { get; set; }

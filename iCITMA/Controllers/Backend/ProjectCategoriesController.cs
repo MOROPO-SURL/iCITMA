@@ -4,18 +4,17 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
-using System;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("Auxiliares")]
-    public class ProjectCategoriesController : SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController<ProjectCategory, System.Guid, ProjectCategoryInputViewModel, ProjectCategoryDisplayViewModel>
+    public class ProjectCategoriesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ProjectCategory, System.Guid, ProjectCategoryInputViewModel, ProjectCategoryDisplayViewModel>
     {
-        public ProjectCategoriesController(IEntityRepository<ProjectCategory, Guid> repository, IStringLocalizer<ProjectCategoriesController> localizer, ILogger<ProjectCategoriesController> logger) : base(repository, localizer, logger)
+        public ProjectCategoriesController(IEntityRepository<ProjectCategory, System.Guid> repository, IStringLocalizer<ProjectCategoriesController> localizer, ILogger<ProjectCategoriesController> logger) : base(repository, localizer, logger)
         {
         }
         [RequirePermissions(Permission.ProjectCategoryViewer)]

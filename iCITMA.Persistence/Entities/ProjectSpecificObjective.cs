@@ -1,6 +1,6 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class ProjectSpecificObjective : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class ProjectSpecificObjective : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public ProjectSpecificObjective()
         {

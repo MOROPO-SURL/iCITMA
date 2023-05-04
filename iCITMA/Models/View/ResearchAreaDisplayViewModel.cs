@@ -2,7 +2,7 @@ using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ResearchAreaDisplayViewModel: SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<ResearchArea, System.Guid>
+    public class ResearchAreaDisplayViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<ResearchArea, System.Guid>
     {
         public System.Guid Id { get; set; }
 

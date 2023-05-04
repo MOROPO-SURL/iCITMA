@@ -2,7 +2,7 @@ using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class OutputKindInputViewModel: SAPRESSC.Core.Persistence.Models.IEntityInputModel<OutputKind, System.Guid>
+    public class OutputKindInputViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<OutputKind, System.Guid>
     {
         public System.Guid Id { get; set; }
 

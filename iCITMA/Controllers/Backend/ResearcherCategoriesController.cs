@@ -4,15 +4,15 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("Auxiliares")]
-    public class ResearcherCategoriesController : SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController<ResearcherCategory, System.Guid, ResearcherCategoryInputViewModel, ResearcherCategoryDisplayViewModel>
+    public class ResearcherCategoriesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ResearcherCategory, System.Guid, ResearcherCategoryInputViewModel, ResearcherCategoryDisplayViewModel>
     {
         public ResearcherCategoriesController(IEntityRepository<ResearcherCategory, System.Guid> repository, IStringLocalizer<ResearcherCategoriesController> localizer, ILogger<ResearcherCategoriesController> logger) : base(repository, localizer, logger)
         {

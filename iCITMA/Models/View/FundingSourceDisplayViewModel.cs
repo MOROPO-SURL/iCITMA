@@ -2,7 +2,7 @@ using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class FundingSourceDisplayViewModel: SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<FundingSource, System.Guid>
+    public class FundingSourceDisplayViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<FundingSource, System.Guid>
     {
         public System.Guid Id { get; set; }
 

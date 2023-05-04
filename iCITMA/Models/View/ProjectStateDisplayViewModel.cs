@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ProjectStateDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<ProjectState, System.Guid>
+    public class ProjectStateDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<ProjectState, System.Guid>
     {
         public System.Guid Id { get; set; }
 

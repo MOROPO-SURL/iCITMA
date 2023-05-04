@@ -1,6 +1,6 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Institution : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Institution : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Institution()
         {
@@ -10,7 +10,7 @@
         [System.ComponentModel.DataAnnotations.Key]
         public System.Guid Id { get; set; }
 
-        public SAPRESSC.Middleware.Identity.Persistence.Entities.OrganizationIdentity Identity { get; set; }
+        public Framework.Guama.Identity.Persistence.Entities.OrganizationIdentity Identity { get; set; }
         public System.Guid? IdentityId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("OwnerId")]

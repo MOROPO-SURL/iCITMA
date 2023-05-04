@@ -1,11 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class FundingSourceRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<FundingSource, System.Guid>
+    public class FundingSourceRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.FundingSource, System.Guid>
     {
-        public FundingSourceRepository(DbContext dbContext) : base(dbContext)
+        public FundingSourceRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
     }

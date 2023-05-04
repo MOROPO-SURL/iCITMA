@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Project : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Project : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Project()
         {

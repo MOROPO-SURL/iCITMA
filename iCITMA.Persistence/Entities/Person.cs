@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Person : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Person : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Person()
         {
@@ -16,7 +16,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         [System.ComponentModel.DataAnnotations.Key]
         public System.Guid Id { get; set; }
 
-        public SAPRESSC.Middleware.Identity.Persistence.Entities.PersonIdentity Identity { get; set; }
+        public Framework.Guama.Identity.Persistence.Entities.PersonIdentity Identity { get; set; }
         public System.Guid? IdentityId { get; set; }
 
         public Enumerators.SchoolingLevel SchoolingLevel { get; set; }
