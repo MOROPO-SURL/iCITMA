@@ -34,7 +34,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Providers
                     new Configurators.InstitutionEntityTypeConfigurator(),
                     new Configurators.PersonEntityTypeConfigurator(),
                     new Configurators.ProgramEntityTypeConfigurator(),
-                    new Configurators.ProjectEntityTypeConfigurator()
+                    new Configurators.ProjectEntityTypeConfigurator(),
+                    new Configurators.ProjectCategoryEntityTypeConfigurator(),
+                    new Configurators.OutputKindEntityTypeConfigurator(),
+                    new Configurators.SceneryKindEntityTypeConfigurator(),
+                    new Configurators.ResearcherCategoryEntityTypeConfigurator(),
+                    new Configurators.TeachingCategoryEntityTypeConfigurator()
                 };
             }
         }

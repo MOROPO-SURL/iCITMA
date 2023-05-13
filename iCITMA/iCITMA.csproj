@@ -12,6 +12,8 @@
 	<PackageProjectUrl>https://www.moropo.cu/</PackageProjectUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Staging)' " />
   <ItemGroup>
     <Compile Remove="dpkeys\**" />
     <Compile Remove="logs\**" />
