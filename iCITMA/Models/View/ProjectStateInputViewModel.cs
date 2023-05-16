@@ -1,13 +1,13 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class ProjectStateInputViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<ProjectState, System.Guid>
     {
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]
