@@ -7,6 +7,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid Id { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]
