@@ -45,7 +45,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Gestión de Tipo de Salida",
+                  Title = "Tipo de Salida",
                   Controller = "OutputKinds",
                   Action = "index",
                   Area = "Auxiliares",
@@ -53,7 +53,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Gestión de Tipos de Escenario",
+                  Title = "Tipos de Escenario",
                   Controller = "SceneryKinds",
                   Action = "index",
                   Area = "Auxiliares",
@@ -61,7 +61,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Gestión de Fuentes de Presupuesto",
+                  Title = "Fuentes de Presupuesto",
                   Controller = "FundingSources",
                   Action = "index",
                   Area = "Auxiliares",
