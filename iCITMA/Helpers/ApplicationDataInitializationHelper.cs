@@ -235,6 +235,25 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
+            #region ODSIndicator
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ODSIndicatorViewer)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ODSIndicatorViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.ODSIndicatorManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ODSIndicatorCreator)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ODSIndicatorCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.ODSIndicatorManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ODSIndicatorEditor)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ODSIndicatorEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.ODSIndicatorManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.ODSIndicatorRemover)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.ODSIndicatorRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.ODSIndicatorManagement));
+            }
+            #endregion
+
             var countryDbSet = dbContext.Set<Country>();
 
             if (!countryDbSet.Any(entity => entity.IsoCode.Equals(Constants.Countries.CUBA_COUNTRY_ISO_CODE)))

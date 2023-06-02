@@ -135,5 +135,15 @@
         public const string KeyWordRemover = "key-word-remover";
 
         #endregion
+
+        #region ODSIndicator
+        public const string ODSIndicatorViewer = "ods-indicator-viewer";
+
+        public const string ODSIndicatorCreator = "ods-indicator-creator";
+
+        public const string ODSIndicatorEditor = "ods-indicator-editor";
+
+        public const string ODSIndicatorRemover = "ods-indicator-remover";
+        #endregion
     }
 }

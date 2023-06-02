@@ -63,6 +63,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<ProjectCategory, System.Guid>, ProjectCategoryRepository>();
             services.AddScoped<IEntityRepository<ProgramCategory, System.Guid>, ProgramCategoryRepository>();
             services.AddScoped<IEntityRepository<KeyWord, System.Guid>, KeyWordRepository>();
+            services.AddScoped<IEntityRepository<ODSIndicator, System.Guid>, ODSIndicatorRepository>();
 
             services.AddSingleton<Framework.Guama.Core.Persistence.ORM.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
 

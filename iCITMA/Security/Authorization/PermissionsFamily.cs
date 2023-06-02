@@ -23,5 +23,7 @@
         internal const string ProgramCategoryManagement = "program-category-management";
 
         internal const string KeyWordManagement = "key-word-management";
+
+        internal const string ODSIndicatorManagement = "ods-indicator-management";
     }
 }
