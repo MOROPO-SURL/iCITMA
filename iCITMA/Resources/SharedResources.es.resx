@@ -636,4 +636,7 @@
   <data name="VideoLibraryManagement" xml:space="preserve">
     <value>Videoteca</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
 </root>
