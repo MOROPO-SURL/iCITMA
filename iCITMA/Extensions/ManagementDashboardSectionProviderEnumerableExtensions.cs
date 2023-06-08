@@ -1,4 +1,5 @@
-﻿using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
+﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
 using System.Collections.Generic;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Extensions
@@ -114,6 +115,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ODSIndicatorViewer
+              },
+                 new ManagementDashboardSectionViewModel
+              {
+                  Title = "Instituciones",
+                  Controller = "Institutions",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.InstitusionViewer
               },
               new ManagementDashboardSectionViewModel
               {

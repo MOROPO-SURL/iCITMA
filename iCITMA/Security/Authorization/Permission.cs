@@ -145,5 +145,15 @@
 
         public const string ODSIndicatorRemover = "ods-indicator-remover";
         #endregion
+
+        #region Institution
+        public const string InstitusionViewer = "institusion-viewer";
+
+        public const string InstitusionCreator = "institusion-creator";
+
+        public const string InstitusionEditor = "institusion-editor";
+
+        public const string InstitusionRemover = "institusion-remover";
+        #endregion
     }
 }

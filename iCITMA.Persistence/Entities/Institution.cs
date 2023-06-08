@@ -4,12 +4,14 @@
     {
         public Institution()
         {
-            Id = System.Guid.NewGuid();
+            Id = System.Guid.NewGuid();            
+            Identity = new Framework.Guama.Identity.Persistence.Entities.OrganizationIdentity();              
         }
 
         [System.ComponentModel.DataAnnotations.Key]
         public System.Guid Id { get; set; }
 
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("IdentityId")]
         public Framework.Guama.Identity.Persistence.Entities.OrganizationIdentity Identity { get; set; }
         public System.Guid? IdentityId { get; set; }
 
@@ -19,7 +21,7 @@
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("RepresentativeId")]
         public Person Representative { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? RepresentativeId { get; set; }
+        public string Alia { get; set; }
     }
 }

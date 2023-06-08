@@ -254,6 +254,25 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
+            #region Institution
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.InstitusionViewer)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.InstitusionViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.InstitusionManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.InstitusionCreator)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.InstitusionCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.InstitusionManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.InstitusionEditor)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.InstitusionEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.InstitusionManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.InstitusionRemover)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.InstitusionRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.InstitusionManagement));
+            }
+            #endregion
+
             var countryDbSet = dbContext.Set<Country>();
 
             if (!countryDbSet.Any(entity => entity.IsoCode.Equals(Constants.Countries.CUBA_COUNTRY_ISO_CODE)))

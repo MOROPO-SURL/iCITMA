@@ -1,0 +1,50 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionDisplayViewModel
+<div class="alert alert-dark">
+    <details>
+        <summary class="h4 mb-0">@Model.Name</summary>
+        <hr />
+        <div class="row no-gutters">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                @if (Model.ImageId != System.Guid.Empty)
+                {
+                    <img class="img-thumbnail" src="~/media/images/@Model.ImageId.@Model.ImageExtension" />
+                }
+                else
+                {
+                    <img class="img-thumbnail" src="~/img/default-person-picture.jpg" />
+                }
+            </div>
+            <div class="col-lg-10 col-md-8 col-sm-6">
+                <div class="card-block pl-3">
+                    <div class="row">
+                        <dl class="col-md-6">
+                            <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                            <dd>@Html.DisplayFor(model => model.Name)</dd>
+                        </dl>
+                        <dl class="col-md-6">
+                            <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+                            <dd>@Html.DisplayFor(model => model.Description)</dd>
+                        </dl>
+                    </div>
+                    <div class="row">
+                        <dl class="col-md-6">
+                            <dt>Fecha de Creación</dt>
+                            @if (Model.CreatedAt == null)
+                            {
+                                <dd>-</dd>
+                            }
+                            else
+                            {
+                                <dd>@Model.CreatedAt.Value.ToShortDateString()</dd>
+                            }
+                        </dl>
+                        <dl class="col-md-6">
+                            <dt>Alias</dt>
+                            <dd>@Model.Alia</dd>
+                        </dl>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </details>
+</div>
