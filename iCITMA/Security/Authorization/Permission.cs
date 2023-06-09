@@ -145,5 +145,17 @@
 
         public const string ODSIndicatorRemover = "ods-indicator-remover";
         #endregion
+
+        #region Person
+
+        public const string PersonViewer = "person-viewer";
+
+        public const string PersonCreator = "person-creator";
+
+        public const string PersonEditor = "person-editor";
+
+        public const string PersonRemover = "person-remover";
+
+        #endregion
     }
 }

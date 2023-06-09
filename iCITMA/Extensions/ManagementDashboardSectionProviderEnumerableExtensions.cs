@@ -115,6 +115,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ODSIndicatorViewer
               },
+               new ManagementDashboardSectionViewModel
+              {
+                  Title = "Personas",
+                  Controller = "persons",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.PersonViewer
+              },
               new ManagementDashboardSectionViewModel
               {
                   Title = "Regiones",

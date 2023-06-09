@@ -17,16 +17,12 @@
   <ItemGroup>
     <Compile Remove="dpkeys\**" />
     <Compile Remove="logs\**" />
-    <Compile Remove="wwwroot\media\**" />
     <Content Remove="dpkeys\**" />
     <Content Remove="logs\**" />
-    <Content Remove="wwwroot\media\**" />
     <EmbeddedResource Remove="dpkeys\**" />
     <EmbeddedResource Remove="logs\**" />
-    <EmbeddedResource Remove="wwwroot\media\**" />
     <None Remove="dpkeys\**" />
     <None Remove="logs\**" />
-    <None Remove="wwwroot\media\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +53,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iCITMA.Persistence\iCITMA.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\media\images\" />
   </ItemGroup>
 
 </Project>
