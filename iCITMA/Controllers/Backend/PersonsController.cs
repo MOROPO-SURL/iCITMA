@@ -48,7 +48,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         [RequirePermissions(Permission.PersonCreator)]
 
-        public override IActionResult Create([FromForm] PersonInputViewModel inputViewModel)
+        public override IActionResult Create(PersonInputViewModel inputViewModel)
         {
             if (Request.Form.Files.Count > 0)
             {
@@ -77,6 +77,24 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.PersonEditor)]
         public override IActionResult Edit(PersonInputViewModel inputModel)
         {
+            ModelState.ClearValidationState("ImageFile");
+            ModelState.MarkFieldValid("ImageFile");
+
+            if (Request.Form.Files.Count > 0)
+            {
+                var formFile = Request.Form.Files[0];
+
+                if (formFile.Length > 0)
+                {
+                    inputModel.ImageFile = formFile;
+
+                    var updateModelTask = TryUpdateModelAsync(inputModel);
+
+                    updateModelTask.Wait();
+                }
+            }
+
+
             return base.Edit(inputModel);
         }
 
@@ -142,7 +160,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         protected override void PreEdit(Person entity, PersonInputViewModel modelInput)
         {
             base.PreEdit(entity, modelInput);
-
 
             if (entity.ResearcherCategory.Id != modelInput.ResearcherCategoryId)
             {

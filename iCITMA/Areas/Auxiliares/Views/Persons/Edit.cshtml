@@ -59,7 +59,7 @@
     </script>
 }
 
-@using (Html.BeginForm("edit", "persons", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post))
+@using (Html.BeginForm("edit", "persons", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.Id)
 
