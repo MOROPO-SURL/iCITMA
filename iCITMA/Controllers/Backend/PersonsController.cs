@@ -27,12 +27,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository;
         private readonly IImageFileManagerFacade imageFileManagerFacade;
         private readonly IEntityRepository<Image, Guid> imageRepository;
-        public PersonsController(IEntityRepository<Image, Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
+        private readonly IEntityRepository<PersonIdentity, Guid> identityRepository;
+        public PersonsController(IEntityRepository<PersonIdentity, Guid> identityRepository, IEntityRepository<Image, Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
         {
             this.ResearcherCategoryRepository = ResearcherCategoryRepository;
             this.TeachingCategoryRepository = TeachingCategoryRepository;
             this.imageFileManagerFacade = imageFileManagerFacade;
             this.imageRepository = imageRepository;
+            this.identityRepository = identityRepository;
         }
 
         public IActionResult Index()
@@ -199,7 +201,20 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 imageFileManagerFacade.SaveImageFileContent(image.Id, memoryStream.ToArray(), modelInput.ImageFile.ContentType);
 
                 entity.Identity.Image = image;
+                imageRepository.Add(image, User.Identity.Name);
             }
+        }
+
+        protected override void PostDelete(Person entity)
+        {
+            base.PostDelete(entity);
+
+            identityRepository.Delete(entity.Identity, User.Identity.Name);
+
+            if (entity.Identity.Image == null) return;
+
+            imageRepository.Delete(entity.Identity.Image, User.Identity.Name);
+            imageFileManagerFacade.DeleteImageFile(entity.Identity.Image);
         }
 
     }
