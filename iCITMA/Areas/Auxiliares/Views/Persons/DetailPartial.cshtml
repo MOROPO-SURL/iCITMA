@@ -1,0 +1,48 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonDisplayViewModel
+
+
+<!-- Modal -->
+<div class="modal fade " id="descrip-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalles</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>@Html.DisplayNameFor(model => model.Name)</h5>
+                            <p>@Model.Name</p>
+                        </div>
+                        <div class="col-md-5">
+                            <h5>@Html.DisplayNameFor(model => model.LastName)</h5>
+                            <p>@Model.LastName</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>@Html.DisplayNameFor(model => model.Sex)</h5>
+                            <p>@Html.DisplayName(GlobalViewLocalizationHelper.Localize(Model.Sex.ToString(), ViewLocalizer))</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>@Html.DisplayNameFor(model => model.TeachingCategoryName)</h5>
+                            <p>@Model.TeachingCategoryName</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>@Html.DisplayNameFor(model => model.ResearcherCategoryName)</h5>
+                            <p>@Model.ResearcherCategoryName</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>@Html.DisplayNameFor(model => model.About)</h5>
+                            <p style="word-wrap: break-word;">@Model.About</p>
+                        </div>                        
+                    </div>                    
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>

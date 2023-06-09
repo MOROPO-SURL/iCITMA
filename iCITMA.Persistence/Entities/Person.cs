@@ -7,6 +7,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         public Person()
         {
             Id = System.Guid.NewGuid();
+            Identity = new Framework.Guama.Identity.Persistence.Entities.PersonIdentity();
             ResearchAreaSpecializationBridges = new List<PersonResearchAreaSpecializationBridge>();
             ResearchAreaMasteryBridges = new List<PersonResearchAreaMasteryBridge>();
             ResearchAreaDoctorateBridges = new List<PersonResearchAreaDoctorateBridge>();
