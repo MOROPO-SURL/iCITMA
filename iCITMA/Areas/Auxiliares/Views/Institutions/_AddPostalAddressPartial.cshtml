@@ -1,5 +1,95 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPostalContactInputViewModel
+
+
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            $('#StateId').on("change", function () {
+                var stateId = $('#StateId').val();
+                var state = $('#StateId option:selected').text();
+                var obj = { state: stateId };
+                AjaxCall('PopulateStateToMunicipality/' + stateId, stateId, 'GET').done(function (response) {
+                    if (response.length > 0) {
+                        $('#MunicipalityId').html('');
+                        var options = '';
+                        $('#AddressPostal').html('');
+                        for (var i = 0; i < response.length; i++) {
+                            console.log(response[i]);
+                            options += '<option value="' + response[i].id + '">' + response[i].name + '</option>';
+                        }
+                        $('#MunicipalityId').append(options);
+                    }
+                });
+            });
+        });
+
+        function AjaxCall(url, data, type) {
+            console.log(url);
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+            });
+        }
+    </script>
 }
+
+<div class="modal fade" id="add-postaladdress" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-postaladdress-title">Agregar Dirección Postal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("AddPostalAddress", "Institutions", null, FormMethod.Post, true, null))
+            {
+                <div class="modal-body">
+                    @Html.HiddenFor(model => model.InstitutionId)
+
+                    <div class="row">                        
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.StateId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.StateId, Model.SelectStates, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.ZipCode, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.MunicipalityId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.MunicipalityId, Model.SelectMunicipalities, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.MunicipalityId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.Address, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.ZipCode, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.ZipCode, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.ZipCode, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.Longitude, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Longitude, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Longitude, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.Latitude, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Latitude, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Latitude, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

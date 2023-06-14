@@ -6,8 +6,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     public class PostalContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<PostalContactItem, System.Guid>
     {
         public System.Guid Id { get; set; }
-        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
-        [Phone(ErrorMessage = "PostalValidationErrorMessage")]
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]        
         public string Address { get; set; }
         public Framework.Guama.Location.Persistence.Entities.Location Location { get; set; }
         public System.Guid LocationId { get; set; }

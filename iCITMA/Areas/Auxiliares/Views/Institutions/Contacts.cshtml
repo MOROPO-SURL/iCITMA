@@ -41,6 +41,41 @@
     </style>
 }
 
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            $('#StateId').on("change", function () {
+                var stateId = $('#StateId').val();
+                var state = $('#StateId option:selected').text();
+                var obj = { state: stateId };
+                AjaxCall('PopulateStateToMunicipality/' + stateId, stateId, 'GET').done(function (response) {
+                    if (response.length > 0) {
+                        $('#MunicipalityId').html('');
+                        var options = '';
+                        $('#AddressPostal').html('');
+                        for (var i = 0; i < response.length; i++) {
+                            console.log(response[i]);
+                            options += '<option value="' + response[i].id + '">' + response[i].name + '</option>';
+                        }
+                        $('#MunicipalityId').append(options);
+                    }
+                });
+            });
+        });
+
+        function AjaxCall(url, data, type) {
+            console.log(url);
+            return $.ajax({
+                url: url,
+                type: type ? type : 'GET',
+                data: data,
+                contentType: 'application/json'
+            });
+        }
+    </script>
+}
+
 <div class="card" style="margin-bottom: 20px;">
     <div class="card-header">
         <h4>Editar Institución</h4>
@@ -187,6 +222,47 @@
                     </tbody>
                 </table>
             </div>
+            <div class="col-md-6" style="margin-bottom: 20px;">
+                <div class="page-header">
+                    <h4>Web Sociales<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-webcontact"><span class="mdi mdi-plus"></span> Agregar</a></h4>
+                </div>
+
+
+                @await Html.PartialAsync("_AddWebContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionWebContactInputViewModel
+                {
+                InstitutionId = Model.Institution.Id
+                })
+
+                <table class="table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("WebSocial")</th>
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.WebContacts.Count > 0)
+                        {
+                            @foreach (var item in Model.WebContacts)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("WebSocial")"><a href="@item.Url" target="_blank">@item.Url</a></td>
+                                    <td style="vertical-align: middle;">
+                                        <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-webcontact-@item.Id">Eliminar</a>
+                                        @await Html.PartialAsync("_DeleteSWebContactPartial", item)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             <div class="col-md-12" style="margin-bottom: 20px;">
                 <div class="page-header">
                     <h4>Dirección Postal<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-postaladdress"><span class="mdi mdi-plus"></span> Agregar</a></h4>
@@ -195,27 +271,32 @@
 
                 @await Html.PartialAsync("_AddPostalAddressPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPostalContactInputViewModel
                 {
-                InstitutionId = Model.Institution.Id
+                InstitutionId = Model.Institution.Id,               
+                SelectStates = Model.SelectStates
                 })
 
                 <table class="table" style="margin: 0;">
                     <thead>
                         <tr>
-                            <th>@GlobalViewLocalizationHelper.Localize("Icon")</th>
-                            <th>@GlobalViewLocalizationHelper.Localize("SocialMedia")</th>
-                            <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("ZipCode")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Latitude")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Longitude")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Provincia")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Municipio")</th>
                             <th style="width: 1px; white-space: nowrap;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.SocialContacts.Count > 0)
+                        @if (Model.AddressContacts.Count > 0)
                         {
-                            @foreach (var item in Model.SocialContacts)
+                            @foreach (var item in Model.AddressContacts)
                             {
                                 <tr>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Icon")">@item.Icon</td>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("SocialMedia")"><a href="@item.SocialId" target="_blank">@item.SocialId</a></td>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Label")">@item.Label</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("ZipCode")"><a href="@item.ZipCode" target="_blank">@item.ZipCode</a></td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Latitude")">@item.Latitude</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Longitude")">@item.Longitude</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Provincia")">@item.State.Name</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Municipio")">@item.Municipality.Name</td>
                                     <td style="vertical-align: middle;">
                                         <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-postaladdress-@item.Id">Eliminar</a>
                                         @await Html.PartialAsync("_DeletePostalAddressPartial", item)

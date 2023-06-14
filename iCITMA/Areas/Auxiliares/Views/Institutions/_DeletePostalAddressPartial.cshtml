@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using MOROPO.Framework.Guama.Location.Persistence.Entities;
+@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPostalContactDisplayViewModel
+
+<div class="modal fade" id="delete-postaladdress-@Model.Id" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-socialcontact-@Model.Id-title">Eliminar Dirección del Contacto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("DeletePostalAddress", "Institutions", null, FormMethod.Post, true, null))
+            {
+                @Html.HiddenFor(model => model.Id)
+
+                @Html.HiddenFor(model => model.InstitutionId)
+
+                <div class="modal-body">
+                    <p>Está seguro que desea eliminar el contacto con dirección  <b>@Model.Address </b> provincia: <b>@Model.State.Name </b> y municipio: <b>@Model.Municipality.Name</b> ?</p>
+                </div>
+
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

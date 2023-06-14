@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+using MOROPO.Framework.Guama.Location.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
@@ -16,7 +17,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
                 .Include(entity => entity.Identity.EmailContactItemBridges).ThenInclude(entity => entity.Stern)
                 .Include(entity => entity.Identity.SocialContactItemBridges).ThenInclude(entity => entity.Stern)
                 .Include(entity => entity.Identity.WebSiteContactItemBridges).ThenInclude(entity => entity.Stern)
-                .Include(entity => entity.Identity.PostalContactItemBridges).ThenInclude(entity => entity.Stern);            
+                .Include(entity => entity.Identity.PostalContactItemBridges).ThenInclude(entity => entity.Stern)
+                .ThenInclude(entity => entity.Location).ThenInclude(entity => ((MunicipalityLocation)entity).Municipality)
+                .ThenInclude(entity => entity.State);            
         }
     }
 }

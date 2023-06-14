@@ -8,6 +8,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 {
     public class ApplicationDataInitializationHelper : Framework.Guama.Core.Persistence.ORM.EF.Helpers.Facade.IDataInitializationHelper
     {
+        private const string CUBA_COUNTRY_NAME = "Cuba";
+        private const string CMG_STATE_NAME = "Camagüey";
+        private const string SS_STATE_NAME = "Sancti Spíritus";
+
         public void InitialiseData(DbContext dbContext)
         {
             var permissionDbSet = dbContext.Set<Permission>();
@@ -274,11 +278,67 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             #endregion
 
             var countryDbSet = dbContext.Set<Country>();
+            var stateDbSet = dbContext.Set<State>();
+            var municipalitiesDbSet = dbContext.Set<Municipality>();
+            var regionDbSet = dbContext.Set<Region>();
+            var locationDbSet = dbContext.Set<Location>();
+            var locationMuniDbSet = dbContext.Set<MunicipalityLocation>();
+            var locationStateDbSet = dbContext.Set<StateLocation>();            
+
 
             if (!countryDbSet.Any(entity => entity.IsoCode.Equals(Constants.Countries.CUBA_COUNTRY_ISO_CODE)))
             {
                 countryDbSet.Add(new Country { Name = "Cuba", IsoCode = Constants.Countries.CUBA_COUNTRY_ISO_CODE });
             }
+
+            if (!stateDbSet.Any(entity => entity.Name.Equals("Camagüey")) || !stateDbSet.Any(entity => entity.Name.Equals("Sancti Spíritus")))
+            {
+
+
+                var country = countryDbSet.FirstOrDefault(c => c.Name == "Cuba" && c.IsoCode == Constants.Countries.CUBA_COUNTRY_ISO_CODE);
+                var regionWest = new Region { Name = "Oriente", CountryId = country.Id, Country = country };
+                var regionEst = new Region { Name = "Central", CountryId = country.Id, Country = country };
+
+
+
+                regionDbSet.Add(regionWest);
+                regionDbSet.Add(regionEst);
+
+                var stateCMG = new State { Name = "Camagüey", RegionId = regionWest.Id, Region = regionWest };
+                var stateSS = new State { Name = "Sancti Spíritus", RegionId = regionEst.Id, Region = regionEst };
+
+                stateDbSet.Add(stateCMG);
+                stateDbSet.Add(stateSS);
+                
+                var stateLocationCMG = new StateLocation { State = stateCMG, StateId = stateCMG.Id };
+                var stateLocationSS = new StateLocation { State = stateSS, StateId = stateSS.Id };
+                locationStateDbSet.Add(stateLocationCMG);
+                locationStateDbSet.Add(stateLocationSS);
+
+
+
+                var cmgMunicipalitiesNames = new string[] { "Camagüey", "Florida", "Guáimaro", "Vertientes", "Santa Cruz del Sur", "Nuevitas", "Minas", "Sibanicú", "Esmeralda", "Carlos M. de Cespedes", "Jimaguayú", "Sierra de Cubitas", "Najasa" };
+                var ssMunicipalitiesNames = new string[] { "Sancti Spíritus", "Trinidad", "Yaguajay" };
+
+
+
+                foreach (string municipalityName in cmgMunicipalitiesNames)
+                {
+                    if (municipalitiesDbSet.Any(e => e.Name.Equals(municipalityName))) continue;
+                    var mun = new Municipality { Name = municipalityName, State = stateCMG, StateId = stateCMG.Id };
+                    municipalitiesDbSet.Add(mun);
+                    locationMuniDbSet.Add(new MunicipalityLocation { Municipality = mun, MunicipalityId = mun.Id });
+                }
+
+                foreach (string municipalityName in ssMunicipalitiesNames)
+                {
+                    if (municipalitiesDbSet.Any(e => e.Name.Equals(municipalityName))) continue;
+                    var mun = new Municipality { Name = municipalityName, State = stateSS, StateId = stateSS.Id };
+                    municipalitiesDbSet.Add(mun);
+                    locationMuniDbSet.Add(new MunicipalityLocation { Municipality = mun, MunicipalityId = mun.Id });
+                }
+            }
+
 
             if (dbContext is Framework.Guama.Core.Persistence.ORM.EF.Context.Contract.ITraceableDbContext)
             {

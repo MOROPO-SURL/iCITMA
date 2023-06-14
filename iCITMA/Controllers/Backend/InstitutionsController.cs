@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
@@ -8,6 +9,8 @@ using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Identity.Persistence.Entities;
+using MOROPO.Framework.Guama.Identity.Persistence.ORM.EF.Repositories;
+using MOROPO.Framework.Guama.Location.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Managers.Facade;
 using System;
@@ -28,6 +31,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly IEntityRepository<EmailContactItem, Guid> emailContactItemRepository;
         private readonly IEntityRepository<SocialContactItem, Guid> socialContactItemRepository;
         private readonly IEntityRepository<PostalContactItem, Guid> postalContactItemRepository;
+        private readonly IEntityRepository<WebSiteContactItem, Guid> webSiteContactItemRepository;
+        private readonly IEntityRepository<Municipality, Guid> municipalityRepository;
+        private readonly IEntityRepository<State, Guid> stateRepository;
+        private readonly IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository;
+        private readonly IEntityRepository<Location, Guid> locationRepository;
+        private readonly IEntityRepository<StateLocation, Guid> stateLocationRepository;        
 
         public InstitutionsController(IEntityRepository<Institution, System.Guid> repository,
             IStringLocalizer<InstitutionsController> localizer,
@@ -38,7 +47,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             IEntityRepository<PhoneContactItem, Guid> phoneContactItemRepository,
             IEntityRepository<EmailContactItem, Guid> emailContactItemRepository,
             IEntityRepository<SocialContactItem, Guid> socialContactItemRepository,
-            IEntityRepository<PostalContactItem, Guid> postalContactItemRepository) : base(repository, localizer, logger)
+            IEntityRepository<PostalContactItem, Guid> postalContactItemRepository,
+            IEntityRepository<WebSiteContactItem, Guid> webSiteContactItemRepository,
+            IEntityRepository<Municipality, Guid> municipalityRepository,
+            IEntityRepository<State, Guid> stateRepository,
+            IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository,
+            IEntityRepository<Location, Guid> locationRepository,
+            IEntityRepository<StateLocation, Guid> stateLocationRepository
+            ) : base(repository, localizer, logger)
         {
             this.imageFileManagerFacade = imageFileManagerFacade;
             this.imageRepository = imageRepository;
@@ -47,6 +63,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.emailContactItemRepository = emailContactItemRepository;
             this.socialContactItemRepository = socialContactItemRepository;
             this.postalContactItemRepository = postalContactItemRepository;
+            this.webSiteContactItemRepository = webSiteContactItemRepository;
+            this.municipalityRepository = municipalityRepository;
+            this.stateRepository = stateRepository;
+            this.municipalityLocationRepository = municipalityLocationRepository;
+            this.locationRepository = locationRepository;
+            this.stateLocationRepository = stateLocationRepository;
         }
 
         [RequirePermissions(Permission.InstitusionViewer)]
@@ -111,6 +133,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         [RequirePermissions(Permission.InstitusionRemover)]
         public override IActionResult Delete(InstitutionDisplayViewModel displayViewModel) => base.Delete(displayViewModel);
+
+        [Route("edit/{key}/PopulateStateToMunicipality/{stateId}")]
+        [HttpGet("PopulateStateToMunicipality/{stateId}")]
+        public IActionResult PopulateStateToMunicipality(string stateId)
+        {
+            var stateIdParse = Guid.Parse(stateId);
+
+            var municipalities = municipalityRepository.GetAll().Where(entity => entity.StateId == stateIdParse).ToList();
+            return Ok(municipalities);
+        }
 
         protected override void PreCreate(Institution entity, InstitutionInputViewModel modelInput)
         {
@@ -210,8 +242,27 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                         SocialId = bridge.Stern.SocialId,
                         InstitutionId = entity.Id,
                         Icon = GetIcon(bridge.Stern.SocialId)
+                    }).ToList(),
+                    WebContacts = entity.Identity.WebSiteContactItemBridges.Select( bridge => new InstitutionWebContactDisplayViewModel
+                    {
+                        Id = bridge.SternId,
+                        Url = bridge.Stern.Url,                        
+                        InstitutionId = entity.Id,
+                    }).ToList(),
+                    AddressContacts = entity.Identity.PostalContactItemBridges.Select(bridge => new InstitutionPostalContactDisplayViewModel 
+                    { 
+                        Id = bridge.SternId,
+                        Address = bridge.Stern.Address,
+                        Longitude = bridge.Stern.Longitude,
+                        Latitude = bridge.Stern.Latitude,
+                        ZipCode = bridge.Stern.ZipCode,
+                        InstitutionId = entity.Id,
+                        Municipality = ((MunicipalityLocation)bridge.Stern.Location).Municipality,
+                        State = ((MunicipalityLocation)bridge.Stern.Location).Municipality.State
                     }).ToList()
                 };
+
+                PopulateStateWithMunicipality(resultModel);
 
                 resultModel.Institution.Import(entity);
 
@@ -251,7 +302,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             if (ModelState.IsValid)
             {
                 var PhoneContactItem = new PhoneContactItem { Label = modelInput.Label, PhoneNumber = modelInput.Number };
-                phoneContactItemRepository.Add(PhoneContactItem, User.Identity.Name, true);
+                phoneContactItemRepository.Add(PhoneContactItem, User.Identity.Name, false);
                
                 var OrganizationPhoneContactItemBridge = new OrganizationPhoneContactItemBridge
                 {
@@ -356,7 +407,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             if (ModelState.IsValid)
             {
                 var emailContactItem = new EmailContactItem { Label = modelInput.Label, EmailAddress = modelInput.Address };
-                emailContactItemRepository.Add(emailContactItem, User.Identity.Name, true);
+                emailContactItemRepository.Add(emailContactItem, User.Identity.Name, false);
 
                 entity.Identity.EmailContactItemBridges.Add(new OrganizationEmailContactItemBridge { ProwId = (Guid)entity.IdentityId, Stern = emailContactItem , SternId = emailContactItem.Id});
 
@@ -453,7 +504,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             if (ModelState.IsValid)
             {
                 var socialContactItem = new SocialContactItem { Label = modelInput.Label, SocialId = modelInput.SocialId };
-                socialContactItemRepository.Add(socialContactItem, User.Identity.Name, true);
+                socialContactItemRepository.Add(socialContactItem, User.Identity.Name, false);
 
                 entity.Identity.SocialContactItemBridges.Add(new OrganizationSocialContactItemBridge { ProwId = (Guid)entity.IdentityId, Stern = socialContactItem, SternId = modelInput.Id });
 
@@ -549,8 +600,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             if (ModelState.IsValid)
             {
-                var postalContactItem = new PostalContactItem { Address = modelInput.Address, Latitude = modelInput.Latitude, LocationId = modelInput.LocationId, ZipCode = modelInput.ZipCode, Location = modelInput.Location };
-                postalContactItemRepository.Add(postalContactItem, User.Identity.Name, true);
+                var municipality = municipalityRepository.GetAll().FirstOrDefault(m => m.Id == modelInput.MunicipalityId);
+                var municipalityLocaction = municipalityLocationRepository.GetAll().FirstOrDefault(m => m.MunicipalityId == modelInput.MunicipalityId);                
+               
+
+                
+                var postalContactItem = new PostalContactItem { Address = modelInput.Address, Latitude = modelInput.Latitude, Longitude = modelInput.Longitude, LocationId = municipalityLocaction.Id, ZipCode = modelInput.ZipCode };
+                postalContactItemRepository.Add(postalContactItem, User.Identity.Name, false);
 
                 entity.Identity.PostalContactItemBridges.Add(new OrganizationPostalContactItemBridge { ProwId = (Guid)entity.IdentityId, 
                     Stern = postalContactItem, SternId = modelInput.Id });
@@ -583,7 +639,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePostalContact(InstitutionPostalContactDisplayViewModel modelDisplay)
+        public IActionResult DeletePostalAddress(InstitutionPostalContactDisplayViewModel modelDisplay)
         {
             Institution entity = null;
 
@@ -624,9 +680,116 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return RedirectToAction("contacts", new { key = entity.Id });
         }
 
+        [Route("edit/contacts/web/add")]
+        [RequirePermissions(Permission.InstitusionEditor)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddWeb(InstitutionWebContactInputViewModel modelInput)
+        {
+            Institution entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.InstitutionId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var webSiteContactItem = new WebSiteContactItem { Url = modelInput.Url };
+                webSiteContactItemRepository.Add(webSiteContactItem, User.Identity.Name, false);
+
+                entity.Identity.WebSiteContactItemBridges.Add(new OrganizationWebSiteContactItemBridge
+                {
+                    ProwId = (Guid)entity.IdentityId,
+                    Prow = entity.Identity,
+                    Stern = webSiteContactItem,
+                    SternId = modelInput.Id
+                });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("contacts", new { key = entity.Id });
+        }
+
+        [Route("edit/contacts/web/delete")]
+        [RequirePermissions(Permission.InstitusionEditor)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteWebContact(InstitutionWebContactDisplayViewModel modelDisplay)
+        {
+            Institution entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelDisplay.InstitutionId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var bridge = entity.Identity.WebSiteContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
+
+                entity.Identity.WebSiteContactItemBridges.Remove(bridge);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("contacts", new { key = entity.Id });
+        }
+
         #endregion
 
-
+        private void PopulateStateWithMunicipality(InstitutionContactsManageViewModel model)
+        {
+            model.SelectStates = stateRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name}).ToArray();
+            model.SelectMunicipalities = municipalityRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name}).ToArray();
+        }
 
         private Microsoft.AspNetCore.Html.HtmlString GetIcon(string socialId)
         {

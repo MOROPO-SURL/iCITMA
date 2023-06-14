@@ -1,0 +1,35 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionWebContactInputViewModel
+
+<div class="modal fade" id="add-webcontact" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-socialcontact-title">Agregar Contacto de Redes Sociales</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("addweb", "Institutions", null, FormMethod.Post, true, null))
+            {
+                <div class="modal-body">
+                    @Html.HiddenFor(model => model.InstitutionId)
+
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.Url, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Url, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Url, null, new { @class = "text-danger" })
+                        </div>                       
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
