@@ -27,5 +27,7 @@
         internal const string ODSIndicatorManagement = "ods-indicator-management";
 
         internal const string InstitusionManagement = "institusion-management";
+
+        internal const string PersonManagement = "person-management";
     }
 }

@@ -277,6 +277,25 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers
             }
             #endregion
 
+            #region Person
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.PersonViewer)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.PersonViewer.ToPermissionEntity(Security.Authorization.PermissionsFamily.PersonManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.PersonCreator)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.PersonCreator.ToPermissionEntity(Security.Authorization.PermissionsFamily.PersonManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.PersonEditor)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.PersonEditor.ToPermissionEntity(Security.Authorization.PermissionsFamily.PersonManagement));
+            }
+            if (!permissionDbSet.Any(role => role.Code.Equals(Security.Authorization.Permission.PersonRemover)))
+            {
+                permissionDbSet.Add(Security.Authorization.Permission.PersonRemover.ToPermissionEntity(Security.Authorization.PermissionsFamily.PersonManagement));
+            }
+            #endregion
+
             var countryDbSet = dbContext.Set<Country>();
             var stateDbSet = dbContext.Set<State>();
             var municipalitiesDbSet = dbContext.Set<Municipality>();
