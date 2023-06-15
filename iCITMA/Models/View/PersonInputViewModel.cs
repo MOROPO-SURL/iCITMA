@@ -60,6 +60,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         public ICollection<PersonInstitutionBridge> InstitutionBridges { get; set; }
 
+        public List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>> InstitutionsToSelect { get; set; } = new List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>>();
+
         public Person Export()
         {
             var entity = new Person();

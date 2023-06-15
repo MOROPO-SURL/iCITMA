@@ -6,13 +6,13 @@ using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Models.View;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Identity.Persistence.Entities;
-using MOROPO.Framework.Guama.Location.Persistence.ORM.EF.Repositories;
 using MOROPO.Framework.Guama.Media.Persistence.Entities;
-using MOROPO.Framework.Guama.Media.Persistence.ORM.EF.Repositories;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Managers.Facade;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -28,13 +28,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly IImageFileManagerFacade imageFileManagerFacade;
         private readonly IEntityRepository<Image, Guid> imageRepository;
         private readonly IEntityRepository<PersonIdentity, Guid> identityRepository;
-        public PersonsController(IEntityRepository<PersonIdentity, Guid> identityRepository, IEntityRepository<Image, Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
+        private readonly IEntityRepository<Institution, Guid> institutionsRepository;
+        public PersonsController(IEntityRepository<Institution, Guid> institutionsRepository, IEntityRepository<PersonIdentity, Guid> identityRepository, IEntityRepository<Image, Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
         {
             this.ResearcherCategoryRepository = ResearcherCategoryRepository;
             this.TeachingCategoryRepository = TeachingCategoryRepository;
             this.imageFileManagerFacade = imageFileManagerFacade;
             this.imageRepository = imageRepository;
             this.identityRepository = identityRepository;
+            this.institutionsRepository = institutionsRepository;
         }
 
         public IActionResult Index()
@@ -215,6 +217,80 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             imageRepository.Delete(entity.Identity.Image, User.Identity.Name);
             imageFileManagerFacade.DeleteImageFile(entity.Identity.Image);
+        }
+
+        [HttpGet]
+        [Route("edit/{key}/personInstitutions")]
+        [RequirePermissions(Permission.PersonEditor)]
+        public ActionResult EditPersonInstitutions(Guid key)
+        {
+            var entity = Repository.Get(key);
+
+            var model = new PersonInputViewModel();
+
+            PopulateInstitutions(entity, model.InstitutionsToSelect);
+
+            model.Import(entity);
+
+            return View(model);
+        }
+
+        private void PopulateInstitutions(Person entity, List<SelectionDescriptedItemInputViewModel<Guid>> institutionsForSelecting)
+        {
+            var institutions = institutionsRepository.GetAll();
+
+            if (institutions.Count() > 0)
+            {
+                institutionsForSelecting.AddRange(institutions.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                {
+                    Id = item.Id,
+                    Label = item.Identity.Name,
+                    Selected = entity.InstitutionBridges.Any(a => a.SternId == item.Id),
+                    Description = String.IsNullOrWhiteSpace(item.Identity.About) ? "Sin Descripción" : item.Identity.About
+                }));
+            }
+
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/personInstitutions")]
+        [RequirePermissions(Permission.PersonEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPersonInstitutions(Guid key, PersonInputViewModel modelInput)
+        {
+            Person entity = null;
+
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            entity.InstitutionBridges.Clear();
+
+            foreach (var item in modelInput.InstitutionsToSelect)
+            {
+                if (!item.Selected) continue;
+
+                entity.InstitutionBridges.Add(new PersonInstitutionBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = item.Id
+                });
+            }
+
+            Repository.Update(entity, User.Identity.Name);
+
+            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+
+            return RedirectToAction("editpersoninstitutions", new { key = entity.Id });
         }
 
     }
