@@ -37,6 +37,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository;
         private readonly IEntityRepository<Location, Guid> locationRepository;
         private readonly IEntityRepository<StateLocation, Guid> stateLocationRepository;        
+        private readonly IEntityRepository<Person, Guid> personRepository;        
 
         public InstitutionsController(IEntityRepository<Institution, System.Guid> repository,
             IStringLocalizer<InstitutionsController> localizer,
@@ -53,7 +54,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             IEntityRepository<State, Guid> stateRepository,
             IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository,
             IEntityRepository<Location, Guid> locationRepository,
-            IEntityRepository<StateLocation, Guid> stateLocationRepository
+            IEntityRepository<StateLocation, Guid> stateLocationRepository,
+            IEntityRepository<Person, Guid> personRepository
             ) : base(repository, localizer, logger)
         {
             this.imageFileManagerFacade = imageFileManagerFacade;
@@ -69,10 +71,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.municipalityLocationRepository = municipalityLocationRepository;
             this.locationRepository = locationRepository;
             this.stateLocationRepository = stateLocationRepository;
+            this.personRepository = personRepository;
         }
 
         [RequirePermissions(Permission.InstitusionViewer)]
-        public IActionResult Index() => View();
+        public IActionResult Index() => View();        
        
 
         [RequirePermissions(Permission.InstitusionCreator)]
@@ -144,9 +147,23 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return Ok(municipalities);
         }
 
+        protected override void ConfigureCreate(InstitutionInputViewModel modelInput)
+        {
+            base.ConfigureCreate(modelInput);
+            PopulateRepresentative(modelInput);
+        }
+
+        protected override void ConfigureEdit(Institution entity, InstitutionInputViewModel modelInput)
+        {
+            base.ConfigureEdit(entity, modelInput);
+            PopulateRepresentative(modelInput);
+        }
+
         protected override void PreCreate(Institution entity, InstitutionInputViewModel modelInput)
         {
             base.PreCreate(entity, modelInput);
+
+            PopulateRepresentative(modelInput);
 
             if (modelInput.ImageFile == null) return;
 
@@ -164,7 +181,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         protected override void PreEdit(Institution entity, InstitutionInputViewModel modelInput)
         {
-            base.PreEdit(entity, modelInput);
+            base.PreEdit(entity, modelInput);            
 
             if (modelInput.ImageFile == null)
             {
@@ -789,6 +806,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             model.SelectStates = stateRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name}).ToArray();
             model.SelectMunicipalities = municipalityRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name}).ToArray();
+        }
+
+        private void PopulateRepresentative(InstitutionInputViewModel inputViewModel)
+        {
+            inputViewModel.RepresentativeSelected = personRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = "(" + entity.Identity.Alias + ")" + entity.Identity.Name + " " + entity.Identity.LastName }).ToArray();
         }
 
         private Microsoft.AspNetCore.Html.HtmlString GetIcon(string socialId)
