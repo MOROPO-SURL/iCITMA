@@ -40,16 +40,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "SchoolLevel")]
         public Persistence.Enumerators.SchoolingLevel SchoolingLevel { get; set; }
 
-        [Display(Name = "ResearcherCategoryId")]
-        public System.Guid? ResearcherCategoryId { get; set; }
-
         [Display(Name = "ResearcherCategory")]
+        public System.Guid? ResearcherCategoryId { get; set; }
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ResearcherCategorys { get; set; }
 
-        [Display(Name = "TeachingCategoryId")]
-        public System.Guid? TeachingCategoryId { get; set; }
-
         [Display(Name = "TeachingCategory")]
+        public System.Guid? TeachingCategoryId { get; set; }
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> TeachingCategorys { get; set; }
 
         public ICollection<PersonResearchAreaSpecializationBridge> ResearchAreaSpecializationBridge { get; set; }
