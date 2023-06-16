@@ -64,7 +64,26 @@
     @Html.HiddenFor(model => model.Id)
 
     <div class="card" style="margin-bottom: 20px;">
-        <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
+        <div class="card-header">
+            <h4 class="mb-0">@ViewData["Title"]</h4>
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Generales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("editpersoninstitutions", @Model.Id)">Instituciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("editpersonspecializations", @Model.Id)">Especialidades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("editpersonmasterys", @Model.Id)">Maestrías</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("editpersondoctorates", @Model.Id)">Doctorados</a>
+                </li>
+            </ul>
+        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-4 mb-3">
