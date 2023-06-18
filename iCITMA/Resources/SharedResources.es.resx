@@ -651,4 +651,31 @@
   <data name="Reference" xml:space="preserve">
     <value>Referencia</value>
   </data>
+  <data name="SchoolLevel" xml:space="preserve">
+    <value>Nivel de Escolaridad</value>
+  </data>
+  <data name="ResearcherCategory" xml:space="preserve">
+    <value>Categoría de Investigador</value>
+  </data>
+   <data name="TeachingCategory" xml:space="preserve">
+    <value>Categoría Docente</value>
+  </data>
+   <data name="Unknown" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primaria</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medio</value>
+  </data>
+  <data name="UpperMiddle" xml:space="preserve">
+    <value>Medio Superior</value>
+  </data>
+  <data name="Higher" xml:space="preserve">
+    <value>Superior</value>
+  </data>
+  <data name="Ultimate" xml:space="preserve">
+    <value>Quinto Nivel de Educación</value>
+  </data>
 </root>
