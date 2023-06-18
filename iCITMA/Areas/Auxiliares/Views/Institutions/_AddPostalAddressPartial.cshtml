@@ -53,7 +53,7 @@
                     <div class="row">                        
                         <div class="col-md-6" style="margin-bottom: 20px;">
                             @Html.LabelFor(model => model.StateId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.StateId, Model.SelectStates, new { @class="form-control"})
+                            @Html.DropDownListFor(model => model.StateId, Model.SelectStates, "Select", new { @class="form-control"})
                             @Html.ValidationMessageFor(model => model.ZipCode, null, new { @class = "text-danger" })
                         </div>
                         <div class="col-md-6" style="margin-bottom: 20px;">

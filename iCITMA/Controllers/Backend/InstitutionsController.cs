@@ -151,12 +151,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             base.ConfigureCreate(modelInput);
             PopulateRepresentative(modelInput);
+            PopulateOwner(modelInput);
         }
 
         protected override void ConfigureEdit(Institution entity, InstitutionInputViewModel modelInput)
         {
             base.ConfigureEdit(entity, modelInput);
             PopulateRepresentative(modelInput);
+            PopulateOwner(modelInput);
         }
 
         protected override void PreCreate(Institution entity, InstitutionInputViewModel modelInput)
@@ -810,7 +812,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         private void PopulateRepresentative(InstitutionInputViewModel inputViewModel)
         {
-            inputViewModel.RepresentativeSelected = personRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = "(" + entity.Identity.Alias + ")" + entity.Identity.Name + " " + entity.Identity.LastName }).ToArray();
+            inputViewModel.RepresentativeSelected = personRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = "(" + entity.Identity.Alias + ")" + entity.Identity.Name + " " + entity.Identity.LastName }).ToArray();            
+        }
+
+        private void PopulateOwner(InstitutionInputViewModel inputViewModel)
+        {
+            inputViewModel.OwnwerSelected = Repository.GetAll().Where(entity => entity.Owner == null && entity.Id != inputViewModel.Id).Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Identity.Name  }).ToArray();            
         }
 
         private Microsoft.AspNetCore.Html.HtmlString GetIcon(string socialId)

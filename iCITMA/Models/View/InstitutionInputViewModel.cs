@@ -31,7 +31,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "CreatedAt")]
         public DateTime? CreatedAt { get; set; }
         public string Description { get; set; }
+        [Display(Name = "Owner")]
+
         public System.Guid? OwnerId { get; set; }
+        [Display(Name = "Representative")]
         public System.Guid? RepresentativeId { get; set; }
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> OwnwerSelected { get; set; }
             = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
