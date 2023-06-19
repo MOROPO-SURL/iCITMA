@@ -1,6 +1,7 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
 using System.Collections.Generic;
+using System.Security.Permissions;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Extensions
 {
@@ -14,9 +15,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
             {
                 if (provider is Framework.Guama.Security.Personal.Presentation.Web.Backend.Providers.ManagementDashboardSectionProvider)
                 {
-                    securitySections.AddRange(provider.GetManagementDashboardSections());                    
+                    securitySections.AddRange(provider.GetManagementDashboardSections());
                 }
             }
+
+            securitySections.Add(new ManagementDashboardSectionViewModel
+            {
+                Title = "Registros",
+                Controller = "traces",
+                Action = "index",
+                Area = "security",
+                Role = Security.Authorization.Permission.TraceViewer
+            });
 
             var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
             {

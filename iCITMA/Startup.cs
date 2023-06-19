@@ -15,6 +15,7 @@ using MOROPO.CITMA.CMG.iCITMA.Options;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.EF;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+using MOROPO.Framework.Guama.Core.Persistence.ORM.EF.Repositories;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Security.Common.Presentation.Web.Frontend.Extensions;
 using MOROPO.Framework.Guama.Identity.Persistence.Entities;
@@ -26,6 +27,7 @@ using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Persistence.ORM.EF.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Presentation.Web.Backend.Extensions;
 using Serilog;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA
@@ -73,6 +75,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<Image, System.Guid>, ImageRepository>();
             services.AddScoped<IEntityRepository<OrganizationIdentity, System.Guid>, OrganizationIdentityRepository>();
             services.AddScoped<IEntityRepository<Person, System.Guid>, PersonRepository>();
+            services.AddScoped<IEntityRepository<Framework.Guama.Core.Persistence.ORM.EF.Entities.Trace, long>, TraceRepository>();
 
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Managers.RelativeImageFileManager>();
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Managers.RelativeThumbnailFileManager>();
