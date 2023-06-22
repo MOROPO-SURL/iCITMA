@@ -27,6 +27,7 @@ using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Persistence.ORM.EF.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Presentation.Web.Backend.Extensions;
 using Serilog;
+using System;
 using System.Diagnostics;
 using System.Linq;
 
@@ -76,6 +77,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<OrganizationIdentity, System.Guid>, OrganizationIdentityRepository>();
             services.AddScoped<IEntityRepository<Person, System.Guid>, PersonRepository>();
             services.AddScoped<IEntityRepository<Framework.Guama.Core.Persistence.ORM.EF.Entities.Trace, long>, TraceRepository>();
+            services.AddScoped<IEntityRepository<Persistence.Entities.Program, Guid>, ProgramRepository>();
 
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Managers.RelativeImageFileManager>();
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Managers.RelativeThumbnailFileManager>();

@@ -144,6 +144,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Programas",
+                  Controller = "programs",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ProgramViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Regiones",
                   Controller = "regions",
                   Action = "index",

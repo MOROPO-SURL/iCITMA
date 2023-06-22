@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
@@ -40,9 +41,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         public System.DateTime StartAt { get; set; }
 
         public System.DateTime? EndAt { get; set; }
+        [DataType(DataType.Currency)]
+        public decimal? Amount { get; set; } 
 
         // Objetivos
         public string Description { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("FundingSourceId")]
+        public FundingSource FundingSource { get; set; }
+        public System.Guid FundingSourceId { get; set; }
 
         public List<ProgramImpactIndicatorBridge> ImpactIndicatorBridges { get; set; }
 

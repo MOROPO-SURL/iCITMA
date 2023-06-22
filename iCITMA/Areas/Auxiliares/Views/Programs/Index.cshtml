@@ -1,8 +1,8 @@
-﻿@model MOROPO.Framework.Guama.Core.Presentation.Web.Frontend.Models.View.PaginationViewModel<MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Institution, System.Guid,MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionDisplayViewModel>
+﻿@model MOROPO.Framework.Guama.Core.Presentation.Web.Frontend.Models.View.PaginationViewModel<MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Program, System.Guid,MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramDisplayViewModel>
 
 
 @{
-    ViewData["Title"] = "Administración de Instituciones";
+    ViewData["Title"] = "Administración de Programas";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -142,21 +142,39 @@
                     </div>
                     <div class="mb-2">
                         <span class="font-weight-bold">
-                            Fecha de Creación:
+                            Código:
                         </span>
-                        @item.CreatedAt
+                        @item.Code
                     </div>
                     <div class="mb-2">
                         <span class="font-weight-bold">
-                            Entidad Rectora:
+                            Fecha de Inicio:
                         </span>
-                        @item.Owner?.Identity.Name
+                        @item.StartDate
                     </div>
                     <div class="mb-2">
                         <span class="font-weight-bold">
-                            Representante :
+                            Fecha de Terminación:
                         </span>
-                        @item.Representative?.Identity.Name @item.Representative?.Identity.LastName
+                        @item.EndAt
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-weight-bold">
+                            Institución:
+                        </span>
+                        @item.Institution
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-weight-bold">
+                            Jefe :
+                        </span>
+                        @item.Leader
+                    </div>
+                    <div class="mb-2">
+                        <span class="font-weight-bold">
+                            Monto :
+                        </span>
+                        @item.Amount
                     </div>
                     <div>
                         <div class="btn-group btn-group-sm float-right">
@@ -178,9 +196,12 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Código</th>
                     <th>Fecha de Creación</th>
-                    <th>Entidad Rectora</th>
-                    <th>Representante</th>
+                    <th>Fecha de Terminación</th>
+                    <th>Institución</th>
+                    <th>Jefe</th>
+                    <th>Monto</th>
                     <th style="width: 1px;">Opciones</th>
                 </tr>
             </thead>
@@ -189,9 +210,12 @@
                 {
                     <tr>
                         <td style="vertical-align: middle;">@item.Name</td>
-                        <td style="vertical-align: middle;">@item.CreatedAt?.ToString("dd-MM-yyyy") </td>
-                        <td style="vertical-align: middle;">@item.Owner?.Identity.Name</td>
-                        <td style="vertical-align: middle;">@item.Representative?.Identity.Name @item.Representative?.Identity.LastName</td>
+                        <td style="vertical-align: middle;">@item.Code</td>
+                        <td style="vertical-align: middle;">@item.StartDate.ToString("dd-MM-yyyy") </td>
+                        <td style="vertical-align: middle;">@item.EndAt?.ToString("dd-MM-yyyy") </td>
+                        <td style="vertical-align: middle;">@item.Institution</td>
+                        <td style="vertical-align: middle;">@item.Leader</td>
+                        <td style="vertical-align: middle;">@item.Amount</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <button class="btn btn-light" title="@Model" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline  "></span><span>Detalles</span></button>

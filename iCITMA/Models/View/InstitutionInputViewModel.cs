@@ -31,8 +31,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "CreatedAt")]
         public DateTime? CreatedAt { get; set; }
         public string Description { get; set; }
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Owner")]
-
         public System.Guid? OwnerId { get; set; }
         [Display(Name = "Representative")]
         public System.Guid? RepresentativeId { get; set; }

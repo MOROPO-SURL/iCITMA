@@ -29,5 +29,7 @@
         internal const string InstitusionManagement = "institusion-management";
 
         internal const string PersonManagement = "person-management";
+
+        internal const string ProgramManagement = "program-management";
     }
 }

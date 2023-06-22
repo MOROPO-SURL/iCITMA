@@ -167,5 +167,17 @@
         public const string PersonRemover = "person-remover";
 
         #endregion
+   
+        #region Program
+
+        public const string ProgramViewer = "program-viewer";
+   
+        public const string ProgramCreator = "program-creator";
+
+        public const string ProgramEditor = "program-editor";
+
+        public const string ProgramRemover = "program-remover";
+
+        #endregion
     }
 }

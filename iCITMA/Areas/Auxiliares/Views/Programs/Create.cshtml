@@ -1,0 +1,131 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Programa";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-cogs\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración de Programas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/lib/gijgo/combined/css/gijgo.css" />
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
+}
+
+@section scripts {
+    <script src="~/lib/gijgo/combined/js/gijgo.js"></script>
+    <script type="text/javascript">
+        $('#StartDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            modal: true,
+            header: true,
+            footer: true,
+            format: 'dd/mm/yyyy'
+        });
+
+        $('#EndAt').datepicker({
+            uiLibrary: 'bootstrap4',
+            modal: true,
+            header: true,
+            footer: true,
+            format: 'dd/mm/yyyy'
+        });
+
+       
+    </script>
+}
+
+@using (Html.BeginForm("create", "programs", new { Area = "Auxiliares" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
+
+        <div class="card-body">            
+            <div class="row">
+                <div class="col-lg-5 col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-6" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Code, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Code, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.StartDate, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.StartDate, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.EndAt, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.EndAt, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EndAt, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    @Html.LabelFor(model => model.InstitutionId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.InstitutionId, Model.InstitutionSelected, "Select", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.InstitutionId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    @Html.LabelFor(model => model.LeaderId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.LeaderId, Model.LeaderSelected, "Select", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.LeaderId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    @Html.LabelFor(model => model.FundingSourceId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.FundingSourceId, Model.FundingSourceSelected, "Select", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.FundingSourceId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelected, "Select", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12" style="margin-bottom: 20px;">
+                    @Html.LabelFor(model => model.Amount, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Amount, null, new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Agregar</button>
+            <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+        </div>
+    </div>
+}
+
+
