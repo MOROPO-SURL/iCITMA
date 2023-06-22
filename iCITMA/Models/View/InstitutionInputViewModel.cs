@@ -30,8 +30,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Alia { get;set; }
         [Display(Name = "CreatedAt")]
         public DateTime? CreatedAt { get; set; }
-        public string Description { get; set; }
-        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        public string Description { get; set; }        
         [Display(Name = "Owner")]
         public System.Guid? OwnerId { get; set; }
         [Display(Name = "Representative")]
