@@ -179,5 +179,17 @@
         public const string ProgramRemover = "program-remover";
 
         #endregion
+
+        #region Document
+
+        public const string DocumentViewer = "document-viewer";
+
+        public const string DocumentCreator = "document-creator";
+
+        public const string DocumentEditor = "document-editor";
+
+        public const string DocumentRemover = "document-remover";
+
+        #endregion
     }
 }

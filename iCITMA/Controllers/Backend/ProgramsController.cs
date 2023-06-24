@@ -26,14 +26,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<Person, System.Guid> personRepository;
         public readonly IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository;
         public readonly IEntityRepository<FundingSource, System.Guid> fundingSourceRepository;
+        public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
+        public readonly IEntityRepository<Document, System.Guid> documentRepository;
 
 
-        public ProgramsController(IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
+        public ProgramsController(IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
         {
             this.institutionRepository = institutionRepository;
             this.personRepository = personRepository;
             this.programCategoryRepository = programCategoryRepository;
             this.fundingSourceRepository = fundingSourceRepository;
+            this.keyWordRepository = keyWordRepository;
+            this.documentRepository = documentRepository;
 
         }
         public IActionResult Index() => View();
@@ -111,9 +115,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             var model = new ProgramInputViewModel();
 
             if (entity != null)
-            {               
+            {
 
-                PopulateInstitutions(entity, model.ExpertsToSelect);
+                PopulatePersons(entity, model.ExpertsToSelect);
 
                 model.Import(entity);
 
@@ -122,7 +126,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return View(model);
         }
 
-        private void PopulateInstitutions(Persistence.Entities.Program entity, List<SelectionDescriptedImageItemInputViewModel<System.Guid>> expertsForSelecting)
+        private void PopulatePersons(Persistence.Entities.Program entity, List<SelectionDescriptedImageItemInputViewModel<System.Guid>> expertsForSelecting)
         {
             var persons = personRepository.GetAll();
 
@@ -143,6 +147,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }            
         }
 
+        [HttpPost]
         [Route("edit/{key}/programExprerts")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
@@ -181,6 +186,166 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
 
             return RedirectToAction("EditProgramExprerts", new { key = entity.Id });
+        }
+        #endregion
+
+        #region ProgramKeyWorld
+        [HttpGet]
+        [Route("edit/{key}/programKeyWorlds")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        public IActionResult EditProgramKeyWorlds(Guid key)
+        {
+            var entity = Repository.Get(key);
+
+            var model = new ProgramInputViewModel();
+
+            if (entity != null)
+            {
+
+                PopulateKeyWords(entity, model.KeyWordsToSelect);
+
+                model.Import(entity);
+
+                return View(model);
+            }
+            return View(model);
+        }
+
+        private void PopulateKeyWords(Persistence.Entities.Program entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        {
+            var keyWords = keyWordRepository.GetAll();
+
+            if (keyWords.Count() > 0)
+            {
+                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                {
+                    Id = item.Id,                   
+                    Label = item.Name,
+                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),                    
+                    Description = item.Description
+                }));
+            }
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/programKeyWorlds")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProgramKeyWorlds(Guid key, ProgramInputViewModel modelInput)
+        {
+            Persistence.Entities.Program entity = null;
+
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            entity.KeyWordBridges.Clear();
+
+            foreach (var item in modelInput.KeyWordsToSelect)
+            {
+                if (!item.Selected) continue;
+
+                entity.KeyWordBridges.Add(new ProgramKeyWordBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = item.Id
+                });
+            }
+
+            Repository.Update(entity, User.Identity.Name);
+
+            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+
+            return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
+        }
+        #endregion
+
+        #region Documents
+        [HttpGet]
+        [Route("edit/{key}/programDocuments")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        public IActionResult EditProgramDocuments(Guid key)
+        {
+            var entity = Repository.Get(key);
+
+            var model = new ProgramInputViewModel();
+
+            if (entity != null)
+            {
+
+                PopulateDocuments(entity, model.DocumentsToSelect);
+
+                model.Import(entity);
+
+                return View(model);
+            }
+            return View(model);
+        }
+
+        private void PopulateDocuments(Persistence.Entities.Program entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        {
+            var documents = documentRepository.GetAll();
+
+            if (documents.Count() > 0)
+            {
+                expertsForSelecting.AddRange(documents.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                {
+                    Id = item.Id,
+                    Label = item.Name,
+                    Selected = entity.DocumentBridges.Any(a => a.SternId == item.Id),
+                    Description = item.Description
+                }));
+            }
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/programDocuments")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProgramDocuments(Guid key, ProgramInputViewModel modelInput)
+        {
+            Persistence.Entities.Program entity = null;
+
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            entity.DocumentBridges.Clear();
+
+            foreach (var item in modelInput.DocumentsToSelect)
+            {
+                if (!item.Selected) continue;
+
+                entity.DocumentBridges.Add(new ProgramDocumentBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = item.Id
+                });
+            }
+
+            Repository.Update(entity, User.Identity.Name);
+
+            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+
+            return RedirectToAction("EditProgramDocuments", new { key = entity.Id });
         }
         #endregion
     }

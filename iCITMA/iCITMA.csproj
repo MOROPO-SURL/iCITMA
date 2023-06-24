@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\media\images\" />
+    <Folder Include="wwwroot\media\attachments\" />
   </ItemGroup>
 
 </Project>

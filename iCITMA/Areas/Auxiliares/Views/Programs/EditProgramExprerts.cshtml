@@ -38,10 +38,10 @@
                     <a class="nav-link active" href="#">Expertos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Palabras Claves</a>
+                    <a class="nav-link" href="@Url.Action("EditProgramKeyWorlds", Model.Id)">Palabras Claves</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Documentos</a>
+                    <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.Id)">Documentos</a>
                 </li>
             </ul>
         </div>
@@ -54,7 +54,14 @@
                     {
                         <div class="col-md-4">
                             <div class="card" style="width: 18rem;">
+                            @if(item.ImageId != System.Guid.Empty && item.ImageId != null)
+                            {
                                 <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="card-img-top" alt="...">
+                            }else
+                            {
+                                <img src="~/img/default-person-picture.jpg" class="card-img-top" alt="..." />
+                            }
+                                
                                 <div class="card-body">
                                     <h5 class="card-title">@item.LabelDisplay</h5>
                                     <p class="card-text">@item.DescriptionDisplay</p>

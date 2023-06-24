@@ -23,8 +23,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         public string ImageExtension { get; set; }
 
-        public bool ResetImage { get; set; }       
-
+        public bool ResetImage { get; set; }
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
         [Display(Name = "Stage name")]
         public string Alia { get;set; }
@@ -63,8 +63,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         }
 
         public void Mergue(Institution entity)
-        {
-            //TODO Se debe incluir las imagenes ImageFile, ImageId, etc            
+        {                      
             entity.Identity.Name = Name;
             entity.Alia = Alia;
             entity.Identity.BornDate = CreatedAt;
