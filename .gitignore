@@ -356,3 +356,4 @@ MigrationBackup/
 /iCITMA/appsettings.Staging.json
 /.vscode/launch.json
 /.vscode/tasks.json
+/iCITMA/wwwroot/media/attachments
