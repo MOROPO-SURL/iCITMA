@@ -678,4 +678,22 @@
   <data name="Ultimate" xml:space="preserve">
     <value>Quinto Nivel de Educación</value>
   </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Fecha de Creación</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Fecha de Creación</value>
+  </data>
+  <data name="Representative" xml:space="preserve">
+    <value>Representante</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Entidad Rectora</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Número</value>
+  </data>
 </root>

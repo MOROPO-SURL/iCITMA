@@ -17,11 +17,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         [Display(Name = "Name")]
         public string Name { get; set; }
+
         [Display(Name = "Fecha de Creación")]
         public DateTime? CreatedAt { get; set; }
+
+        [Display(Name = "Description")]
         public string Description { get; set; }
+
         public Institution Owner { get; set; }
+
         public Person Representative { get; set; }
+
+        [Display(Name = "Alias")]
         public string Alia { get; set; }
 
         public void Import(Institution entity)
