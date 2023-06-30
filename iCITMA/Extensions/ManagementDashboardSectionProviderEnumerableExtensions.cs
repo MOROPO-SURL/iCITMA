@@ -160,6 +160,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
+                  Title = "Proyectos",
+                  Controller = "projects",
+                  Action = "index",
+                  Area = "Auxiliares",
+                  Role = Security.Authorization.Permission.ProjectViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
                   Title = "Regiones",
                   Controller = "regions",
                   Action = "index",
