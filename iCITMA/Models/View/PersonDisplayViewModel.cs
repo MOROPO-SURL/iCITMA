@@ -23,7 +23,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "Sex")]
         public Framework.Guama.Identity.Persistence.Enumerations.Sex Sex { get; set; }
 
-        [Display(Name = "Stage name")]
+        [Display(Name = "Alias")]
         public string Alias { get; set; }
 
         [Display(Name = "Description")]

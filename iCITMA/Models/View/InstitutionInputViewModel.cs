@@ -24,17 +24,26 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string ImageExtension { get; set; }
 
         public bool ResetImage { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
-        [Display(Name = "Stage name")]
+
+        [Display(Name = "Alias")]
         public string Alia { get;set; }
+
         [Display(Name = "CreatedAt")]
         public DateTime? CreatedAt { get; set; }
+
+        [Display(Name = "Description")]
         public string Description { get; set; }        
+
         [Display(Name = "Owner")]
         public System.Guid? OwnerId { get; set; }
+
         [Display(Name = "Representative")]
         public System.Guid? RepresentativeId { get; set; }
+
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> OwnwerSelected { get; set; }
             = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> RepresentativeSelected { get; set; }
