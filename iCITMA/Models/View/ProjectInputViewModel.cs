@@ -32,13 +32,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid LeaderId { get; set; }
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> LeaderSelected { get; set; }
             = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-        [Display(Name = "State")]
-        public System.Guid StateId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> StateSelected { get; set; }
+        [Display(Name = "ProjectState")]
+        public System.Guid ProjectStateId { get; set; }
+        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ProjectStateSelected { get; set; }
             = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
         [Display(Name = "Start At")]
-        public System.DateTime StartAt { get; set; }
-        [Display(Name = "End At")]
+        [DataType(DataType.Date)]        
+        public System.DateTime StartAt { get; set; } = DateTime.Now;
+        [Display(Name = "End At")]        
         public System.DateTime? EndAt { get; set; }
         [Display(Name = "Budget")]
         public decimal? Budget { get; set; }
@@ -76,7 +77,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             CategoryId = (Guid)entity.CategoryId;
             ManagerId = (Guid)entity.ManagerId;
             LeaderId = (Guid)entity.LeaderId;
-            StateId = (Guid)entity.StateId;
+            ProjectStateId = (Guid)entity.StateId;
             StartAt = entity.StartAt;
             EndAt = entity.EndAt;
             Budget = entity.Budget;
@@ -95,7 +96,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.CategoryId = CategoryId;
             entity.ManagerId = ManagerId;
             entity.LeaderId = LeaderId;
-            entity.StateId = StateId;
+            entity.StateId = ProjectStateId;
             entity.StartAt = StartAt;
             entity.EndAt = EndAt;
             entity.Budget = Budget;

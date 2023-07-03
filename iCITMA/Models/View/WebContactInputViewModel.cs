@@ -7,6 +7,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     public class WebContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<WebSiteContactItem, System.Guid>
     {
         public Guid Id { get; set; }
+
+        [Display(Name = "Label")]
+        public string Label { get; set; }
         [Required]
         [Url]
         public string Url { get; set; }
@@ -23,10 +26,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public void Import(WebSiteContactItem entity)
         {
             Url = entity.Url;
+            Label = entity.Label;
         }
         public void Mergue(WebSiteContactItem entity)
         {
             entity.Url = Url;
+            entity.Label = Label;
         }
     }
 }

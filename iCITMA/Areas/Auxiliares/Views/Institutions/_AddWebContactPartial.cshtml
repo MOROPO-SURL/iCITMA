@@ -16,6 +16,11 @@
 
                     <div class="row">
                         <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.Label, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Label, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Label, null, new { @class = "text-danger" })
+                        </div>     
+                        <div class="col-md-6" style="margin-bottom: 20px;">
                             @Html.LabelFor(model => model.Url, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Url, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Url, null, new { @class = "text-danger" })
