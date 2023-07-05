@@ -97,7 +97,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         private void PopulateProjectState(ProjectInputViewModel modelInput)
         {
-            modelInput.StateSelected = projectStateRepository.GetAll().Select(p => new SelectListItem
+            modelInput.ProjectStateSelected = projectStateRepository.GetAll().Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),
                 Text = p.Name

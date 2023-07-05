@@ -147,9 +147,9 @@
                 @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
             </div>
                 <div class="col-lg-4 col-md-6 mb-3">
-                    @Html.LabelFor(model => model.StateId, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.StateId, Model.StateSelected, "Select", new { @class = "form-control"})
-                    @Html.ValidationMessageFor(model => model.StateId, null, new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.ProjectStateId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ProjectStateId, Model.ProjectStateSelected, "Select", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.ProjectStateId, null, new { @class = "text-danger" })
                 </div>
         </div>        
     </div>

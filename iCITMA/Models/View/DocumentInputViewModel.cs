@@ -51,5 +51,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.Description = Description;
             entity.ContentType = ContentType;
         }
+
+        public void MergueForProgram(Document entity)
+        {
+            entity.Name = Name;
+            entity.Description = Description;            
+        }
     }
 }
