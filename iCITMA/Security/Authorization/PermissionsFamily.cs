@@ -33,5 +33,7 @@
         internal const string ProgramManagement = "program-management";
 
         internal const string DocumentManagement = "document-management";
+
+        internal const string ProjectManagement = "project-management";
     }
 }

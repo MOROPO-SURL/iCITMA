@@ -191,5 +191,17 @@
         public const string DocumentRemover = "document-remover";
 
         #endregion
+
+        #region Project
+
+        public const string ProjectViewer = "project-viewer";
+
+        public const string ProjectCreator = "project-creator";
+
+        public const string ProjectEditor = "project-editor";
+
+        public const string ProjectRemover = "project-remover";
+
+        #endregion
     }
 }

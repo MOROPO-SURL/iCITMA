@@ -14,6 +14,8 @@ using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using Document = MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Document;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
@@ -28,9 +30,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<FundingSource, System.Guid> fundingSourceRepository;
         public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
         public readonly IEntityRepository<Document, System.Guid> documentRepository;
+        private readonly Managers.RelativeDocumentFileManager attachmentFileManager;        
 
 
-        public ProgramsController(IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
+        public ProgramsController(Managers.RelativeDocumentFileManager attachmentFileManager, IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
         {
             this.institutionRepository = institutionRepository;
             this.personRepository = personRepository;
@@ -38,6 +41,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.fundingSourceRepository = fundingSourceRepository;
             this.keyWordRepository = keyWordRepository;
             this.documentRepository = documentRepository;
+            this.attachmentFileManager = attachmentFileManager;
 
         }
         public IActionResult Index() => View();
@@ -60,7 +64,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return base.Edit(key);
         }
 
-        [RequirePermissions(Permission.ProgramEditor)]        
+        [RequirePermissions(Permission.ProgramEditor)]
         public override IActionResult Edit(ProgramInputViewModel modelInput)
         {
             return base.Edit(modelInput);
@@ -80,9 +84,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         private void PopulateLists(ProgramInputViewModel modelInput)
         {
-            modelInput.InstitutionSelected = institutionRepository.GetAll().Select(inst => new SelectListItem { Value = inst.Id.ToString(), Text = inst.Identity.Name}).ToArray();
+            modelInput.InstitutionSelected = institutionRepository.GetAll().Select(inst => new SelectListItem { Value = inst.Id.ToString(), Text = inst.Identity.Name }).ToArray();
             modelInput.CategorySelected = programCategoryRepository.GetAll().Select(prog => new SelectListItem { Value = prog.Id.ToString(), Text = prog.Name }).ToArray();
-            modelInput.LeaderSelected = personRepository.GetAll().Select(pers => new SelectListItem { Value = pers.Id.ToString(), Text = pers.Identity.Name+" "+pers.Identity.LastName }).ToArray();
+            modelInput.LeaderSelected = personRepository.GetAll().Select(pers => new SelectListItem { Value = pers.Id.ToString(), Text = pers.Identity.Name + " " + pers.Identity.LastName }).ToArray();
             modelInput.FundingSourceSelected = fundingSourceRepository.GetAll().Select(fun => new SelectListItem { Value = fun.Id.ToString(), Text = fun.Name }).ToArray();
         }
 
@@ -110,54 +114,73 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.ProgramEditor)]
         public IActionResult EditProgramExprerts(Guid key)
         {
-            var entity = Repository.Get(key);
-
-            var model = new ProgramInputViewModel();
-
-            if (entity != null)
+            try
             {
+                var entity = Repository.Get(key);
 
-                PopulatePersons(entity, model.ExpertsToSelect);
+                var experts = entity.PersonExpertBridges.Select(p => p.Stern).ToArray();
 
-                model.Import(entity);
+                var notSelectedExperts = personRepository.GetAll().ToArray();
 
-                return View(model);
-            }
-            return View(model);
-        }
-
-        private void PopulatePersons(Persistence.Entities.Program entity, List<SelectionDescriptedImageItemInputViewModel<System.Guid>> expertsForSelecting)
-        {
-            var persons = personRepository.GetAll();
-
-            if (persons.Count() > 0)
-            {
-                expertsForSelecting.AddRange(persons.ToList().Select(item => new SelectionDescriptedImageItemInputViewModel<Guid>
+                if (experts.Count() != 0)
                 {
-                    Id = item.Id,
-                    LabelDisplay = item.Identity.Name+" "+item.Identity.LastName,
-                    Label= entity.PersonExpertBridges.Any(a => a.SternId == item.Id)?"Seleccionado":"No Seleccionado",
-                    Selected = entity.PersonExpertBridges.Any(a => a.SternId == item.Id),
-                    DescriptionDisplay = String.IsNullOrWhiteSpace(item.Identity.About) ? "Sin Descripción" : item.Identity.About,
-                    Description = " ",
-                    ImageId = item.Identity.ImageId,
-                    ImageExtension = item.Identity.Image?.ContentType.ContentTypeToExtension() ?? null
+                    notSelectedExperts = notSelectedExperts.Except(experts).ToArray();
+                }
 
-                }));
-            }            
+                var resultModel = new ProgramExpertManagerViewModel
+                {
+                    Program = new ProgramDisplayViewModel()
+                };
+
+                resultModel.Program.Import(entity);
+
+                resultModel.NotSelectedExperts = notSelectedExperts.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Identity.Name} {exp.Identity.LastName}"
+                }).ToArray();
+
+                resultModel.Experts = experts.Select(item =>
+                {
+                    var model = new PersonDisplayViewModel
+                    {
+                        ProgramExpert = new ProgramExpertDisplayViewModel
+                        {
+                            ProgramId = key,
+                            PersonId = item.Id,
+                            Name = $"{item.Identity.Name} {item.Identity.LastName}",
+                            Alias = item.Identity.Alias
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
         [HttpPost]
-        [Route("edit/{key}/programExprerts")]
+        [Route("edit/programExprerts/add")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditProgramExprerts(Guid key, ProgramInputViewModel modelInput)
+        public IActionResult AddExprerts(ProgramExpertInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.ProgramId);
             }
             catch { }
 
@@ -168,22 +191,85 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.PersonExpertBridges.Clear();            
-
-            foreach (var item in modelInput.ExpertsToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.PersonExpertBridges.Add(new ProgramPersonExpertBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.PersonId,
+                    Prow = entity,
+                    Stern = personRepository.Get(modelInput.PersonId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditProgramExprerts", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpPost]
+        [Route("edit/programExprerts/remove")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveExprerts(ProgramExpertDisplayViewModel modelInput)
+        {
+            Persistence.Entities.Program entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProgramId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.PersonExpertBridges.FirstOrDefault(exp => exp.ProwId == modelInput.ProgramId && exp.SternId == modelInput.PersonId);
+
+                entity.PersonExpertBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
 
             return RedirectToAction("EditProgramExprerts", new { key = entity.Id });
         }
@@ -219,9 +305,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
                 {
-                    Id = item.Id,                   
+                    Id = item.Id,
                     Label = item.Name,
-                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),                    
+                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),
                     Description = item.Description
                 }));
             }
@@ -277,76 +363,202 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             var entity = Repository.Get(key);
 
-            var model = new ProgramInputViewModel();
-
-            if (entity != null)
+            var model = new ProgramDocumentDisplayViewModel
             {
+                Program = new ProgramDisplayViewModel(),
+                Documents = entity.DocumentBridges.Select(item =>
+                {
+                    var result = new DocumentDisplayViewModel();
 
-                PopulateDocuments(entity, model.DocumentsToSelect);
+                    result.Import(item.Stern);
 
-                model.Import(entity);
+                    return result;
+                    
+                }).ToArray()
+                
+            };
 
-                return View(model);
-            }
+            model.Program.Import(entity);
+
             return View(model);
         }
 
-        private void PopulateDocuments(Persistence.Entities.Program entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        [HttpPost]
+        [Route("edit/{key}/programDocuments/add")]
+        [ValidateAntiForgeryToken]
+        [RequirePermissions(Permission.ProgramEditor)]
+        public IActionResult AddDocument(System.Guid key, DocumentInputViewModel model)
         {
-            var documents = documentRepository.GetAll();
-
-            if (documents.Count() > 0)
+            try
             {
-                expertsForSelecting.AddRange(documents.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                var entity = Repository.Get(key);
+
+                ModelState.ClearValidationState("File");
+
+                model.File = Request.Form.Files[0];
+
+                var updateModelTask = TryUpdateModelAsync(model);
+
+                updateModelTask.Wait();
+
+                if (ModelState.IsValid)
                 {
-                    Id = item.Id,
-                    Label = item.Name,
-                    Selected = entity.DocumentBridges.Any(a => a.SternId == item.Id),
-                    Description = item.Description
-                }));
+                    try
+                    {
+                        using (var memoryStream = new System.IO.MemoryStream())
+                        {
+                            model.File.CopyTo(memoryStream);
+
+                            var document = new Document
+                            {
+                                Name = model.Name,
+                                Description = model.Description,
+                                ContentType = model.File.ContentType,
+                                Length = model.File.Length
+                            };
+
+                            documentRepository.Add(document, User.Identity.Name);
+
+                            var documentBridge = new ProgramDocumentBridge
+                            {
+                                ProwId = entity.Id,
+                                Prow = entity,
+                                Stern = document,
+                                SternId = document.Id                                
+                            };
+                            
+                            entity.DocumentBridges.Add(documentBridge);
+
+                            Repository.Update(entity, User.Identity.Name);
+
+                            attachmentFileManager.SaveImageFileContent(document.Id, memoryStream.ToArray(), document.ContentType);
+                        }
+
+                        SetDefaultNotification(NotificationType.Success, GetCreationSuccessMessage());
+
+                        return RedirectToAction("EditProgramDocuments", new { key = entity.Id });
+                    }
+                    catch (MOROPO.Framework.Guama.Core.Presentation.Web.Frontend.InvalidModelException e)
+                    {
+                        ModelState.AddModelError(e.ModelKey, e.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, GetInvalidMessage());
+
+                return RedirectToAction("EditProgramDocuments", new { key = entity.Id });
             }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
         [HttpPost]
-        [Route("edit/{key}/programDocuments")]
-        [RequirePermissions(Permission.ProgramEditor)]
+        [Route("edit/{key}/programDocuments/delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult EditProgramDocuments(Guid key, ProgramInputViewModel modelInput)
+        [RequirePermissions(Permission.ProgramEditor)]
+        public IActionResult DeleteDocument(System.Guid key, System.Guid documentId)
         {
-            Persistence.Entities.Program entity = null;
-
             try
             {
-                entity = Repository.Get(key);
-            }
-            catch { }
+                var entity = Repository.Get(key);
 
-            if (entity == null)
+                var document = entity.DocumentBridges.First(e => e.SternId == documentId);
+
+                attachmentFileManager.DeleteImageFile(document.Stern);
+
+                documentRepository.Delete(document.Stern, User.Identity.Name);
+
+                entity.DocumentBridges.Remove(document);
+
+                
+
+                
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+
+                return RedirectToAction("EditProgramDocuments", new { key = entity.Id });
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
             {
-                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+                logger.LogError(e.InnerException, e.Message);
 
-                return GetDefaultActionResult();
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+
+                return RedirectToAction("EditProgramDocuments", new { key });
             }
-
-            entity.DocumentBridges.Clear();
-
-            foreach (var item in modelInput.DocumentsToSelect)
+            catch (System.Exception e)
             {
-                if (!item.Selected) continue;
-
-                entity.DocumentBridges.Add(new ProgramDocumentBridge
-                {
-                    ProwId = entity.Id,
-                    SternId = item.Id
-                });
+                logger.LogError(e.InnerException, e.Message);
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
-
-            return RedirectToAction("EditProgramDocuments", new { key = entity.Id });
+            return GetSuccessDeleteActionResult();
         }
+
+        [HttpPost]
+        [Route("edit/{key}/programDocuments/edit")]
+        [ValidateAntiForgeryToken]
+        [RequirePermissions(Permission.ProgramEditor)]
+        public IActionResult EditDocument(System.Guid key, DocumentInputViewModel modelInput)
+        {
+            try
+            {
+                ModelState.Remove("File");                
+
+                if (ModelState.IsValid)
+                {
+                    Document val = documentRepository.Get(modelInput.Id);
+                    try
+                    {
+                        modelInput.MergueForProgram(val);
+
+                        documentRepository.Update(val, base.User.Identity.Name);
+
+                        SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+                        return RedirectToAction("EditProgramDocuments", new { key });
+                    }
+                    catch (Exception ex2)
+                    {
+                        logger.LogError(ex2.InnerException, ex2.Message);
+                        SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+                        return RedirectToAction("EditProgramDocuments", new { key });
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/{documentId}/programDocuments/download")]
+        [ValidateAntiForgeryToken]
+        [RequirePermissions(Permission.ProgramEditor)]
+        public FileResult DownloadDocument(System.Guid key, System.Guid documentId)
+        {
+
+            var entity = Repository.Get(key);
+            var document = entity.DocumentBridges.FirstOrDefault(att => att.Stern.Id == documentId);
+
+            var fileBytes = attachmentFileManager.GetImageFileContent(document.Stern);
+            var extension = document.Stern.ContentType.Split('/');
+            var fileName = document.Stern.Name + "." + extension[1];
+
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+
+        }
+
         #endregion
     }
 }

@@ -52,6 +52,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 
         public System.DateTime? EndAt { get; set; }
 
+        public decimal? Budget { get; set; }
+
         [System.ComponentModel.DataAnnotations.Required]
         public string Summary { get; set; }
 

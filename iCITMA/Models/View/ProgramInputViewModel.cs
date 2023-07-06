@@ -10,9 +10,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
         [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
+        [System.ComponentModel.DataAnnotations.Display(Name = "Code")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Code { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [System.ComponentModel.DataAnnotations.Display(Name = "Manager")]
         public System.Guid? InstitutionId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [System.ComponentModel.DataAnnotations.Display(Name = "Leader")]
         public System.Guid? LeaderId { get; set; }
         [System.ComponentModel.DataAnnotations.Display(Name = "Category")]

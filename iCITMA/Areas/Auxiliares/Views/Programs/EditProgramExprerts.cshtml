@@ -1,4 +1,4 @@
-﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramInputViewModel
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramExpertManagerViewModel
 
 @{
     ViewData["Title"] = "Editar Programa (Expertos)";
@@ -24,62 +24,117 @@
     Layout = "_BackendLayout";
 }
 
-@using (Html.BeginForm("EditProgramExprerts", "programs", new { key = Model.Id }, FormMethod.Post, true, null))
-{
-    var selectableIndex = 0;
-    <div class="card" style="margin-bottom: 20px;">
-        <div class="card-header">
-            <h4 class="mb-0">@ViewData["Title"]</h4>
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Expertos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProgramKeyWorlds", Model.Id)">Palabras Claves</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.Id)">Documentos</a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body">
-            <div class="row">
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
 
-                @if (Model.ExpertsToSelect != null || Model.ExpertsToSelect.Count() > 0)
-                {
-                    @foreach (var item in Model.ExpertsToSelect)
-                    {
-                        <div class="col-md-4">
-                            <div class="card" style="width: 18rem;">
-                            @if(item.ImageId != System.Guid.Empty && item.ImageId != null)
-                            {
-                                <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="card-img-top" alt="...">
-                            }else
-                            {
-                                <img src="~/img/default-person-picture.jpg" class="card-img-top" alt="..." />
-                            }
-                                
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.LabelDisplay</h5>
-                                    <p class="card-text">@item.DescriptionDisplay</p>
-                                    @Html.EditorFor(model => item, "SelectionDescriptedGuidIDItemInputViewModel", string.Format("ExpertsToSelect[{0}]", selectableIndex++))
-                                </div>
-                            </div>                            
-                        </div>
-                    }
-                }
+        .member-img {
+            width: 85%;
+            max-height: 330px;
+        }
 
+        .dropdown-toggle {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin-left: -1px;
+            line-height: 36px;
+        }
 
-            </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Modificar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
-        </div>
-    </div>
+            .dropdown-toggle::after {
+                margin: 0 5px;
+            }
+
+        ul.dropdown-menu {
+            width: 100%;
+        }
+    </style>
 }
+
+@section scripts {
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+    <script type="text/javascript">
+        $('.member-select').combobox();
+    </script>
+
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4 class="mb-0">@ViewData["Title"]</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Program.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Expertos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProgramKeyWorlds", Model.Program.Id)">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.Program.Id)">Documentos</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        @if (Model.Experts.Count() != 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.Experts)
+                {
+                    <div class="col-lg-2 col-md-3 col-sm-4" style="margin-bottom: 20px;">
+                        @if (item.ImageId != System.Guid.Empty)
+                        {
+                            <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="img-fluid img-thumbnail rounded-circle" />
+                        }
+                        else
+                        {
+                            <img src="~/img/default-person-picture.jpg" class="img-fluid img-thumbnail rounded-circle" />
+                        }
+                        <div class="text-center mt-2">
+                            @if (string.IsNullOrEmpty(item.LastName))
+                            {
+                                <div>@item.Name</div>
+                            }
+                            else
+                            {
+                                <div>@item.Name @item.LastName</div>
+                            }
+                            <div class="mt-2">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detail</span></button>
+                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-member-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    await Html.RenderPartialAsync("_ExpertDetailPartial", @item);
+                    await Html.RenderPartialAsync("_DeleteExpertPartial", @item.ProgramExpert);
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-muted font-italic">Aun no tiene expertos, haga clic en el boton agregar para comenzar ...</div>
+        }
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-member">Agregar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+    </div>
+    @await Html.PartialAsync("AddExpertPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramExpertInputViewModel
+    {
+        ProgramId = Model.Program.Id,
+        NotSelectedExperts = Model.NotSelectedExperts
+    })
+</div>
+
 
 

@@ -38,6 +38,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "TeachingCategory")]
         public string TeachingCategoryName { get; set; }
 
+        public ProgramExpertDisplayViewModel ProgramExpert { get; set; }
+
         public ICollection<PersonResearchAreaSpecializationBridge> ResearchAreaSpecializationBridge { get; set; }
 
         public ICollection<PersonResearchAreaMasteryBridge> ResearchAreaMasteryBridges { get; set; }
