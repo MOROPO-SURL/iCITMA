@@ -696,4 +696,16 @@
   <data name="Number" xml:space="preserve">
     <value>Número</value>
   </data>
+  <data name="ZipCode" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitud</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitud</value>
+  </data>
+  <data name="WebSocial" xml:space="preserve">
+    <value>Web Social</value>
+  </data>
 </root>
