@@ -177,52 +177,54 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6" style="margin-bottom: 20px;">
-                <div class="page-header">
-                    <h4>Redes Sociales<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-socialcontact"><span class="mdi mdi-plus"></span> Agregar</a></h4>
-                </div>
+            <!--
+        <div class="col-md-6" style="margin-bottom: 20px;">
+            <div class="page-header">
+                <h4>Redes Sociales<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-socialcontact"><span class="mdi mdi-plus"></span> Agregar</a></h4>
+            </div>
 
 
-                @await Html.PartialAsync("_AddSocialContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionSocialContactInputViewModel
-                {
-                InstitutionId = Model.Institution.Id
-                })
+            @await Html.PartialAsync("_AddSocialContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionSocialContactInputViewModel
+            {
+            InstitutionId = Model.Institution.Id
+            })
 
-                <table class="table" style="margin: 0;">
-                    <thead>
-                        <tr>
-                            <th>@GlobalViewLocalizationHelper.Localize("Icon")</th>
-                            <th>@GlobalViewLocalizationHelper.Localize("SocialMedia")</th>
-                            <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
-                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.SocialContacts.Count > 0)
-                        {
-                            @foreach (var item in Model.SocialContacts)
-                            {
-                                <tr>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Icon")">@item.Icon</td>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("SocialMedia")"><a href="@item.SocialId" target="_blank">@item.SocialId</a></td>
-                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Label")">@item.Label</td>
-                                    <td style="vertical-align: middle;">
-                                        <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-socialcontact-@item.Id">Eliminar</a>
-                                        @await Html.PartialAsync("_DeleteSocialContactPartial", item)
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
+            <table class="table" style="margin: 0;">
+                <thead>
+                    <tr>
+                        <th>@GlobalViewLocalizationHelper.Localize("Icon")</th>
+                        <th>@GlobalViewLocalizationHelper.Localize("SocialMedia")</th>
+                        <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
+                        <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.SocialContacts.Count > 0)
+                    {
+                        @foreach (var item in Model.SocialContacts)
                         {
                             <tr>
-                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                                <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Icon")">@item.Icon</td>
+                                <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("SocialMedia")"><a href="@item.SocialId" target="_blank">@item.SocialId</a></td>
+                                <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Label")">@item.Label</td>
+                                <td style="vertical-align: middle;">
+                                    <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-socialcontact-@item.Id">Eliminar</a>
+                                    @await Html.PartialAsync("_DeleteSocialContactPartial", item)
+                                </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-6" style="margin-bottom: 20px;">
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        -->
+            <div class="col-md-12" style="margin-bottom: 20px;">
                 <div class="page-header">
                     <h4>Web Sociales<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-webcontact"><span class="mdi mdi-plus"></span> Agregar</a></h4>
                 </div>
@@ -271,7 +273,7 @@
 
                 @await Html.PartialAsync("_AddPostalAddressPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPostalContactInputViewModel
                 {
-                InstitutionId = Model.Institution.Id,               
+                InstitutionId = Model.Institution.Id,
                 SelectStates = Model.SelectStates
                 })
 
@@ -314,8 +316,8 @@
                 </table>
             </div>
         </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+        </div>
     </div>
-    <div class="card-footer">
-        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
-    </div>
-</div>
