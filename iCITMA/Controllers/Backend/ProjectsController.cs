@@ -37,23 +37,29 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             return View();
         }
-        [RequirePermissions(Permission.ProjectCategoryCreator)]
+        [RequirePermissions(Permission.ProjectCreator)]
         public override IActionResult Create() => base.Create();
 
+        [RequirePermissions(Permission.ProjectEditor)]
         public override IActionResult Create(ProjectInputViewModel modelInput) =>  base.Create(modelInput);
 
+        [RequirePermissions(Permission.ProjectEditor)]
         public override IActionResult Edit(Guid key) => base.Edit(key);
 
+        [RequirePermissions(Permission.ProjectEditor)]
+        [HttpPost]
         public override IActionResult Edit(ProjectInputViewModel modelInput)
         {
             return base.Edit(modelInput);
         }
 
+        [RequirePermissions(Permission.ProjectRemover)]
         public override IActionResult Delete(ProjectDisplayViewModel displayModel)
         {
             return base.Delete(displayModel);
         }
 
+        [RequirePermissions(Permission.ProjectRemover)]
         public override IActionResult Delete(Guid key)
         {
             return base.Delete(key);
