@@ -10,6 +10,7 @@ using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Controllers;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Location.Persistence.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
@@ -23,14 +24,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ProjectCategory, System.Guid> categoryRepository;
         public readonly IEntityRepository<Institution, System.Guid> managerRepository;
         public readonly IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository;
-        public readonly IEntityRepository<ProjectState, System.Guid> projectStateRepository;        
-        public ProjectsController( IEntityRepository<ProjectState, System.Guid> projectStateRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository, IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository, IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
+        public readonly IEntityRepository<ProjectState, System.Guid> projectStateRepository;
+        public readonly IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository;
+        public ProjectsController(IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository, IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository, IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
         {
             this.leaderRepository = leaderRepository;
             this.categoryRepository = categoryRepository;
             this.managerRepository = managerRepository;
             this.programRepository = programRepository;
-            this.projectStateRepository = projectStateRepository;           
+            this.projectStateRepository = projectStateRepository;
+            this.programExpectResultRepository = programExpectResultRepository;
         }
 
         public IActionResult Index()
@@ -162,6 +165,84 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             base.PostCreate(entity, modelInput);
         }
 
-        
+        #region ProgramExpectResult
+        [Route("edit/{key}/ProgramExpectResults")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult ProgramExpectResults(System.Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+
+                var projectInputModel = new ProjectInputViewModel();
+                projectInputModel.Import(entity);               
+
+                return View(projectInputModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [Route("edit/{key}/ProgramExpectResults/add")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult AddExpectResult(ProjectProgramExpectResultInputViewModel modelInput)
+        {
+            var entity = Repository.Get(modelInput.ProjectId);
+            
+
+            if (ModelState.IsValid)
+            {
+                var Stern = new ProgramExpectResult
+                {
+                    ProgramId = entity.ProgramId,
+                    Program = entity.Program,
+                    Title = modelInput.Title,
+                    Description = modelInput.Description
+                };
+
+                programExpectResultRepository.Add(Stern, User.Identity.Name, false);
+
+                var bridge = new ProjectProgramExpectResultBridge
+                {
+                    Prow = entity,
+                    ProwId = entity.Id,
+                    Stern = Stern   
+                };
+                entity.ProgramExpectResultBridges.Add(bridge);
+
+                 Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("ProgramExpectResults", new { key = entity.Id });
+        }
+
+        [Route("edit/{key}/ProgramExpectResults/delete")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult DeleteExpectResult(System.Guid key)
+        {
+            return View();
+        }
+        #endregion
     }
 }
