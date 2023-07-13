@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
+using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Controllers;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
@@ -239,9 +240,40 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         [Route("edit/{key}/ProgramExpectResults/delete")]
         [RequirePermissions(Permission.ProjectViewer)]
-        public IActionResult DeleteExpectResult(System.Guid key)
+        public IActionResult DeleteExpectResult(System.Guid IdProgramExpectResult, System.Guid ProjectId)
         {
-            return View();
+            ProgramExpectResult programExpectResult = null;
+            try
+            {
+                programExpectResult = programExpectResultRepository.Get(IdProgramExpectResult);
+                
+            }
+            catch {}
+
+            try
+            {
+                var project = Repository.Get(ProjectId);
+
+                var programExpectResultBridges = project.ProgramExpectResultBridges.FirstOrDefault(p => p.Stern.Id == programExpectResult.Id);
+
+                project.ProgramExpectResultBridges.Remove(programExpectResultBridges);
+
+                programExpectResultRepository.Delete(programExpectResult, User.Identity.Name, false);
+
+                Repository.Update(project, User.Identity.Name, true);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("ProgramExpectResults", new { key = ProjectId });
         }
         #endregion
     }

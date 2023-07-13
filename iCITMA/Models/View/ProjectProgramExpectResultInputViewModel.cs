@@ -2,6 +2,7 @@
 {
     public class ProjectProgramExpectResultInputViewModel
     {
+        public System.Guid IdProgramExpectResult { get; set; }
         public System.Guid ProjectId { get; set; }
         public System.Guid ProgramId { get; set; }
 

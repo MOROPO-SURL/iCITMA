@@ -7,5 +7,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
         public ProgramExpectResultRepository(DbContext dbContext) : base(dbContext)
         {
         }
+
+        protected override System.Linq.IQueryable<Entities.ProgramExpectResult> GetQueryableDbSet()
+        {
+            return base.GetQueryableDbSet().Include(entity => entity.Program);
+        }
     }
 }
