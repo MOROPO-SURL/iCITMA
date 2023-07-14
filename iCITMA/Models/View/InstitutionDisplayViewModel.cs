@@ -30,7 +30,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         [Display(Name = "Alias")]
         public string Alia { get; set; }
-        public InstitutionParticipationDisplayViewModel InstitutionParticipation { get; set; }
+        public InstitutionProjectLogicViewModel InstitutionProjectLogicViewModel { get; set; }
 
         public void Import(Institution entity)
         {

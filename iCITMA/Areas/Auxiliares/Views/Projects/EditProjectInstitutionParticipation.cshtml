@@ -82,7 +82,7 @@
                 <a class="nav-link" href="@Url.Action("EditProjectKeyWorlds", Model.Project.Id)">Palabras Claves</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Clientes</a>
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Project.Id)">Clientes</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Objetivos específicos</a>
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                     await Html.RenderPartialAsync("_ProjectInstitutionParticipationDetailPartial", @item);
-                    await Html.RenderPartialAsync("_DeleteProjectInstitutionParticipationPartial", @item.InstitutionParticipation);
+                    await Html.RenderPartialAsync("_DeleteProjectInstitutionParticipationPartial", @item.InstitutionProjectLogicViewModel);
                 }
             </div>
         }

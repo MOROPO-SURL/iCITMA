@@ -322,7 +322,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 {
                     var model = new InstitutionDisplayViewModel
                     {
-                        InstitutionParticipation = new InstitutionParticipationDisplayViewModel
+                        InstitutionProjectLogicViewModel = new InstitutionParticipationDisplayViewModel
                         {
                             ProjectId = key,
                             InstitutionId = item.Id,
@@ -529,6 +529,175 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
 
             return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
+        }
+        #endregion
+
+        #region Client
+        [HttpGet]
+        [Route("edit/{key}/projectInstitutionClient")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult EditProjectInstitutionClient(Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+
+                var clients = entity.InstitutionClientBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedClients = institutionRepository.GetAll().ToArray();
+
+                if (clients.Count() != 0)
+                {
+                    notSelectedClients = notSelectedClients.Except(clients).ToArray();
+                }
+
+                var resultModel = new InstitutionClientManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Project.Import(entity);
+
+                resultModel.NotSelectedClients = notSelectedClients.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Identity.Name}"
+                }).ToArray();
+
+                resultModel.Clients = clients.Select(item =>
+                {
+                    var model = new InstitutionDisplayViewModel
+                    {
+                        InstitutionProjectLogicViewModel = new InstitutionClientDisplayViewModel
+                        {
+                            ProjectId = key,
+                            InstitutionId = item.Id,
+                            InstitutionName = $"{item.Identity.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
+        }
+
+        [HttpPost]
+        [Route("edit/projectInstitutionClient/add")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddInstitutionClient(InstitutionClientInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                entity.InstitutionClientBridges.Add(new ProjectInstitutionClientBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = modelInput.InstitutionId,
+                    Prow = entity,
+                    Stern = institutionRepository.Get(modelInput.InstitutionId)
+                });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("EditProjectInstitutionClient", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/projectInstitutionClient/remove")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveInstitutionClient(InstitutionClientDisplayViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.InstitutionClientBridges.FirstOrDefault(exp => exp.ProwId == modelInput.ProjectId && exp.SternId == modelInput.InstitutionId);
+
+                entity.InstitutionClientBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditProjectInstitutionClient", new { key = entity.Id });
         }
         #endregion
     }
