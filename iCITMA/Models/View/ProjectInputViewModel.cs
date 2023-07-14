@@ -61,6 +61,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         public List<ProjectProgramExpectResultBridge> ProgramExpectResultBridges { get; set; }
 
+        public List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>> KeyWordsToSelect { get; set; } = new List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>>();
+
         public Project Export()
         {
             var entity = new Project();

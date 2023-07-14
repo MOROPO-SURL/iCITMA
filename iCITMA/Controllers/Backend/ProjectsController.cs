@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
 using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Models.View;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Controllers;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Location.Persistence.Entities;
@@ -19,7 +21,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("Auxiliares")]
-    public class ProjectsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Project , System.Guid, ProjectInputViewModel, ProjectDisplayViewModel>
+    public class ProjectsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Project, System.Guid, ProjectInputViewModel, ProjectDisplayViewModel>
     {
         public readonly IEntityRepository<Person, System.Guid> leaderRepository;
         public readonly IEntityRepository<ProjectCategory, System.Guid> categoryRepository;
@@ -27,7 +29,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository;
         public readonly IEntityRepository<ProjectState, System.Guid> projectStateRepository;
         public readonly IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository;
-        public ProjectsController(IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository, IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository, IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
+        public readonly IEntityRepository<Institution, System.Guid> institutionRepository;
+        public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
+        public ProjectsController(IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository, IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository, IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
         {
             this.leaderRepository = leaderRepository;
             this.categoryRepository = categoryRepository;
@@ -35,6 +39,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.programRepository = programRepository;
             this.projectStateRepository = projectStateRepository;
             this.programExpectResultRepository = programExpectResultRepository;
+            this.institutionRepository = institutionRepository;
+            this.keyWordRepository = keyWordRepository;
         }
 
         public IActionResult Index()
@@ -45,7 +51,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public override IActionResult Create() => base.Create();
 
         [RequirePermissions(Permission.ProjectEditor)]
-        public override IActionResult Create(ProjectInputViewModel modelInput) =>  base.Create(modelInput);
+        public override IActionResult Create(ProjectInputViewModel modelInput) => base.Create(modelInput);
 
         [RequirePermissions(Permission.ProjectEditor)]
         public override IActionResult Edit(Guid key) => base.Edit(key);
@@ -75,7 +81,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 Value = c.Id.ToString(),
                 Text = c.Name
-            }).ToArray();   
+            }).ToArray();
         }
 
         private void PopulateManager(ProjectInputViewModel modelInput)
@@ -141,7 +147,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         protected override void ConfigurePostFailCreateValidation(ProjectInputViewModel modelInput)
         {
-            base.ConfigurePostFailCreateValidation(modelInput);           
+            base.ConfigurePostFailCreateValidation(modelInput);
 
             PopulateCategory(modelInput);
             PopulateManager(modelInput);
@@ -176,7 +182,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 var entity = Repository.Get(key);
 
                 var projectInputModel = new ProjectInputViewModel();
-                projectInputModel.Import(entity);               
+                projectInputModel.Import(entity);
 
                 return View(projectInputModel);
             }
@@ -192,7 +198,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public IActionResult AddExpectResult(ProjectProgramExpectResultInputViewModel modelInput)
         {
             var entity = Repository.Get(modelInput.ProjectId);
-            
+
 
             if (ModelState.IsValid)
             {
@@ -210,11 +216,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 {
                     Prow = entity,
                     ProwId = entity.Id,
-                    Stern = Stern   
+                    Stern = Stern
                 };
                 entity.ProgramExpectResultBridges.Add(bridge);
 
-                 Repository.Update(entity, User.Identity.Name);
+                Repository.Update(entity, User.Identity.Name);
 
                 SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
             }
@@ -246,9 +252,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             try
             {
                 programExpectResult = programExpectResultRepository.Get(IdProgramExpectResult);
-                
+
             }
-            catch {}
+            catch { }
 
             try
             {
@@ -274,6 +280,255 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("ProgramExpectResults", new { key = ProjectId });
+        }
+        #endregion
+
+        #region Participation
+        [HttpGet]
+        [Route("edit/{key}/projectInstitutionParticipation")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult EditProjectInstitutionParticipation(Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+
+                var participants = entity.InstitutionParticipationBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedParticipants = institutionRepository.GetAll().ToArray();
+
+                if (participants.Count() != 0)
+                {
+                    notSelectedParticipants = notSelectedParticipants.Except(participants).ToArray();
+                }
+
+                var resultModel = new InstitutionParticipationManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Project.Import(entity);
+
+                resultModel.NotSelectedParticipants = notSelectedParticipants.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Identity.Name}"
+                }).ToArray();
+
+                resultModel.Participants = participants.Select(item =>
+                {
+                    var model = new InstitutionDisplayViewModel
+                    {
+                        InstitutionParticipation = new InstitutionParticipationDisplayViewModel
+                        {
+                            ProjectId = key,
+                            InstitutionId = item.Id,
+                            InstitutionName = $"{item.Identity.Name}"                           
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
+        }
+
+        [HttpPost]
+        [Route("edit/projectInstitutionParticipation/add")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddInstitutionParticipation(InstitutionParticipationInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                entity.InstitutionParticipationBridges.Add(new ProjectInstitutionParticipationBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = modelInput.InstitutionId,
+                    Prow = entity,
+                    Stern = institutionRepository.Get(modelInput.InstitutionId)
+                });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("EditProjectInstitutionParticipation", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/projectInstitutionParticipation/remove")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveInstitutionParticipation(InstitutionParticipationDisplayViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.InstitutionParticipationBridges.FirstOrDefault(exp => exp.ProwId == modelInput.ProjectId && exp.SternId == modelInput.InstitutionId);
+
+                entity.InstitutionParticipationBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditProjectInstitutionParticipation", new { key = entity.Id });
+        }
+        #endregion
+
+        #region ProjectKeyWorld
+        [HttpGet]
+        [Route("edit/{key}/projectKeyWorlds")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult EditProjectKeyWorlds(Guid key)
+        {
+            var entity = Repository.Get(key);
+
+            var model = new ProjectInputViewModel();
+
+            if (entity != null)
+            {
+
+                PopulateKeyWords(entity, model.KeyWordsToSelect);
+
+                model.Import(entity);
+
+                return View(model);
+            }
+            return View(model);
+        }
+
+        private void PopulateKeyWords(Persistence.Entities.Project entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        {
+            var keyWords = keyWordRepository.GetAll();
+
+            if (keyWords.Count() > 0)
+            {
+                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                {
+                    Id = item.Id,
+                    Label = item.Name,
+                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),
+                    Description = item.Description
+                }));
+            }
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/projectKeyWorlds")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditProjectKeyWorlds(Guid key, ProjectInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            entity.KeyWordBridges.Clear();
+
+            foreach (var item in modelInput.KeyWordsToSelect)
+            {
+                if (!item.Selected) continue;
+
+                entity.KeyWordBridges.Add(new ProjectKeyWordBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = item.Id
+                });
+            }
+
+            Repository.Update(entity, User.Identity.Name);
+
+            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+
+            return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
         }
         #endregion
     }
