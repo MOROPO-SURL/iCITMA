@@ -59,6 +59,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "Main Objetive")]
         public string MainObjetive { get; set; }
 
+        public List<ProjectProgramExpectResultBridge> ProgramExpectResultBridges { get; set; }
+
+        public List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>> KeyWordsToSelect { get; set; } = new List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>>();
+
         public Project Export()
         {
             var entity = new Project();
@@ -86,6 +90,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Context = entity.Context;
             Beneficiary = entity.Beneficiary;
             MainObjetive = entity.MainObjetive;
+            ProgramExpectResultBridges = entity.ProgramExpectResultBridges;
         }
 
         public void Mergue(Project entity)
@@ -105,6 +110,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.Context = Context;
             entity.Beneficiary = Beneficiary;
             entity.MainObjetive = MainObjetive;
+            entity.ProgramExpectResultBridges = ProgramExpectResultBridges;
         }
     }
 }

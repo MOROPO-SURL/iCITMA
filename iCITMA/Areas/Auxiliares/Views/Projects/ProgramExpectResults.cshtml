@@ -1,0 +1,117 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectInputViewModel
+
+@{
+    ViewData["Title"] = "Editar Proyecto (Resultados esperados del programa)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-cogs\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración de Proyectos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4>Editar Proyecto</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Prioridades que Tributa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Id)">Participantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectKeyWorlds", Model.Id)">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Id)">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Objetivos específicos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Resultados esperados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Impactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Salidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Participantes </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <div class="page-header">
+                    <h4>Agregar<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-expectresult"><span class="mdi mdi-plus"></span> Agregar</a></h4>
+                </div>
+
+                @await Html.PartialAsync("AddProgramExpectResultPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectProgramExpectResultInputViewModel
+                {
+                ProjectId = Model.Id,
+                ProgramId = Model.ProgramId
+                })
+                <table class="table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("Title")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Description")</th>
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Export().ProgramExpectResultBridges.Count() > 0)
+                        {
+                            @foreach (var item in Model.Export().ProgramExpectResultBridges)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")">@item.Stern.Title</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")"><p>@item.Stern.Description</p></td>
+                                    <td style="vertical-align: middle;">
+                                        <div class="btn-group btn-group-sm">
+                                            <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-expectresult-@item.Stern.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</a>
+                                            @await Html.PartialAsync("DeleteExpectResultPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectProgramExpectResultInputViewModel{
+                                                IdProgramExpectResult = item.SternId,
+                                                ProjectId = item.Prow.Id,
+                                                ProgramId = (System.Guid)item.Prow.ProgramId,
+                                                Title = item.Stern.Title,
+                                                Description = item.Stern.Description
+                                            })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

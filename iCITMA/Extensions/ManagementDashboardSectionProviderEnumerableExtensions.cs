@@ -149,15 +149,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ProgramViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Documentos",
-                  Controller = "documents",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.DocumentViewer
-              },
+              },              
               new ManagementDashboardSectionViewModel
               {
                   Title = "Proyectos",
