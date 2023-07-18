@@ -681,9 +681,6 @@
   <data name="CreatedAt" xml:space="preserve">
     <value>Fecha de Creación</value>
   </data>
-  <data name="CreatedAt" xml:space="preserve">
-    <value>Fecha de Creación</value>
-  </data>
   <data name="Representative" xml:space="preserve">
     <value>Representante</value>
   </data>
@@ -710,5 +707,29 @@
   </data>
   <data name="Manager" xml:space="preserve">
     <value>Gestor</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>Jefe</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Fecha de Creación</value>
+  </data>
+  <data name="EndAt" xml:space="preserve">
+    <value>Fecha de Terminación</value>
+  </data>
+  <data name="FundingSource" xml:space="preserve">
+    <value>Fuente de Presupuesto</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Monto</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Selecionar</value>
   </data>
 </root>

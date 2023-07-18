@@ -1,6 +1,8 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Models.View.CustomSelect;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
@@ -21,10 +23,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid? LeaderId { get; set; }
         [System.ComponentModel.DataAnnotations.Display(Name = "Category")]
         public System.Guid? CategoryId { get; set; }
+        [Display(Name = "StartDate")]
         public System.DateTime StartDate { get; set; }
+        [Display(Name = "EndAt")] 
         public System.DateTime? EndAt { get; set; }
-        [System.ComponentModel.DataAnnotations.Display(Name = "Funding")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [System.ComponentModel.DataAnnotations.Display(Name = "FundingSource")]
         public System.Guid FundingSourceId { get; set; }
+        [Display(Name = "Amount")]
         public decimal? Amount { get; set; }        
 
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> InstitutionSelected { get; set; }

@@ -10,7 +10,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     public class ProgramDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<Persistence.Entities.Program, System.Guid>
     {
         public System.Guid Id { get; set; }
+        [Display(Name = "Name")]
         public string Name { get; set; }
+        [Display(Name = "Code")]
         public string Code { get; set; }
         [Display(Name = "Manager")]
         public string Institution { get; set; }
@@ -20,7 +22,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Leader { get; set; }
         [Display(Name = "FundingSource")]
         public string FundingSource { get; set; }
+        [Display(Name = "StartDate")]
         public System.DateTime StartDate { get; set; }
+        [Display(Name = "EndAt")]
         public System.DateTime? EndAt { get; set; }
         [Display(Name = "Amount")]
         public decimal? Amount { get; set; }
