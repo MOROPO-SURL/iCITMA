@@ -708,4 +708,7 @@
   <data name="WebSocial" xml:space="preserve">
     <value>Web Social</value>
   </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Gestor</value>
+  </data>
 </root>

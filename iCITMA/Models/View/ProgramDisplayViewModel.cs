@@ -12,7 +12,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        [Display(Name = "Institution")]
+        [Display(Name = "Manager")]
         public string Institution { get; set; }
         [Display(Name = "Category")]
         public string Category { get; set; }
