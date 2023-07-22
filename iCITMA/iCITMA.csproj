@@ -55,9 +55,4 @@
     <ProjectReference Include="..\iCITMA.Persistence\iCITMA.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\media\images\" />
-    <Folder Include="wwwroot\media\attachments\" />
-  </ItemGroup>
-
 </Project>

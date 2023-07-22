@@ -239,6 +239,7 @@
                     <thead>
                         <tr>
                             <th>@GlobalViewLocalizationHelper.Localize("WebSocial")</th>
+                     
                             <th style="width: 1px; white-space: nowrap;">Acciones</th>
                         </tr>
                     </thead>
@@ -249,6 +250,7 @@
                             {
                                 <tr>
                                     <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("WebSocial")"><a href="@item.Url" target="_blank">@item.Url</a></td>
+                                    
                                     <td style="vertical-align: middle;">
                                         <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-webcontact-@item.Id">Eliminar</a>
                                         @await Html.PartialAsync("_DeleteSWebContactPartial", item)
