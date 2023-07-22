@@ -31,7 +31,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository;
         public readonly IEntityRepository<Institution, System.Guid> institutionRepository;
         public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
-        public ProjectsController(IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository, IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository, IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
+        public readonly IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository;
+        public readonly IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository;
+        public readonly IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository;
+        public ProjectsController(IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository, IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository, IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository,
+            IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository,
+            IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository,
+            IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository,
+            IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository,
+            IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
         {
             this.leaderRepository = leaderRepository;
             this.categoryRepository = categoryRepository;
@@ -41,6 +49,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.programExpectResultRepository = programExpectResultRepository;
             this.institutionRepository = institutionRepository;
             this.keyWordRepository = keyWordRepository;
+            this.projectImpactRepository = projectImpactRepository;
+            this.impactIndicatorRepository = impactIndicatorRepository;
+            this.odsIndicatorRepository = odsIndicatorRepository;
         }
 
         public IActionResult Index()
@@ -698,6 +709,298 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("EditProjectInstitutionClient", new { key = entity.Id });
+        }
+        #endregion
+
+        #region Impact
+        [Route("edit/{key}/ProjectImpact")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult ProjectImpact(System.Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+                var projectImpacts = projectImpactRepository.GetAll().Where(p => p.ProjectId == key).ToList();
+                var programExpectResults = programExpectResultRepository.GetAll().ToArray();
+                var odsIndicators = odsIndicatorRepository.GetAll().ToArray();
+
+                var projectImpactManagerModel = new ProjectImpactManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel()
+                };
+                projectImpactManagerModel.Project.Import(entity);
+                projectImpactManagerModel.ProjectImpacts = projectImpacts;
+
+                ViewBag.ImpactIndicator = impactIndicatorRepository.GetAll().Select(p => new SelectListItem 
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }).ToArray();
+
+                var selectedExpectResults = SelectedProgramExpectResult(projectImpacts);
+                var notSelectedExpectResults = programExpectResults.Except(selectedExpectResults).ToArray();
+
+                var selectedODSs = SelectedODSIndicator(projectImpacts);
+                var notSelectedODSs = odsIndicators.Except(selectedODSs).ToArray();
+
+                ViewBag.ProgramExpectResults = notSelectedExpectResults.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = $"{p.Title} - {p.Program.Name}"
+                }).ToArray();
+
+                ViewBag.ODSIndicators = notSelectedODSs.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = $"{p.Name}"
+                }).ToArray();
+
+                return View(projectImpactManagerModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private ProgramExpectResult[] SelectedProgramExpectResult(List<ProjectImpact> projectImpacts)
+        {
+            var selectedProgramExpectResult = new List<ProgramExpectResult>();
+
+            foreach (var projectImpact in projectImpacts)
+            {
+                foreach (var programExpectResultBridge in projectImpact.ProgramExpectResultBridges)
+                {
+                    var expectResult = programExpectResultBridge.Stern;
+                    var exist = selectedProgramExpectResult.Any(p => p.Id == expectResult.Id);
+                    if (!exist)
+                    {
+                        selectedProgramExpectResult.Add(expectResult);
+                    }
+                }
+            }
+
+            return selectedProgramExpectResult.ToArray();
+        }
+
+        private ODSIndicator[] SelectedODSIndicator(List<ProjectImpact> projectImpacts)
+        {
+            var selectedODSIndicator = new List<ODSIndicator>();
+
+            foreach (var projectImpact in projectImpacts)
+            {
+                foreach (var ODSIndicatorBridge in projectImpact.ODSIndicatorBridges)
+                {
+                    var oDSIndicator = ODSIndicatorBridge.Stern;
+                    var exist = selectedODSIndicator.Any(p => p.Id == oDSIndicator.Id);
+                    if (!exist)
+                    {
+                        selectedODSIndicator.Add(oDSIndicator);
+                    }
+                }
+            }
+
+            return selectedODSIndicator.ToArray();
+        }
+
+        [Route("edit/{key}/ProjectImpact/add")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult AddProjectImpact(ProjectImpactInputViewModel modelInput)
+        {
+            var key =(System.Guid) modelInput.ProjectId;                       
+
+            var project = Repository.Get(key);
+
+            var indicator = impactIndicatorRepository.Get(modelInput.ImpactIndicatorId);
+            try
+            {
+                if (key != System.Guid.Empty && project != null && indicator != null) 
+                {
+                    var entity = Repository.Get(key);
+
+                    var projectImpact = new ProjectImpact
+                    {
+                        ProjectId = key,
+                        Project = project,
+                        IndicatorId = modelInput.ImpactIndicatorId,
+                        Indicator = indicator,
+                        Description = modelInput.Description
+                    };
+                    
+                    projectImpactRepository.Add(projectImpact, User.Identity.Name, false);
+
+                    Repository.Update(entity, User.Identity.Name, true);
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                }
+                else
+                {
+                    var messages = new List<string>();
+
+                    foreach (var item in ModelState)
+                    {
+                        if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                        foreach (var error in item.Value.Errors)
+                        {
+                            messages.Add(error.ErrorMessage);
+                        }
+                    }
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }           
+
+
+            return RedirectToAction("ProjectImpact", new { key = project.Id });
+        }
+
+        [Route("edit/{key}/ProjectImpact/delete")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult DeleteProjectImpact(ProjectImpactDisplayViewModel displayViewModel)
+        {
+            var projectImpact = projectImpactRepository.GetAll().FirstOrDefault(p => p.Id == displayViewModel.Id);
+            var ProjectId = projectImpact.ProjectId;
+            
+            try
+            {               
+                
+                projectImpactRepository.Delete(projectImpact, User.Identity.Name, true);
+                               
+                
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e) 
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }            
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("ProjectImpact", new { key = ProjectId });
+        }
+
+        [HttpPost]
+        [Route("edit/ProjectImpact/addProjectImpactProgramExpectResult")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddProjectImpactProgramExpectResult(ProjectImpactProgramExpectResultInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+            Persistence.Entities.ProjectImpact projectImpact = null;
+
+            try
+            {
+                projectImpact = projectImpactRepository.Get(modelInput.ProjectImpactId);
+                entity = Repository.Get((System.Guid)projectImpact.ProjectId);
+            }
+            catch { }
+
+            if (projectImpact == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                projectImpact.ProgramExpectResultBridges.Add(new ProjectImpactProgramExpectResultBridge
+                {
+                    ProwId = projectImpact.Id,
+                    SternId = modelInput.ProgramExpectResultId,
+                    Prow = projectImpact,
+                    Stern = programExpectResultRepository.Get(modelInput.ProgramExpectResultId)
+                });
+
+                projectImpactRepository.Update(projectImpact, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("ProjectImpact", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/ProjectImpact/addProjectImpactODSIndicator")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddProjectImpactODSIndicator(ProjectImpactODSIndicatorInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+            Persistence.Entities.ProjectImpact projectImpact = null;
+
+            try
+            {
+                projectImpact = projectImpactRepository.Get(modelInput.ProjectImpactId);
+                entity = Repository.Get((System.Guid)projectImpact.ProjectId);
+            }
+            catch { }
+
+            if (projectImpact == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                projectImpact.ODSIndicatorBridges.Add(new ProjectImpactODSIndicatorBridge
+                {
+                    ProwId = projectImpact.Id,
+                    SternId = modelInput.ODSIndicatorId,
+                    Prow = projectImpact,
+                    Stern = odsIndicatorRepository.Get(modelInput.ODSIndicatorId)
+                });
+
+                projectImpactRepository.Update(projectImpact, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("ProjectImpact", new { key = entity.Id });
         }
         #endregion
     }

@@ -67,7 +67,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         public string Beneficiary { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
-        public string MainObjetive { get; set; }
+        public string MainObjetive { get; set; }        
 
         public List<ProjectProgramExpectResultBridge> ProgramExpectResultBridges { get; set; }
 
