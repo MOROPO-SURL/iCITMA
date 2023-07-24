@@ -34,7 +34,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository;
         public readonly IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository;
         public readonly IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository;
-        public ProjectsController(IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository, IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository, IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository,
+        public readonly IEntityRepository<Person, System.Guid> personRepository;
+        public ProjectsController(IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository,
+            IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository, IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository,
             IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository,
             IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository,
             IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository,
@@ -52,6 +54,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.projectImpactRepository = projectImpactRepository;
             this.impactIndicatorRepository = impactIndicatorRepository;
             this.odsIndicatorRepository = odsIndicatorRepository;
+            this.personRepository = personRepository;
         }
 
         public IActionResult Index()
@@ -1002,6 +1005,173 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             return RedirectToAction("ProjectImpact", new { key = entity.Id });
         }
+        #endregion
+
+        #region Participan        
+        [HttpGet]
+        [Route("edit/{key}/Participation")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult EditProjectParticipan(Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+
+                var participans = entity.PersonParticipationBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedParticipans = personRepository.GetAll().ToArray();
+
+                if (participans.Count() != 0)
+                {
+                    notSelectedParticipans = notSelectedParticipans.Except(participans).ToArray();
+                }
+
+                var resultModel = new ProjectParticipanManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel()
+                };
+
+                resultModel.Project.Import(entity);
+
+                resultModel.NotSelectedParticipans = notSelectedParticipans.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Identity.Name} {exp.Identity.LastName}"
+                }).ToArray();
+
+                resultModel.Participans = participans.Select(item =>
+                {
+                    var model = new PersonDisplayViewModel
+                    {
+                        ProjectParticipan = new ProjectParticipanDisplayViewModel
+                        {
+                            ProjectId = key,
+                            PersonId = item.Id,
+                            Name = $"{item.Identity.Name} {item.Identity.LastName}",
+                            Alias = item.Identity.Alias
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
+        }
+
+        [HttpPost]
+        [Route("edit/Participation/add")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddParticipans(ProjectParticipanInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                entity.PersonParticipationBridges.Add(new ProjectPersonParticipationBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = modelInput.PersonId,
+                    Prow = entity,
+                    Stern = personRepository.Get(modelInput.PersonId)
+                });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("EditProjectParticipan", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/Participation/remove")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveParticipan(ProjectParticipanDisplayViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.PersonParticipationBridges.FirstOrDefault(exp => exp.ProwId == modelInput.ProjectId && exp.SternId == modelInput.PersonId);
+
+                entity.PersonParticipationBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditProjectParticipan", new { key = entity.Id });
+        }        
         #endregion
     }
 }
