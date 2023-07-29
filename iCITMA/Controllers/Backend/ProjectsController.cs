@@ -35,7 +35,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository;
         public readonly IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository;
         public readonly IEntityRepository<Person, System.Guid> personRepository;
-        public ProjectsController(IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository,
+        public readonly IEntityRepository<ProjectOutput, System.Guid> projectOutputRepository;
+        public ProjectsController(IEntityRepository<ProjectOutput, System.Guid> projectOutputRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository,
             IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository, IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository,
             IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository,
             IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository,
@@ -55,6 +56,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.impactIndicatorRepository = impactIndicatorRepository;
             this.odsIndicatorRepository = odsIndicatorRepository;
             this.personRepository = personRepository;
+            this.projectOutputRepository = projectOutputRepository;
         }
 
         public IActionResult Index()
@@ -1171,7 +1173,59 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("EditProjectParticipan", new { key = entity.Id });
-        }        
+        }
         #endregion
+
+       /* #region OutputKinds
+        [Route("edit/{key}/ProjectOutputKinds")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult ProjectOutputKinds(System.Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);                
+                var projectOutputs = projectOutputRepository.GetAll().Where(p => p.ProjectId == key).ToList();
+                
+
+                var projectOuputManagerModel = new ProjectOutputManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel()
+                };
+                projectOuputManagerModel.Project.Import(entity);
+                projectOuputManagerModel.ProjectOuputs = projectOutputs;
+
+                ViewBag.ImpactIndicator = impactIndicatorRepository.GetAll().Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }).ToArray();
+
+                var selectedExpectResults = SelectedProgramExpectResult(projectImpacts);
+                var notSelectedExpectResults = programExpectResults.Except(selectedExpectResults).ToArray();
+
+                var selectedODSs = SelectedODSIndicator(projectImpacts);
+                var notSelectedODSs = odsIndicators.Except(selectedODSs).ToArray();
+
+                ViewBag.ProgramExpectResults = notSelectedExpectResults.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = $"{p.Title} - {p.Program.Name}"
+                }).ToArray();
+
+                ViewBag.ODSIndicators = notSelectedODSs.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = $"{p.Name}"
+                }).ToArray();
+
+                return View(projectImpactManagerModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion*/
     }
 }
