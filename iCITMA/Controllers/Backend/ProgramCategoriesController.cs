@@ -11,12 +11,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("I_D_i")]
     public class ProgramCategoriesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ProgramCategory, System.Guid, ProgramCategoryInputViewModel, ProgramCategoryDisplayViewModel>
     {
         public ProgramCategoriesController(IEntityRepository<ProgramCategory, System.Guid> repository, IStringLocalizer<ProgramCategoriesController> localizer, ILogger<ProgramCategoriesController> logger) : base(repository, localizer, logger)
         {
         }
+
         [RequirePermissions(Permission.ProgramCategoryViewer)]
         public IActionResult Index()
         {

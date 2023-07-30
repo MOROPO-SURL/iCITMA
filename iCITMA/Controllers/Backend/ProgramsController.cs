@@ -102,15 +102,27 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             base.ValidateCreate(modelInput);
 
-            //if (modelInput.LeaderId == default)
-            //{
-            //    ModelState.AddModelError("LeaderId", localizer.GetString("RequiredValidationErrorMessage", localizer.GetString("LeaderId")));
-            //}
+            if (modelInput.EndAt != null && modelInput.EndAt.Value.Date < modelInput.StartDate.Date)
+            {
+                ModelState.AddModelError("EndAt", "La Fecha de Terminación no puede ser menor que la Fecha de Inicio");
+            }
+        }
 
-            //if (modelInput.ManagerId == default)
-            //{
-            //    ModelState.AddModelError("ManagerId", localizer.GetString("RequiredValidationErrorMessage", localizer.GetString("ManagerId")));
-            //}
+        protected override void ValidateEdit(ProgramInputViewModel modelInput)
+        {
+            base.ValidateEdit(modelInput);
+
+            if (modelInput.EndAt != null && modelInput.EndAt.Value.Date < modelInput.StartDate.Date)
+            {
+                ModelState.AddModelError("EndAt", "La Fecha de Terminación no puede ser menor que la Fecha de Inicio");
+            }
+        }
+
+        protected override void ConfigurePostFailEditValidation(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)
+        {
+            base.ConfigurePostFailEditValidation(entity, modelInput);
+
+            Populate(modelInput);
         }
 
         protected override void PreCreate(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)

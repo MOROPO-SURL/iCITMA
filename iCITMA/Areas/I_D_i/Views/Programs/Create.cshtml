@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelectedListItems, "Seleccionar", new { @class = "form-control"})
+                    @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
                 </div>
             </div>
@@ -82,19 +82,19 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(model => model.EndAt, new { @class = "control-label" })
-                    @Html.TextBoxFor(model => model.EndAt, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.EndAt, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.EndAt, null, new { @class = "text-danger" })
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(model => model.ManagerId, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.ManagerId, Model.InstitutionSelectedListItems, "Seleccionar", new { @class = "form-control"})
+                    @Html.DropDownListFor(model => model.ManagerId, Model.InstitutionSelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.ManagerId, null, new { @class = "text-danger" })
                 </div>
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(model => model.LeaderId, new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.LeaderId, Model.LeaderSelectedListItems, "Seleccionar", new { @class = "form-control"})
+                    @Html.DropDownListFor(model => model.LeaderId, Model.LeaderSelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.LeaderId, null, new { @class = "text-danger" })
                 </div>
             </div>

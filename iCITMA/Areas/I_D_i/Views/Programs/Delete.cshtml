@@ -24,19 +24,40 @@
     Layout = "_BackendLayout";
 }
 
-<h3>Está seguro que desea eliminar el programa detallado a continuación?</h3>
+<h3 class="mb-3">Está seguro que desea eliminar el programa detallado a continuación?</h3>
 <dl>
-
     <dt>Nombre</dt>
-    <dd>@Html.DisplayFor(model => model.Name)</dd>
+    <dd>@Model.Name</dd>
     <dd>Código</dd>
-    <dt>@Html.DisplayNameFor(model => model.Leader)</dt>
+    <dt>@Model.Leader</dt>
+    <dt>Categoría</dt>
+    <dd>@Model.Category</dd>
+    <dt>Fecha de Inicio</dt>
+    <dd>@Model.StartDate.ToShortDateString()</dd>
+    <dt>Fecha de Terminación</dt>
+    @if (Model.EndAt != null)
+    {
+        <dd>@Model.EndAt.Value.ToShortDateString()</dd>
+    }
+    else
+    {
+        <dd class="text-muted">---</dd>
+    }
     <dt>Gestor</dt>
-    <dd>@Html.DisplayFor(model => model.Manager)</dd>
+    <dd>@Model.Manager</dd>
     <dt>Jefe</dt>
-    <dd>@Html.DisplayFor(model => model.Leader)</dd>   
+    <dd>@Model.Leader</dd>
+    <dt>Objetivos</dt>
+    @if (Model.Description != null)
+    {
+        <dd class="mb-0">@Model.Description</dd>
+    }
+    else
+    {
+        <dd class="mb-0 text-muted">---</dd>
+    }
 </dl>
-
+<hr />
 @using (Html.BeginForm("delete", "programs", new { Area = "I_D_i", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)

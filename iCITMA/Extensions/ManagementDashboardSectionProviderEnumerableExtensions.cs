@@ -107,7 +107,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Categorías de Programa",
                   Controller = "programcategories",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "I_D_i",
                   Role = Security.Authorization.Permission.ProgramCategoryViewer
               },
               new ManagementDashboardSectionViewModel

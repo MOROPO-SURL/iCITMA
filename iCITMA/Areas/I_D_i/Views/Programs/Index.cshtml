@@ -126,7 +126,7 @@
     <div class="row">
         @foreach (var item in Model.List)
         {
-            <div class="col-4 mb-2">
+            <div class="col-xl-4 col-md-6 mb-3">
                 <div class="card">
                     <div class="card-body">
                         <dl class="mb-0">
@@ -134,17 +134,10 @@
                             <dd>@item.Name</dd>
                             <dt>Código</dt>
                             <dd>@item.Code</dd>
+                            <dt>Categoría</dt>
+                            <dd>@item.Category</dd>
                             <dt>Fecha de Inicio</dt>
-                            <dd>@item.StartDate</dd>
-                            <dt>Fecha de Terminación</dt>
-                            @if (item.EndAt != null)
-                            {
-                                <dd>@item.EndAt</dd>
-                            }
-                            else
-                            {
-                                <dd class="text-muted">---</dd>
-                            }
+                            <dd>@item.StartDate.ToShortDateString()</dd>
                             <dt>Gestor</dt>
                             <dd>@item.Manager</dd>
                             <dt>Jefe</dt>
@@ -162,7 +155,7 @@
                 </div>
             </div>
             
-            await Html.RenderPartialAsync("DetailPartial", @item);
+            await Html.RenderPartialAsync("_DetailPartial", @item);
         }
     </div>
     if (Model.HasNext || Model.HasPrevious)

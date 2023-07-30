@@ -660,10 +660,10 @@
   <data name="ResearcherCategory" xml:space="preserve">
     <value>Categoría de Investigador</value>
   </data>
-   <data name="TeachingCategory" xml:space="preserve">
+  <data name="TeachingCategory" xml:space="preserve">
     <value>Categoría Docente</value>
   </data>
-   <data name="Unknown" xml:space="preserve">
+  <data name="Unknown" xml:space="preserve">
     <value>Desconocido</value>
   </data>
   <data name="Primary" xml:space="preserve">
@@ -718,7 +718,7 @@
     <value>Jefe</value>
   </data>
   <data name="StartDate" xml:space="preserve">
-    <value>Fecha de Creación</value>
+    <value>Fecha de Inicio</value>
   </data>
   <data name="EndAt" xml:space="preserve">
     <value>Fecha de Terminación</value>

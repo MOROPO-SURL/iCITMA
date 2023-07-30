@@ -36,6 +36,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Leader = entity.Leader.Identity.LastName != null ? string.Format("{0} {1}", entity.Leader.Identity.Name, entity.Leader.Identity.LastName) : entity.Leader.Identity.Name;
             StartDate = entity.StartAt;
             EndAt = entity.EndAt;
+            Description = entity.Description;
             Experts = entity.PersonExpertBridges.Select(bridge =>
             {
                 var model = new PersonDisplayViewModel();
