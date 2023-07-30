@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("DeleteExpectResult", "Projects", new { Area = "Auxiliares", IdProgramExpectResult = Model.IdProgramExpectResult, ProjectId = Model.ProjectId }, FormMethod.Post, true, null))
+            @using (Html.BeginForm("DeleteExpectResult", "Projects", new { Area = "I_D_i", IdProgramExpectResult = Model.IdProgramExpectResult, ProjectId = Model.ProjectId }, FormMethod.Post, true, null))
             {
                 @Html.HiddenFor(model => model.IdProgramExpectResult)
                 @Html.HiddenFor(model => model.ProjectId)                
