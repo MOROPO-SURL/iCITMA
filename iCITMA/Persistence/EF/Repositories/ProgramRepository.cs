@@ -13,7 +13,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
             return base.GetQueryableDbSet().Include(entity => entity.Category)
                 .Include(entity => entity.Manager).ThenInclude(entity => entity.Identity)
                 .Include(entity => entity.Leader).ThenInclude(entity => entity.Identity)
-                .Include(entity => entity.FundingSource)
                 .Include(entity => entity.PersonExpertBridges).ThenInclude(entity => entity.Stern)
                 .Include(entity => entity.KeyWordBridges).ThenInclude(entity => entity.Stern)
                 .Include(entity => entity.DocumentBridges).ThenInclude(entity => entity.Stern);

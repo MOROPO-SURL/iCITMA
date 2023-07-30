@@ -27,17 +27,17 @@
 <h3>Está seguro que desea eliminar el programa detallado a continuación?</h3>
 <dl>
 
-    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dt>Nombre</dt>
     <dd>@Html.DisplayFor(model => model.Name)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Code)</dt>
-    <dd>@Html.DisplayFor(model => model.Code)</dd>
+    <dd>Código</dd>
     <dt>@Html.DisplayNameFor(model => model.Leader)</dt>
-    <dd>@Html.DisplayFor(model => model.Leader)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Institution)</dt>
-    <dd>@Html.DisplayFor(model => model.Institution)</dd>   
+    <dt>Gestor</dt>
+    <dd>@Html.DisplayFor(model => model.Manager)</dd>
+    <dt>Jefe</dt>
+    <dd>@Html.DisplayFor(model => model.Leader)</dd>   
 </dl>
 
-@using (Html.BeginForm("delete", "programs", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post, true, null))
+@using (Html.BeginForm("delete", "programs", new { Area = "I_D_i", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)
     <div>

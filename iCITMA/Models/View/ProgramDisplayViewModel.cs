@@ -1,52 +1,65 @@
-﻿
-
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
+﻿using System.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class ProgramDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<Persistence.Entities.Program, System.Guid>
     {
         public System.Guid Id { get; set; }
-        [Display(Name = "Name")]
+        
         public string Name { get; set; }
-        [Display(Name = "Code")]
+        
         public string Code { get; set; }
-        [Display(Name = "Manager")]
-        public string Institution { get; set; }
-        [Display(Name = "Category")]
+        
+        public string Manager { get; set; }
+        
         public string Category { get; set; }
-        [Display(Name = "Leader")]
+        
         public string Leader { get; set; }
-        [Display(Name = "FundingSource")]
-        public string FundingSource { get; set; }
-        [Display(Name = "StartDate")]
+        
         public System.DateTime StartDate { get; set; }
-        [Display(Name = "EndAt")]
+        
         public System.DateTime? EndAt { get; set; }
-        [Display(Name = "Amount")]
-        public decimal? Amount { get; set; }
-        public ICollection<ProgramPersonExpertBridge> PersonExpertBridges { get; set; }
-        public ICollection<ProgramKeyWordBridge> KeyWordBridges { get; set; }
-        public ICollection<ProgramDocumentBridge> DocumentBridges { get; set; }
+
+        public string Description { get; set; }
+
+        public PersonDisplayViewModel[] Experts { get; set; }
+        public KeyWordDisplayViewModel[] KeyWords { get; set; }
+        public DocumentDisplayViewModel[] Documents { get; set; }
 
         public void Import(Persistence.Entities.Program entity)
         {
             Id = entity.Id;
             Name = entity.Name;
             Code = entity.Code;
-            Institution = entity.Manager.Identity.Name;
             Category = entity.Category.Name;
-            Leader = entity.Leader.Identity.Name + " " + entity.Leader.Identity.LastName;
-            FundingSource = entity.FundingSource.Name;
+            Manager = entity.Manager.Identity.Name;
+            Leader = entity.Leader.Identity.LastName != null ? string.Format("{0} {1}", entity.Leader.Identity.Name, entity.Leader.Identity.LastName) : entity.Leader.Identity.Name;
             StartDate = entity.StartAt;
             EndAt = entity.EndAt;
-            Amount = entity.Amount;
-            PersonExpertBridges = entity.PersonExpertBridges;
-            KeyWordBridges = entity.KeyWordBridges;
-            DocumentBridges = entity.DocumentBridges;
+            Experts = entity.PersonExpertBridges.Select(bridge =>
+            {
+                var model = new PersonDisplayViewModel();
+
+                model.Import(bridge.Stern);
+
+                return model;
+            }).ToArray();
+            KeyWords = entity.KeyWordBridges.Select(bridge =>
+            {
+                var model = new KeyWordDisplayViewModel();
+
+                model.Import(bridge.Stern);
+
+                return model;
+            }).ToArray();
+            Documents = entity.DocumentBridges.Select(bridge =>
+            {
+                var model = new DocumentDisplayViewModel();
+
+                model.Import(bridge.Stern);
+
+                return model;
+            }).ToArray();
         }
     }
 }

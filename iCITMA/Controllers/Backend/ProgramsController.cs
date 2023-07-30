@@ -2,26 +2,21 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using MOROPO.CITMA.CMG.iCITMA.Extensions;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
-using MOROPO.CITMA.CMG.iCITMA.Models.View.CustomSelect;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Models.View;
-using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Controllers;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using Document = MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Document;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("I_D_i")]
     public class ProgramsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Persistence.Entities.Program, System.Guid, ProgramInputViewModel, ProgramDisplayViewModel>
     {
         public readonly IEntityRepository<Institution, System.Guid> institutionRepository;
@@ -33,7 +28,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly Managers.RelativeDocumentFileManager attachmentFileManager;        
 
 
-        public ProgramsController(Managers.RelativeDocumentFileManager attachmentFileManager, IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
+        public ProgramsController(Managers.RelativeDocumentFileManager attachmentFileManager, IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
         {
             this.institutionRepository = institutionRepository;
             this.personRepository = personRepository;
@@ -59,7 +54,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [RequirePermissions(Permission.ProgramEditor)]
-        public override IActionResult Edit(Guid key)
+        public override IActionResult Edit(System.Guid key)
         {
             return base.Edit(key);
         }
@@ -71,7 +66,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [RequirePermissions(Permission.ProgramRemover)]
-        public override IActionResult Delete(Guid key)
+        public override IActionResult Delete(System.Guid key)
         {
             return base.Delete(key);
         }
@@ -82,37 +77,86 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return base.Delete(displayModel);
         }
 
-        private void PopulateLists(ProgramInputViewModel modelInput)
-        {
-            modelInput.InstitutionSelected = institutionRepository.GetAll().Select(inst => new SelectListItem { Value = inst.Id.ToString(), Text = inst.Identity.Name }).ToArray();
-            modelInput.CategorySelected = programCategoryRepository.GetAll().Select(prog => new SelectListItem { Value = prog.Id.ToString(), Text = prog.Name }).ToArray();
-            modelInput.LeaderSelected = personRepository.GetAll().Select(pers => new SelectListItem { Value = pers.Id.ToString(), Text = pers.Identity.Name + " " + pers.Identity.LastName }).ToArray();
-            modelInput.FundingSourceSelected = fundingSourceRepository.GetAll().Select(fun => new SelectListItem { Value = fun.Id.ToString(), Text = fun.Name }).ToArray();
-        }
-
         protected override void ConfigureCreate(ProgramInputViewModel modelInput)
         {
             base.ConfigureCreate(modelInput);
-            PopulateLists(modelInput);
+            
+            Populate(modelInput);
         }
 
         protected override void ConfigurePostFailCreateValidation(ProgramInputViewModel modelInput)
         {
             base.ConfigurePostFailCreateValidation(modelInput);
-            PopulateLists(modelInput);
+            
+            Populate(modelInput);
         }
 
         protected override void ConfigureEdit(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)
         {
             base.ConfigureEdit(entity, modelInput);
-            PopulateLists(modelInput);
+            
+            Populate(modelInput);
         }
 
-        #region Exprerts
+        protected override void ValidateCreate(ProgramInputViewModel modelInput)
+        {
+            base.ValidateCreate(modelInput);
+
+            //if (modelInput.LeaderId == default)
+            //{
+            //    ModelState.AddModelError("LeaderId", localizer.GetString("RequiredValidationErrorMessage", localizer.GetString("LeaderId")));
+            //}
+
+            //if (modelInput.ManagerId == default)
+            //{
+            //    ModelState.AddModelError("ManagerId", localizer.GetString("RequiredValidationErrorMessage", localizer.GetString("ManagerId")));
+            //}
+        }
+
+        protected override void PreCreate(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)
+        {
+            base.PreCreate(entity, modelInput);
+
+            entity.CategoryId = modelInput.CategoryId.Value;
+            entity.ManagerId = modelInput.ManagerId.Value;
+            entity.LeaderId = modelInput.LeaderId.Value;
+        }
+
+        protected override void PreEdit(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)
+        {
+            base.PreEdit(entity, modelInput);
+
+            if (entity.CategoryId != modelInput.CategoryId)
+            {
+                entity.CategoryId = modelInput.CategoryId.Value;
+                entity.Category = programCategoryRepository.Get(modelInput.CategoryId.Value);
+            }
+
+            if (entity.ManagerId != modelInput.ManagerId)
+            {
+                entity.ManagerId = modelInput.ManagerId.Value;
+                entity.Manager = institutionRepository.Get(modelInput.ManagerId.Value);
+            }
+
+            if (entity.LeaderId != modelInput.LeaderId)
+            {
+                entity.LeaderId = modelInput.LeaderId.Value;
+                entity.Leader = personRepository.Get(modelInput.LeaderId.Value);
+            }
+        }
+
+        private void Populate(ProgramInputViewModel modelInput)
+        {
+            modelInput.InstitutionSelectedListItems = institutionRepository.GetAll().Select(inst => new SelectListItem { Value = inst.Id.ToString(), Text = inst.Identity.Name }).ToArray();
+            modelInput.CategorySelectedListItems = programCategoryRepository.GetAll().Select(prog => new SelectListItem { Value = prog.Id.ToString(), Text = prog.Name }).ToArray();
+            modelInput.LeaderSelectedListItems = personRepository.GetAll().Select(pers => new SelectListItem { Value = pers.Id.ToString(), Text = pers.Identity.Name + " " + pers.Identity.LastName }).ToArray();
+        }
+
+        #region Experts
         [HttpGet]
-        [Route("edit/{key}/programExprerts")]
+        [Route("edit/{key}/program/experts")]
         [RequirePermissions(Permission.ProgramEditor)]
-        public IActionResult EditProgramExprerts(Guid key)
+        public IActionResult EditProgramExperts(System.Guid key)
         {
             try
             {
@@ -160,7 +204,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
                 return View(resultModel);
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 logger.LogError(e.InnerException, e.Message);
             }
@@ -171,10 +215,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/programExprerts/add")]
+        [Route("edit/program/experts/add")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult AddExprerts(ProgramExpertInputViewModel modelInput)
+        public IActionResult AddExperts(ProgramExpertInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -226,10 +270,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/programExprerts/remove")]
+        [Route("edit/program/experts/remove")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult RemoveExprerts(ProgramExpertDisplayViewModel modelInput)
+        public IActionResult RemoveExperts(ProgramExpertDisplayViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -237,7 +281,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 entity = Repository.Get(modelInput.ProgramId);
             }
-            catch (Exception)
+            catch (System.Exception)
             {
 
                 throw;
@@ -277,9 +321,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         #region ProgramKeyWorld
         [HttpGet]
-        [Route("edit/{key}/programKeyWorlds")]
+        [Route("edit/{key}/program /keyworlds")]
         [RequirePermissions(Permission.ProgramEditor)]
-        public IActionResult EditProgramKeyWorlds(Guid key)
+        public IActionResult EditProgramKeyWorlds(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -303,7 +347,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             if (keyWords.Count() > 0)
             {
-                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
                 {
                     Id = item.Id,
                     Label = item.Name,
@@ -314,10 +358,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/programKeyWorlds")]
+        [Route("edit/{key}/program/keyworlds")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditProgramKeyWorlds(Guid key, ProgramInputViewModel modelInput)
+        public IActionResult EditProgramKeyWorlds(System.Guid key, ProgramInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -357,9 +401,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         #region Documents
         [HttpGet]
-        [Route("edit/{key}/programDocuments")]
+        [Route("edit/{key}/program/documents")]
         [RequirePermissions(Permission.ProgramEditor)]
-        public IActionResult EditProgramDocuments(Guid key)
+        public IActionResult EditProgramDocuments(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -384,7 +428,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/programDocuments/add")]
+        [Route("edit/{key}/program/documents/add")]
         [ValidateAntiForgeryToken]
         [RequirePermissions(Permission.ProgramEditor)]
         public IActionResult AddDocument(System.Guid key, DocumentInputViewModel model)
@@ -459,7 +503,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/programDocuments/delete")]
+        [Route("edit/{key}/program/documents/delete")]
         [ValidateAntiForgeryToken]
         [RequirePermissions(Permission.ProgramEditor)]
         public IActionResult DeleteDocument(System.Guid key, System.Guid documentId)
@@ -475,10 +519,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 documentRepository.Delete(document.Stern, User.Identity.Name);
 
                 entity.DocumentBridges.Remove(document);
-
-                
-
-                
 
                 SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
 
@@ -503,7 +543,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/programDocuments/edit")]
+        [Route("edit/{key}/program/documents/edit")]
         [ValidateAntiForgeryToken]
         [RequirePermissions(Permission.ProgramEditor)]
         public IActionResult EditDocument(System.Guid key, DocumentInputViewModel modelInput)
@@ -519,15 +559,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                     {
                         modelInput.MergueForProgram(val);
 
-                        documentRepository.Update(val, base.User.Identity.Name);
+                        documentRepository.Update(val, User.Identity.Name);
 
                         SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+                        
                         return RedirectToAction("EditProgramDocuments", new { key });
                     }
-                    catch (Exception ex2)
+                    catch (System.Exception ex2)
                     {
                         logger.LogError(ex2.InnerException, ex2.Message);
+                        
                         SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+                        
                         return RedirectToAction("EditProgramDocuments", new { key });
                     }
                 }
@@ -542,7 +585,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/{documentId}/programDocuments/download")]
+        [Route("edit/{key}/program/documents/{documentId}/download")]
         [ValidateAntiForgeryToken]
         [RequirePermissions(Permission.ProgramEditor)]
         public FileResult DownloadDocument(System.Guid key, System.Guid documentId)
