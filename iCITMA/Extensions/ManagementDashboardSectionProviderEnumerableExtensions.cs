@@ -28,6 +28,43 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                 Role = Security.Authorization.Permission.TraceViewer
             });
 
+            var ecosistemaSections = new List<ManagementDashboardSectionViewModel>
+            {
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Instituciones",
+                  Controller = "Institutions",
+                  Action = "index",
+                  Area = "Ecosistema",
+                  Role = Security.Authorization.Permission.InstitusionViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Personas",
+                  Controller = "persons",
+                  Action = "index",
+                  Area = "Ecosistema",
+                  Role = Security.Authorization.Permission.PersonViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Categorías de Investigador",
+                  Controller = "researchercategories",
+                  Action = "index",
+                  Area = "Ecosistema",
+                  Role = Security.Authorization.Permission.ResearcherCategoryViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Categorías Docentes",
+                  Controller = "teachingcategories",
+                  Action = "index",
+                  Area = "Ecosistema",
+                  Role = Security.Authorization.Permission.TeachingCategoryViewer
+              }
+
+            };
+
             var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
             {
               new ManagementDashboardSectionViewModel
@@ -80,22 +117,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Categorías de Investigador",
-                  Controller = "researchercategories",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ResearcherCategoryViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Categorías Docentes",
-                  Controller = "teachingcategories",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.TeachingCategoryViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
                   Title = "Categorías de Proyectos",
                   Controller = "projectcategories",
                   Action = "index",
@@ -125,22 +146,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ODSIndicatorViewer
-              },
-               new ManagementDashboardSectionViewModel
-              {
-                  Title = "Personas",
-                  Controller = "persons",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.PersonViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Instituciones",
-                  Controller = "Institutions",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.InstitusionViewer
               },
               new ManagementDashboardSectionViewModel
               {
@@ -187,6 +192,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
             return new Dictionary<string, ICollection<ManagementDashboardSectionViewModel>>
             {
                 { "Seguridad", securitySections },
+                { "Ecosistema", ecosistemaSections },
                 { "Auxiliares", auxiliaresSections },
             };
         }

@@ -23,6 +23,12 @@
     <EmbeddedResource Remove="logs\**" />
     <None Remove="dpkeys\**" />
     <None Remove="logs\**" />
+    <None Remove="Areas\Ecosistema\" />
+    <None Remove="Areas\Ecosistema\Views\" />
+    <None Remove="Areas\Ecosistema\Views\Institutions\" />
+    <None Remove="Areas\Ecosistema\Views\Persons\" />
+    <None Remove="Areas\Ecosistema\Views\ResearcherCategories\" />
+    <None Remove="Areas\Ecosistema\Views\TeachingCategories\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +63,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
+    <Folder Include="Areas\Ecosistema\" />
+    <Folder Include="Areas\Ecosistema\Views\" />
+    <Folder Include="Areas\Ecosistema\Views\Institutions\" />
+    <Folder Include="Areas\Ecosistema\Views\Persons\" />
+    <Folder Include="Areas\Ecosistema\Views\ResearcherCategories\" />
+    <Folder Include="Areas\Ecosistema\Views\TeachingCategories\" />
   </ItemGroup>
 
 </Project>

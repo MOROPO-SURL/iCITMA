@@ -19,7 +19,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("Ecosistema")]
     public class PersonsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Person, System.Guid, PersonInputViewModel, PersonDisplayViewModel>
     {
         private readonly IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository;

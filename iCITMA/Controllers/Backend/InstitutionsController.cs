@@ -21,7 +21,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("Ecosistema")]
     public class InstitutionsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Institution, System.Guid, InstitutionInputViewModel, InstitutionDisplayViewModel>
     {
         private readonly IImageFileManagerFacade imageFileManagerFacade;
