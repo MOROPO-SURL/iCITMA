@@ -1,7 +1,7 @@
 ﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectCategoryInputViewModel
 
 @{
-    ViewData["Title"] = "Agregar Categoría de Proyecto";
+    ViewData["Title"] = "Editar Categoría de Proyecto";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -24,9 +24,10 @@
     Layout = "_BackendLayout";
 }
 
-@using (Html.BeginForm("create", "projectcategories", new { Area = "Auxiliares" }, FormMethod.Post))
+@using (Html.BeginForm("edit", "projectcategories", new { Area = "I_D_i", key = string.Empty }, FormMethod.Post))
 {
-    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
         <div class="card-body">
@@ -46,9 +47,8 @@
             </div>
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Agregar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Modificar</button>
+            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
         </div>
     </div>
 }
-

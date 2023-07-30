@@ -11,7 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("I_D_i")]
     public class ProjectStatesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ProjectState, System.Guid, ProjectStateInputViewModel, ProjectStateDisplayViewModel>
     {
         public ProjectStatesController(IEntityRepository<ProjectState, System.Guid> repository, IStringLocalizer<ProjectStatesController> localizer, ILogger<ProjectStatesController> logger) : base(repository, localizer, logger)

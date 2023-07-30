@@ -20,7 +20,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("I_D_i")]
     public class ProjectsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Project, System.Guid, ProjectInputViewModel, ProjectDisplayViewModel>
     {
         public readonly IEntityRepository<Person, System.Guid> leaderRepository;

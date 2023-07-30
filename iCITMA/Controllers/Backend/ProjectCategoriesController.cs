@@ -11,7 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("I_D_i")]
     public class ProjectCategoriesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ProjectCategory, System.Guid, ProjectCategoryInputViewModel, ProjectCategoryDisplayViewModel>
     {
         public ProjectCategoriesController(IEntityRepository<ProjectCategory, System.Guid> repository, IStringLocalizer<ProjectCategoriesController> localizer, ILogger<ProjectCategoriesController> logger) : base(repository, localizer, logger)

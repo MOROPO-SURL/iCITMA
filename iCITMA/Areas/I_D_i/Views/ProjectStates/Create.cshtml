@@ -1,7 +1,7 @@
-﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectCategoryInputViewModel
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectStateInputViewModel
 
 @{
-    ViewData["Title"] = "Editar Categoría de Proyecto";
+    ViewData["Title"] = "Agregar Estado de Proyecto";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Categorías de Proyectos",
+            Caption = "Administración de Estados de Proyecto",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -24,12 +24,12 @@
     Layout = "_BackendLayout";
 }
 
-@using (Html.BeginForm("edit", "projectcategories", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post))
+@using (Html.BeginForm("create", "ProjectStates", new { Area = "I_D_i" }, FormMethod.Post))
 {
-    @Html.HiddenFor(model => model.Id)
-
+    @Html.ValidationSummary(true)
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
+
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-5 col-md-6" style="margin-bottom: 20px;">
@@ -44,11 +44,12 @@
                     @Html.TextAreaFor(model => model.Description, 4, 0, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
                 </div>
-            </div>
+            </div>            
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Modificar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+            <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
         </div>
     </div>
 }
+

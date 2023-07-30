@@ -29,6 +29,9 @@
     <None Remove="Areas\Ecosistema\Views\Persons\" />
     <None Remove="Areas\Ecosistema\Views\ResearcherCategories\" />
     <None Remove="Areas\Ecosistema\Views\TeachingCategories\" />
+    <None Remove="Areas\I_D_i\Views\ProjectCategories\" />
+    <None Remove="Areas\I_D_i\Views\Projects\" />
+    <None Remove="Areas\I_D_i\Views\ProjectStates\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +72,9 @@
     <Folder Include="Areas\Ecosistema\Views\Persons\" />
     <Folder Include="Areas\Ecosistema\Views\ResearcherCategories\" />
     <Folder Include="Areas\Ecosistema\Views\TeachingCategories\" />
+    <Folder Include="Areas\I_D_i\Views\ProjectCategories\" />
+    <Folder Include="Areas\I_D_i\Views\Projects\" />
+    <Folder Include="Areas\I_D_i\Views\ProjectStates\" />
   </ItemGroup>
 
 </Project>

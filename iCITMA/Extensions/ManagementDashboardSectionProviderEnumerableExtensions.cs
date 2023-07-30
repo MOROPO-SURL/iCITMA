@@ -62,7 +62,50 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Area = "Ecosistema",
                   Role = Security.Authorization.Permission.TeachingCategoryViewer
               }
+            };
 
+            var iDiSections = new List<ManagementDashboardSectionViewModel>
+            {
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Programas",
+                  Controller = "programs",
+                  Action = "index",
+                  Area = "I_D_i",
+                  Role = Security.Authorization.Permission.ProgramViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Proyectos",
+                  Controller = "projects",
+                  Action = "index",
+                  Area = "I_D_i",
+                  Role = Security.Authorization.Permission.ProjectViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Estados de Proyecto",
+                  Controller = "ProjectStates",
+                  Action = "index",
+                  Area = "I_D_i",
+                  Role = Security.Authorization.Permission.ProjectStateViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Categorías de Programa",
+                  Controller = "programcategories",
+                  Action = "index",
+                  Area = "I_D_i",
+                  Role = Security.Authorization.Permission.ProgramCategoryViewer
+              },
+              new ManagementDashboardSectionViewModel
+              {
+                  Title = "Categorías de Proyectos",
+                  Controller = "projectcategories",
+                  Action = "index",
+                  Area = "I_D_i",
+                  Role = Security.Authorization.Permission.ProjectCategoryViewer
+              }
             };
 
             var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
@@ -74,14 +117,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ImpactIndicatorViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Estados de Proyecto",
-                  Controller = "ProjectStates",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ProjectStateViewer
               },
               new ManagementDashboardSectionViewModel
               {
@@ -117,22 +152,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Categorías de Proyectos",
-                  Controller = "projectcategories",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ProjectCategoryViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Categorías de Programa",
-                  Controller = "programcategories",
-                  Action = "index",
-                  Area = "I_D_i",
-                  Role = Security.Authorization.Permission.ProgramCategoryViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
                   Title = "Palabras Claves",
                   Controller = "keywords",
                   Action = "index",
@@ -146,22 +165,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.ODSIndicatorViewer
-              },
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Programas",
-                  Controller = "programs",
-                  Action = "index",
-                  Area = "I_D_i",
-                  Role = Security.Authorization.Permission.ProgramViewer
-              },              
-              new ManagementDashboardSectionViewModel
-              {
-                  Title = "Proyectos",
-                  Controller = "projects",
-                  Action = "index",
-                  Area = "Auxiliares",
-                  Role = Security.Authorization.Permission.ProjectViewer
               },
               new ManagementDashboardSectionViewModel
               {
@@ -193,6 +196,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
             {
                 { "Seguridad", securitySections },
                 { "Ecosistema", ecosistemaSections },
+                { "I_D_i", iDiSections },
                 { "Auxiliares", auxiliaresSections },
             };
         }
