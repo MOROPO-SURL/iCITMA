@@ -619,7 +619,7 @@
     <value>Periodistas</value>
   </data>
   <data name="SociaMedia" xml:space="preserve">
-    <value>Pespecialistas de los Medios</value>
+    <value>Especialistas de los Medios</value>
   </data>
   <data name="SoundManagement" xml:space="preserve">
     <value>Sonido</value>
@@ -647,6 +647,9 @@
   </data>
   <data name="State" xml:space="preserve">
     <value>Provincia</value>
+  </data>
+  <data name="Municipality" xml:space="preserve">
+    <value>Municipio</value>
   </data>
   <data name="Reference" xml:space="preserve">
     <value>Referencia</value>

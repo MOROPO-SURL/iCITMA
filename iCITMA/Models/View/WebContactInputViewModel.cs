@@ -10,8 +10,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         [Display(Name = "Label")]
         public string Label { get; set; }
-        [Required]
-        [Url]
+
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Url(ErrorMessage = "UrlValidationErrorMessage")]
+        [Display(Name = "Url")]
         public string Url { get; set; }
 
         public WebSiteContactItem Export()

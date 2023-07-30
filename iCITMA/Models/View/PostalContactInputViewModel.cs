@@ -6,12 +6,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     public class PostalContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<PostalContactItem, System.Guid>
     {
         public System.Guid Id { get; set; }
-        [Required(ErrorMessage = "RequiredValidationErrorMessage")]        
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Direction")]
         public string Address { get; set; }
         public Framework.Guama.Location.Persistence.Entities.Location Location { get; set; }
         public System.Guid LocationId { get; set; }
+        [Display(Name = "ZipCode")]
         public int ZipCode { get; set; }
+        [Display(Name = "Longitude")]
         public decimal Longitude { get; set; }
+        [Display(Name = "Latitude")]
         public decimal Latitude { get; set; }
 
         public PostalContactItem Export()
