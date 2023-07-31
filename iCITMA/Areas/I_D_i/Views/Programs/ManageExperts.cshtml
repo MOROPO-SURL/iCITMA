@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Programas",
+            Caption = "Gestionar Programas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -65,9 +65,9 @@
 
 }
 
-<div class="card" style="margin-bottom: 20px;">
+<div class="card mb-3 mt-4">
     <div class="card-header">
-        <h4 class="mb-0">@ViewData["Title"]</h4>
+        <h4>@ViewData["Title"]</h4>
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("edit", @Model.Program.Id)">Generales</a>
@@ -76,10 +76,10 @@
                 <a class="nav-link active" href="#">Expertos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("EditProgramKeyWorlds", Model.Program.Id)">Palabras Claves</a>
+                <a class="nav-link" href="@Url.Action("ManageKeyWorlds", Model.Program.Id)">Palabras Claves</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.Program.Id)">Documentos</a>
+                <a class="nav-link" href="@Url.Action("ManageDocuments", Model.Program.Id)">Documentos</a>
             </li>
         </ul>
     </div>
@@ -89,7 +89,7 @@
             <div class="row">
                 @foreach (var item in Model.Experts)
                 {
-                    <div class="col-lg-2 col-md-3 col-sm-4" style="margin-bottom: 20px;">
+                    <div class="col-lg-2 col-md-3 col-sm-4 mb-3 text-center">
                         @if (item.ImageId != System.Guid.Empty)
                         {
                             <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="img-fluid img-thumbnail rounded-circle" />
@@ -98,7 +98,7 @@
                         {
                             <img src="~/img/default-person-picture.jpg" class="img-fluid img-thumbnail rounded-circle" />
                         }
-                        <div class="text-center mt-2">
+                        <div class="mt-2">
                             @if (string.IsNullOrEmpty(item.LastName))
                             {
                                 <div>@item.Name</div>
@@ -109,12 +109,13 @@
                             }
                             <div class="mt-2">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detail</span></button>
-                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-member-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-eye"></span> Detalles</button>
+                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-member-@item.Id"><span class="mdi mdi-trash-can-outline"></span> Eliminar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     await Html.RenderPartialAsync("_ExpertDetailPartial", @item);
                     await Html.RenderPartialAsync("_DeleteExpertPartial", @item.ProgramExpert);
                 }
@@ -129,7 +130,8 @@
         <button type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-member">Agregar</button>
         <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
     </div>
-    @await Html.PartialAsync("AddExpertPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramExpertInputViewModel
+
+    @await Html.PartialAsync("_AddExpertPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramExpertInputViewModel
     {
         ProgramId = Model.Program.Id,
         NotSelectedExperts = Model.NotSelectedExperts

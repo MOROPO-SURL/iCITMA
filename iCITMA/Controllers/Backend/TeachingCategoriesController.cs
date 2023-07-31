@@ -11,7 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Ecosistema")]
+    [Area("ecosystem")]
     public class TeachingCategoriesController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<TeachingCategory, System.Guid, TeachingCategoryInputViewModel, TeachingCategoryDisplayViewModel>
     {
         public TeachingCategoriesController(IEntityRepository<TeachingCategory, System.Guid> repository, IStringLocalizer<TeachingCategoriesController> localizer, ILogger<TeachingCategoriesController> logger) : base(repository, localizer, logger)

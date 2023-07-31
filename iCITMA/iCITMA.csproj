@@ -15,20 +15,19 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Staging)' " />
   <ItemGroup>
+    <Compile Remove="Areas\Ecosistema\**" />
     <Compile Remove="dpkeys\**" />
     <Compile Remove="logs\**" />
+    <Content Remove="Areas\Ecosistema\**" />
     <Content Remove="dpkeys\**" />
     <Content Remove="logs\**" />
+    <EmbeddedResource Remove="Areas\Ecosistema\**" />
     <EmbeddedResource Remove="dpkeys\**" />
     <EmbeddedResource Remove="logs\**" />
+    <None Remove="Areas\Ecosistema\**" />
     <None Remove="dpkeys\**" />
     <None Remove="logs\**" />
     <None Remove="Areas\Ecosistema\" />
-    <None Remove="Areas\Ecosistema\Views\" />
-    <None Remove="Areas\Ecosistema\Views\Institutions\" />
-    <None Remove="Areas\Ecosistema\Views\Persons\" />
-    <None Remove="Areas\Ecosistema\Views\ResearcherCategories\" />
-    <None Remove="Areas\Ecosistema\Views\TeachingCategories\" />
     <None Remove="Areas\I_D_i\Views\ProjectCategories\" />
     <None Remove="Areas\I_D_i\Views\Projects\" />
     <None Remove="Areas\I_D_i\Views\ProjectStates\" />
@@ -66,12 +65,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
-    <Folder Include="Areas\Ecosistema\" />
-    <Folder Include="Areas\Ecosistema\Views\" />
-    <Folder Include="Areas\Ecosistema\Views\Institutions\" />
-    <Folder Include="Areas\Ecosistema\Views\Persons\" />
-    <Folder Include="Areas\Ecosistema\Views\ResearcherCategories\" />
-    <Folder Include="Areas\Ecosistema\Views\TeachingCategories\" />
     <Folder Include="Areas\I_D_i\Views\ProjectCategories\" />
     <Folder Include="Areas\I_D_i\Views\Projects\" />
     <Folder Include="Areas\I_D_i\Views\ProjectStates\" />

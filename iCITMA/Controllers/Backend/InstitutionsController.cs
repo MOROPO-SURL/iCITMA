@@ -5,15 +5,12 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Identity.Persistence.Entities;
-using MOROPO.Framework.Guama.Identity.Persistence.ORM.EF.Repositories;
 using MOROPO.Framework.Guama.Location.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Managers.Facade;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,41 +18,41 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Ecosistema")]
+    [Area("ecosystem")]
     public class InstitutionsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Institution, System.Guid, InstitutionInputViewModel, InstitutionDisplayViewModel>
     {
         private readonly IImageFileManagerFacade imageFileManagerFacade;
         private readonly IEntityRepository<Image, System.Guid> imageRepository;
-        private readonly IEntityRepository<OrganizationIdentity, Guid> identityRepository;
-        private readonly IEntityRepository<PhoneContactItem, Guid> phoneContactItemRepository;
-        private readonly IEntityRepository<EmailContactItem, Guid> emailContactItemRepository;
-        private readonly IEntityRepository<SocialContactItem, Guid> socialContactItemRepository;
-        private readonly IEntityRepository<PostalContactItem, Guid> postalContactItemRepository;
-        private readonly IEntityRepository<WebSiteContactItem, Guid> webSiteContactItemRepository;
-        private readonly IEntityRepository<Municipality, Guid> municipalityRepository;
-        private readonly IEntityRepository<State, Guid> stateRepository;
-        private readonly IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository;
-        private readonly IEntityRepository<Location, Guid> locationRepository;
-        private readonly IEntityRepository<StateLocation, Guid> stateLocationRepository;        
-        private readonly IEntityRepository<Person, Guid> personRepository;        
+        private readonly IEntityRepository<OrganizationIdentity, System.Guid> identityRepository;
+        private readonly IEntityRepository<PhoneContactItem, System.Guid> phoneContactItemRepository;
+        private readonly IEntityRepository<EmailContactItem, System.Guid> emailContactItemRepository;
+        private readonly IEntityRepository<SocialContactItem, System.Guid> socialContactItemRepository;
+        private readonly IEntityRepository<PostalContactItem, System.Guid> postalContactItemRepository;
+        private readonly IEntityRepository<WebSiteContactItem, System.Guid> webSiteContactItemRepository;
+        private readonly IEntityRepository<Municipality, System.Guid> municipalityRepository;
+        private readonly IEntityRepository<State, System.Guid> stateRepository;
+        private readonly IEntityRepository<MunicipalityLocation, System.Guid> municipalityLocationRepository;
+        private readonly IEntityRepository<Location, System.Guid> locationRepository;
+        private readonly IEntityRepository<StateLocation, System.Guid> stateLocationRepository;        
+        private readonly IEntityRepository<Person, System.Guid> personRepository;        
 
         public InstitutionsController(IEntityRepository<Institution, System.Guid> repository,
             IStringLocalizer<InstitutionsController> localizer,
             ILogger<InstitutionsController> logger,
             IImageFileManagerFacade imageFileManagerFacade,
             IEntityRepository<Image, System.Guid> imageRepository,
-            IEntityRepository<OrganizationIdentity, Guid> identityRepository,
-            IEntityRepository<PhoneContactItem, Guid> phoneContactItemRepository,
-            IEntityRepository<EmailContactItem, Guid> emailContactItemRepository,
-            IEntityRepository<SocialContactItem, Guid> socialContactItemRepository,
-            IEntityRepository<PostalContactItem, Guid> postalContactItemRepository,
-            IEntityRepository<WebSiteContactItem, Guid> webSiteContactItemRepository,
-            IEntityRepository<Municipality, Guid> municipalityRepository,
-            IEntityRepository<State, Guid> stateRepository,
-            IEntityRepository<MunicipalityLocation, Guid> municipalityLocationRepository,
-            IEntityRepository<Location, Guid> locationRepository,
-            IEntityRepository<StateLocation, Guid> stateLocationRepository,
-            IEntityRepository<Person, Guid> personRepository
+            IEntityRepository<OrganizationIdentity, System.Guid> identityRepository,
+            IEntityRepository<PhoneContactItem, System.Guid> phoneContactItemRepository,
+            IEntityRepository<EmailContactItem, System.Guid> emailContactItemRepository,
+            IEntityRepository<SocialContactItem, System.Guid> socialContactItemRepository,
+            IEntityRepository<PostalContactItem, System.Guid> postalContactItemRepository,
+            IEntityRepository<WebSiteContactItem, System.Guid> webSiteContactItemRepository,
+            IEntityRepository<Municipality, System.Guid> municipalityRepository,
+            IEntityRepository<State, System.Guid> stateRepository,
+            IEntityRepository<MunicipalityLocation, System.Guid> municipalityLocationRepository,
+            IEntityRepository<Location, System.Guid> locationRepository,
+            IEntityRepository<StateLocation, System.Guid> stateLocationRepository,
+            IEntityRepository<Person, System.Guid> personRepository
             ) : base(repository, localizer, logger)
         {
             this.imageFileManagerFacade = imageFileManagerFacade;
@@ -141,7 +138,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet("PopulateStateToMunicipality/{stateId}")]
         public IActionResult PopulateStateToMunicipality(string stateId)
         {
-            var stateIdParse = Guid.Parse(stateId);
+            var stateIdParse = System.Guid.Parse(stateId);
 
             var municipalities = municipalityRepository.GetAll().Where(entity => entity.StateId == stateIdParse).ToList();
             return Ok(municipalities);
@@ -287,7 +284,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
                 return View(resultModel);
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 logger.LogError(e.InnerException, e.Message);
             }
@@ -428,7 +425,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 var emailContactItem = new EmailContactItem { Label = modelInput.Label, EmailAddress = modelInput.Address };
                 emailContactItemRepository.Add(emailContactItem, User.Identity.Name, false);
 
-                entity.Identity.EmailContactItemBridges.Add(new OrganizationEmailContactItemBridge { ProwId = (Guid)entity.IdentityId, Stern = emailContactItem , SternId = emailContactItem.Id});
+                entity.Identity.EmailContactItemBridges.Add(new OrganizationEmailContactItemBridge { ProwId = entity.IdentityId.Value, Stern = emailContactItem , SternId = emailContactItem.Id});
 
                 Repository.Update(entity, User.Identity.Name);
 
@@ -525,7 +522,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 var socialContactItem = new SocialContactItem { Label = modelInput.Label, SocialId = modelInput.SocialId };
                 socialContactItemRepository.Add(socialContactItem, User.Identity.Name, false);
 
-                entity.Identity.SocialContactItemBridges.Add(new OrganizationSocialContactItemBridge { ProwId = (Guid)entity.IdentityId, Stern = socialContactItem, SternId = modelInput.Id });
+                entity.Identity.SocialContactItemBridges.Add(new OrganizationSocialContactItemBridge { ProwId = entity.IdentityId.Value, Stern = socialContactItem, SternId = modelInput.Id });
 
                 Repository.Update(entity, User.Identity.Name);
 
@@ -627,7 +624,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 var postalContactItem = new PostalContactItem { Address = modelInput.Address, Latitude = modelInput.Latitude, Longitude = modelInput.Longitude, LocationId = municipalityLocaction.Id, ZipCode = modelInput.ZipCode };
                 postalContactItemRepository.Add(postalContactItem, User.Identity.Name, false);
 
-                entity.Identity.PostalContactItemBridges.Add(new OrganizationPostalContactItemBridge { ProwId = (Guid)entity.IdentityId, 
+                entity.Identity.PostalContactItemBridges.Add(new OrganizationPostalContactItemBridge { ProwId = (System.Guid)entity.IdentityId, 
                     Stern = postalContactItem, SternId = modelInput.Id });
 
                 Repository.Update(entity, User.Identity.Name);
@@ -727,7 +724,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
                 entity.Identity.WebSiteContactItemBridges.Add(new OrganizationWebSiteContactItemBridge
                 {
-                    ProwId = (Guid)entity.IdentityId,
+                    ProwId = entity.IdentityId.Value,
                     Prow = entity.Identity,
                     Stern = webSiteContactItem,
                     SternId = modelInput.Id

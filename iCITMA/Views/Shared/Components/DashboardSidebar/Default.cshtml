@@ -26,7 +26,7 @@
             {
                 <div class="text-light text-truncate">@Model.UserProfile.LastName</div>
             }
-            <a asp-action="index" asp-controller="account" asp-area="security"><span class="mdi mdi-square-edit-outline"></span> Perfil</a>
+            <a asp-action="index" asp-controller="account" asp-area="security">Ver Perfil</a>
         </div>
     </div>
     
@@ -52,11 +52,11 @@
             {
                 if (User.IsAuthorized(item.Role))
                 {
-                    if (Context.Request.Path.Value.StartsWith("/management/" + item.Area + "/" + item.Controller))
+                    if (Context.Request.Path.Value.ToLower().StartsWith("/management/" + item.Area + "/" + item.Controller))
                     {
                         <a class="nav-link active" href="@Url.Action(item.Action, item.Controller, new { area = item.Area, sheet = string.Empty })">@item.ToIconographyHtmlString() <span>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</span></a>
                     }
-                    else if (string.IsNullOrEmpty(item.Area) && Context.Request.Path.Value.StartsWith("/management/" + item.Controller))
+                    else if (string.IsNullOrEmpty(item.Area) && Context.Request.Path.Value.ToLower().StartsWith("/management/" + item.Controller))
                     {
                         <a class="nav-link active" href="@Url.Action(item.Action, item.Controller, new { area = item.Area, sheet = string.Empty })">@item.ToIconographyHtmlString() <span>@GlobalViewLocalizationHelper.Localize(item.Title, ViewLocalizer)</span></a>
                     }

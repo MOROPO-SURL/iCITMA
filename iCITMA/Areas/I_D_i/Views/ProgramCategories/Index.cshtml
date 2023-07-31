@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "Administración de Categorías de Programa";
+    ViewData["Title"] = "Gestionar Categorías de Programa";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -20,9 +20,11 @@
     Layout = "_BackendLayout";
 }
 
-<a class="btn btn-primary float-right" href="@Url.Action("create")"><span class="mdi mdi-plus"></span> Agregar</a>
-<h3>@ViewData["Title"]</h3>
-<hr class="mb-4" />
+<div class="mt-4">
+    <a class="btn btn-primary float-right" href="@Url.Action("create")"><span class="mdi mdi-plus"></span> Agregar</a>
+    <h3>@ViewData["Title"]</h3>
+    <hr class="mb-4" />
+</div>
 
 @if (Model.MaxPageCount > 0)
 {
@@ -145,8 +147,8 @@
                     </div>
                     <div class="card-footer">
                         <div class="btn-group btn-group-sm float-right">
-                            <button type="button" class="btn btn-light" title="@Model" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-eye"></span> Detalles</button>
-                            <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-light" title="Editar"><span class="mdi mdi-square-edit-outline"></span> Modificar</a>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-eye"></span> Detalles</button>
+                            <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-light"><span class="mdi mdi-square-edit-outline"></span> Modificar</a>
                             <a role="button" href="@Url.Action("delete", new {key = item.Id})" class="btn btn-danger"><span class="mdi mdi-trash-can-outline"></span> Eliminar</a>
                         </div>
                         <div class="clearfix"></div>

@@ -1,7 +1,7 @@
-﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionDisplayViewModel
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonDisplayViewModel
 
 @{
-    ViewData["Title"] = "Eliminar Institución";
+    ViewData["Title"] = "Eliminar Persona";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Instituciones",
+            Caption = "Administración de Personas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -24,16 +24,20 @@
     Layout = "_BackendLayout";
 }
 
-<h3>Está seguro que desea eliminar la institución detallada a continuación?</h3>
+<h3>Está seguro que desea eliminar la persona detallada a continuación?</h3>
 <dl>
 
     <dt>@Html.DisplayNameFor(model => model.Name)</dt>
     <dd>@Html.DisplayFor(model => model.Name)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Description)</dt>
-    <dd>@Html.DisplayFor(model => model.Description)</dd>
+    <dt>@Html.DisplayNameFor(model => model.LastName)</dt>
+    <dd>@Html.DisplayFor(model => model.LastName)</dd>
+    <dt>@Html.DisplayNameFor(model => model.Alias)</dt>
+    <dd>@Html.DisplayFor(model => model.Alias)</dd>
+    <dt>@Html.DisplayNameFor(model => model.Sex)</dt>
+    <dd>@GlobalViewLocalizationHelper.Localize(Model.Sex.ToString())</dd>
 </dl>
 
-@using (Html.BeginForm("delete", "Institutions", new { Area = "Ecosistema", key = string.Empty }, FormMethod.Post, true, null))
+@using (Html.BeginForm("delete", "persons", new { Area = "ecosystem", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)
     <div>

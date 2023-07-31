@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("AddExprerts", "Programs", null, FormMethod.Post, true, null))
+            @using (Html.BeginForm("AddExpert", "programs", new { Area = "I_D_i" }, FormMethod.Post, true, null))
             {
                 <div class="modal-body">
                     @Html.HiddenFor(model => model.ProgramId)

@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Programas",
+            Caption = "Gestionar Programas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -53,7 +53,7 @@
 @using (Html.BeginForm("create", "programs", new { Area = "I_D_i" }, FormMethod.Post, true, null))
 {
     @Html.ValidationSummary(true)
-    <div class="card mb-3">
+    <div class="card mb-3 mt-4">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
 
         <div class="card-body">            

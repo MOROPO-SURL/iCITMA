@@ -9,14 +9,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("RemoveExprerts", "programs", null, FormMethod.Post, true, null))
+            @using (Html.BeginForm("RemoveExpert", "programs", null, FormMethod.Post, true, null))
             {
                 @Html.HiddenFor(model => model.ProgramId)
 
                 @Html.HiddenFor(model => model.PersonId)
 
                 <div class="modal-body">
-                    <p>Está seguro que desea eliminar el experto <b>@Model.Name</b> de nombre artístico <b>@Model.Alias</b>?</p>
+                    <p class="mb-0">Está seguro que desea eliminar el experto <b>@Model.Name</b> ?</p>
                 </div>
 
                 <div class="modal-footer" style="margin-top: 0;">

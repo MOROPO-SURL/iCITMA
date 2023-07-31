@@ -83,7 +83,6 @@ namespace MOROPO.CITMA.CMG.iCITMA
 
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathImageFileManager>();
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathThumbnailFileManager>();
-            services.AddSingleton<RelativeAttachmentFileManager>();
             services.AddSingleton<RelativeDocumentFileManager>();
 
             services.AddSingleton<Framework.Guama.Core.Persistence.ORM.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();

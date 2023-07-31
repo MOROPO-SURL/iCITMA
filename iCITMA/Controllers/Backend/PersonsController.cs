@@ -11,7 +11,6 @@ using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 using MOROPO.Framework.Guama.Identity.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Managers.Facade;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,17 +18,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Ecosistema")]
+    [Area("ecosystem")]
     public class PersonsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Person, System.Guid, PersonInputViewModel, PersonDisplayViewModel>
     {
         private readonly IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository;
         private readonly IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository;
         private readonly IImageFileManagerFacade imageFileManagerFacade;
-        private readonly IEntityRepository<Image, Guid> imageRepository;
-        private readonly IEntityRepository<PersonIdentity, Guid> identityRepository;
-        private readonly IEntityRepository<Institution, Guid> institutionsRepository;
-        private readonly IEntityRepository<ResearchArea, Guid> researchAreaRepository;
-        public PersonsController(IEntityRepository<ResearchArea, Guid> researchAreaRepository, IEntityRepository<Institution, Guid> institutionsRepository, IEntityRepository<PersonIdentity, Guid> identityRepository, IEntityRepository<Image, Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
+        private readonly IEntityRepository<Image, System.Guid> imageRepository;
+        private readonly IEntityRepository<PersonIdentity, System.Guid> identityRepository;
+        private readonly IEntityRepository<Institution, System.Guid> institutionsRepository;
+        private readonly IEntityRepository<ResearchArea, System.Guid> researchAreaRepository;
+
+        public PersonsController(IEntityRepository<ResearchArea, System.Guid> researchAreaRepository, IEntityRepository<Institution, System.Guid> institutionsRepository, IEntityRepository<PersonIdentity, System.Guid> identityRepository, IEntityRepository<Image, System.Guid> imageRepository, IImageFileManagerFacade imageFileManagerFacade, IEntityRepository<TeachingCategory, System.Guid> TeachingCategoryRepository, IEntityRepository<ResearcherCategory, System.Guid> ResearcherCategoryRepository, IEntityRepository<Person, System.Guid> repository, IStringLocalizer<PersonsController> localizer, ILogger<PersonsController> logger) : base(repository, localizer, logger)
         {
             this.ResearcherCategoryRepository = ResearcherCategoryRepository;
             this.TeachingCategoryRepository = TeachingCategoryRepository;
@@ -40,6 +40,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.researchAreaRepository = researchAreaRepository;
         }
 
+        [RequirePermissions(Permission.PersonViewer)]
         public IActionResult Index()
         {
             return View();
@@ -145,8 +146,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             base.PreCreate(entity, modelInput);
 
-            entity.ResearcherCategory = ResearcherCategoryRepository.Get((Guid)modelInput.ResearcherCategoryId);
-            entity.TeachingCategory = TeachingCategoryRepository.Get((Guid)modelInput.TeachingCategoryId);
+            entity.ResearcherCategory = ResearcherCategoryRepository.Get((System.Guid)modelInput.ResearcherCategoryId);
+            entity.TeachingCategory = TeachingCategoryRepository.Get((System.Guid)modelInput.TeachingCategoryId);
 
             if (modelInput.ImageFile == null) return;
 
@@ -168,12 +169,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             if (entity.ResearcherCategory.Id != modelInput.ResearcherCategoryId)
             {
-                entity.ResearcherCategory = ResearcherCategoryRepository.Get((Guid)modelInput.ResearcherCategoryId);
+                entity.ResearcherCategory = ResearcherCategoryRepository.Get((System.Guid)modelInput.ResearcherCategoryId);
             }
 
             if (entity.TeachingCategory.Id != modelInput.TeachingCategoryId)
             {
-                entity.TeachingCategory = TeachingCategoryRepository.Get((Guid)modelInput.TeachingCategoryId);
+                entity.TeachingCategory = TeachingCategoryRepository.Get((System.Guid)modelInput.TeachingCategoryId);
             }
 
             if (modelInput.ImageFile == null)
@@ -223,7 +224,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personInstitutions")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonInstitutions(Guid key)
+        public ActionResult EditPersonInstitutions(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -236,18 +237,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return View(model);
         }
 
-        private void PopulateInstitutions(Person entity, List<SelectionDescriptedItemInputViewModel<Guid>> institutionsForSelecting)
+        private void PopulateInstitutions(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> institutionsForSelecting)
         {
             var institutions = institutionsRepository.GetAll();
 
             if (institutions.Count() > 0)
             {
-                institutionsForSelecting.AddRange(institutions.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                institutionsForSelecting.AddRange(institutions.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
                 {
                     Id = item.Id,
                     Label = item.Identity.Name,
                     Selected = entity.InstitutionBridges.Any(a => a.SternId == item.Id),
-                    Description = String.IsNullOrWhiteSpace(item.Identity.About) ? "Sin Descripción" : item.Identity.About
+                    Description = string.IsNullOrWhiteSpace(item.Identity.About) ? "Sin Descripción" : item.Identity.About
                 }));
             }
 
@@ -257,7 +258,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/{key}/personInstitutions")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonInstitutions(Guid key, PersonInputViewModel modelInput)
+        public IActionResult EditPersonInstitutions(System.Guid key, PersonInputViewModel modelInput)
         {
             Person entity = null;
 
@@ -297,7 +298,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personSpecializations")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonSpecializations(Guid key)
+        public ActionResult EditPersonSpecializations(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -310,18 +311,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return View(model);
         }
 
-        private void PopulateSpecializations(Person entity, List<SelectionDescriptedItemInputViewModel<Guid>> SpecializationsForSelecting)
+        private void PopulateSpecializations(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> SpecializationsForSelecting)
         {
             var Specializations = researchAreaRepository.GetAll();
 
             if (Specializations.Count() > 0)
             {
-                SpecializationsForSelecting.AddRange(Specializations.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                SpecializationsForSelecting.AddRange(Specializations.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
                 {
                     Id = item.Id,
                     Label = item.Name,
                     Selected = entity.ResearchAreaSpecializationBridges.Any(a => a.SternId == item.Id),
-                    Description = String.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
+                    Description = string.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
                 }));
             }
 
@@ -331,7 +332,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/{key}/personSpecializations")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonSpecializations(Guid key, PersonInputViewModel modelInput)
+        public IActionResult EditPersonSpecializations(System.Guid key, PersonInputViewModel modelInput)
         {
             Person entity = null;
 
@@ -371,7 +372,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personMasterys")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonMasterys(Guid key)
+        public ActionResult EditPersonMasterys(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -384,18 +385,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return View(model);
         }
 
-        private void PopulateMasterys(Person entity, List<SelectionDescriptedItemInputViewModel<Guid>> MasterysForSelecting)
+        private void PopulateMasterys(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> MasterysForSelecting)
         {
             var Masterys = researchAreaRepository.GetAll();
 
             if (Masterys.Count() > 0)
             {
-                MasterysForSelecting.AddRange(Masterys.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                MasterysForSelecting.AddRange(Masterys.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
                 {
                     Id = item.Id,
                     Label = item.Name,
                     Selected = entity.ResearchAreaMasteryBridges.Any(a => a.SternId == item.Id),
-                    Description = String.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
+                    Description = string.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
                 }));
             }
 
@@ -405,7 +406,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/{key}/personMasterys")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonMasterys(Guid key, PersonInputViewModel modelInput)
+        public IActionResult EditPersonMasterys(System.Guid key, PersonInputViewModel modelInput)
         {
             Person entity = null;
 
@@ -445,7 +446,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personDoctorates")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonDoctorates(Guid key)
+        public ActionResult EditPersonDoctorates(System.Guid key)
         {
             var entity = Repository.Get(key);
 
@@ -458,18 +459,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return View(model);
         }
 
-        private void PopulateDoctorates(Person entity, List<SelectionDescriptedItemInputViewModel<Guid>> DoctoratesForSelecting)
+        private void PopulateDoctorates(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> DoctoratesForSelecting)
         {
             var Doctorates = researchAreaRepository.GetAll();
 
             if (Doctorates.Count() > 0)
             {
-                DoctoratesForSelecting.AddRange(Doctorates.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                DoctoratesForSelecting.AddRange(Doctorates.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
                 {
                     Id = item.Id,
                     Label = item.Name,
                     Selected = entity.ResearchAreaDoctorateBridges.Any(a => a.SternId == item.Id),
-                    Description = String.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
+                    Description = string.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
                 }));
             }
 
@@ -479,7 +480,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/{key}/personDoctorates")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonDoctorates(Guid key, PersonInputViewModel modelInput)
+        public IActionResult EditPersonDoctorates(System.Guid key, PersonInputViewModel modelInput)
         {
             Person entity = null;
 

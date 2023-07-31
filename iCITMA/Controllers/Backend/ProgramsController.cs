@@ -166,9 +166,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         #region Experts
         [HttpGet]
-        [Route("edit/{key}/program/experts")]
+        [Route("edit/{key}/experts")]
         [RequirePermissions(Permission.ProgramEditor)]
-        public IActionResult EditProgramExperts(System.Guid key)
+        public IActionResult ManageExperts(System.Guid key)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
                 var notSelectedExperts = personRepository.GetAll().ToArray();
 
-                if (experts.Count() != 0)
+                if (experts.Length > 0)
                 {
                     notSelectedExperts = notSelectedExperts.Except(experts).ToArray();
                 }
@@ -227,10 +227,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/program/experts/add")]
+        [Route("edit/experts/add")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult AddExperts(ProgramExpertInputViewModel modelInput)
+        public IActionResult AddExpert(ProgramExpertInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -278,14 +278,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            return RedirectToAction("EditProgramExprerts", new { key = entity.Id });
+            return RedirectToAction("ManageExperts", new { key = entity.Id });
         }
 
         [HttpPost]
-        [Route("edit/program/experts/remove")]
+        [Route("edit/experts/remove")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult RemoveExperts(ProgramExpertDisplayViewModel modelInput)
+        public IActionResult RemoveExpert(ProgramExpertDisplayViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -327,7 +327,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 logger.LogError(e.InnerException, e.Message);
             }
 
-            return RedirectToAction("EditProgramExprerts", new { key = entity.Id });
+            return RedirectToAction("ManageExperts", new { key = entity.Id });
         }
         #endregion
 
