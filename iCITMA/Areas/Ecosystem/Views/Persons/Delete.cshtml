@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Personas",
+            Caption = "Gestionar Personas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -24,19 +24,16 @@
     Layout = "_BackendLayout";
 }
 
-<h3>Está seguro que desea eliminar la persona detallada a continuación?</h3>
+<h3 class="mb-3 mt-4">Está seguro que desea eliminar la persona detallada a continuación?</h3>
 <dl>
-
-    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
-    <dd>@Html.DisplayFor(model => model.Name)</dd>
-    <dt>@Html.DisplayNameFor(model => model.LastName)</dt>
-    <dd>@Html.DisplayFor(model => model.LastName)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Alias)</dt>
-    <dd>@Html.DisplayFor(model => model.Alias)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Sex)</dt>
+    <dt>Nombre</dt>
+    <dd>@Model.Name</dd>
+    <dt>Apellidos</dt>
+    <dd>@Model.LastName</dd>
+    <dt>Sexo</dt>
     <dd>@GlobalViewLocalizationHelper.Localize(Model.Sex.ToString())</dd>
 </dl>
-
+<hr />
 @using (Html.BeginForm("delete", "persons", new { Area = "ecosystem", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)

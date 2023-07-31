@@ -10,7 +10,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     {
         public System.Guid Id { get; set; }
 
-        public System.Guid ImageId { get; set; }
+        public System.Guid? ImageId { get; set; }
 
         public string ImageExtension { get; set; }
 
@@ -52,7 +52,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public void Import(Person entity)
         {
             Id = entity.Id;
-            ImageId = entity.Identity.ImageId ?? System.Guid.Empty;
+            ImageId = entity.Identity.ImageId;
             ImageExtension = entity.Identity.Image?.ContentType.ContentTypeToExtension() ?? null;
             Name = entity.Identity.Name;
             LastName = entity.Identity.LastName;
@@ -60,8 +60,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Alias = entity.Identity.Alias;
             About = entity.Identity.About;
             SchoolingLevel = entity.SchoolingLevel;
-            ResearcherCategoryName = entity.ResearcherCategory.Name;
-            TeachingCategoryName = entity.TeachingCategory.Name;
+            ResearcherCategoryName = entity.ResearcherCategory?.Name;
+            TeachingCategoryName = entity.TeachingCategory?.Name;
             ResearchAreaSpecializationBridge = entity.ResearchAreaSpecializationBridges;
             ResearchAreaMasteryBridges = entity.ResearchAreaMasteryBridges;
             ResearchAreaDoctorateBridges = entity.ResearchAreaDoctorateBridges;

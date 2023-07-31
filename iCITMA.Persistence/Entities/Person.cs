@@ -24,12 +24,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("ResearcherCategoryId")]
         public ResearcherCategory ResearcherCategory { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? ResearcherCategoryId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("TeachingCategoryId")]
         public TeachingCategory TeachingCategory { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? TeachingCategoryId { get; set; }
 
         public List<PersonResearchAreaSpecializationBridge> ResearchAreaSpecializationBridges { get; set; }

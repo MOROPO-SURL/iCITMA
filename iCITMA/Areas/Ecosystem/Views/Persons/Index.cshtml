@@ -1,7 +1,7 @@
 ﻿@model MOROPO.Framework.Guama.Core.Presentation.Web.Frontend.Models.View.PaginationViewModel<MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Person, System.Guid,MOROPO.CITMA.CMG.iCITMA.Models.View.PersonDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Administración de Personas";
+    ViewData["Title"] = "Gestionar Personas";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -19,16 +19,11 @@
     Layout = "_BackendLayout";
 }
 
-@{
-    <div class="row" style="margin-bottom: 20px;">
-        <div class="col-sm-10">
-            
-        </div>
-        <div class="col-sm-2">
-            <a class="btn btn-primary float-right" href="@Url.Action("create")"><span class="mdi mdi-plus"></span> Agregar</a>
-        </div>
-    </div>
-}
+<div class="mt-4">
+    <a class="btn btn-primary float-right" href="@Url.Action("create")"><span class="mdi mdi-plus"></span> Agregar</a>
+    <h3>@ViewData["Title"]</h3>
+    <hr class="mb-4" />
+</div>
 
 @if (Model.MaxPageCount > 0)
 {
@@ -129,72 +124,47 @@
             </div>
         </div>
     }
-    <div>
+    <div class="row">
         @foreach (var item in Model.List)
         {
-            <div class="card border-primary mb-2 d-block d-sm-none">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="font-weight-bold">
-                            Nombre:
-                        </span>
-                        @item.Name
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    @if (item.ImageId != null)
+                    {
+                        <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="card-img-top" />
+                    }
+                    else
+                    {
+                        <img src="~/img/default-person-picture.jpg" class="card-img-top" />
+                    }
+                    <div class="card-body">
+                        <dl class="mb-0">
+                            <dt>Nombre</dt>
+                            <dd>@item.Name</dd>
+                            <dt>Apellidos</dt>
+                            @if (item.LastName != null)
+                            {
+                                <dd class="text-truncate mb-0">@item.LastName</dd>
+                            }
+                            else
+                            {
+                                <dd class="mb-0 text-muted">---</dd>
+                            }
+                        </dl>
                     </div>
-                    <div class="mb-2">
-                        <span class="font-weight-bold">
-                            Apellidos:
-                        </span>
-                        @item.LastName
-                    </div>
-                    <div class="mb-2">
-                        <span class="font-weight-bold">
-                            Sexo:
-                        </span>
-                        @GlobalViewLocalizationHelper.Localize(item.Sex.ToString())
-                    </div>
-                    <div>
+                    <div class="card-footer">
                         <div class="btn-group btn-group-sm float-right">
-                            <button class="btn btn-light" title="@Model" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline  "></span><span>Detalles</span></button>
-                            <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-light" title="Editar"><span class="mdi mdi-square-edit-outline"></span><span class="hidden-xs"> Modificar</span></a>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-eye"></span> Detalles</button>
+                            <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-light"><span class="mdi mdi-square-edit-outline"></span> Modificar</a>
                             <a role="button" href="@Url.Action("delete", new {key = item.Id})" class="btn btn-danger"><span class="mdi mdi-trash-can-outline"></span> Eliminar</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
-            await Html.RenderPartialAsync("DetailPartial", @item);
+
+            await Html.RenderPartialAsync("_DetailPartial", @item);
         }
-    </div>
-
-
-    <div class="d-none d-sm-block" style="border: 1px solid #DDD; border-radius: 4px;">
-        <table class="table" style="margin: 0;">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Sexo</th>
-                    <th style="width: 1px;">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.List)
-                {
-                    <tr>
-                        <td style="vertical-align: middle;">@item.Name</td>
-                        <td style="vertical-align: middle;">@item.LastName</td>
-                        <td style="vertical-align: middle;">@GlobalViewLocalizationHelper.Localize(item.Sex.ToString())</td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <button class="btn btn-light" title="@Model" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline  "></span><span>Detalles</span></button>
-                                <a role="button" href="@Url.Action("edit", new { key = item.Id })" class="btn btn-light" title="Editar"><span class="mdi mdi-square-edit-outline"></span><span class="hidden-xs"> Modificar</span></a>
-                                <a role="button" href="@Url.Action("delete", new {key = item.Id})" class="btn btn-danger"><span class="mdi mdi-trash-can-outline"></span> Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
     if (Model.HasNext || Model.HasPrevious)
     {
@@ -296,21 +266,5 @@
 }
 else
 {
-    <div style="border: 1px solid #DDD; border-radius: 4px;">
-        <table class="table" style="margin: 0;">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Sexo</th>
-                    <th style="width: 1px;">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="6"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <p class="text-muted mb-0">Sin elementos que mostrar</p>
 }

@@ -27,12 +27,6 @@
 @section styles {
     <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
     <style type="text/css">
-        #ImageFile {
-            width: 0;
-            height: 0;
-            overflow: hidden;
-        }
-
         .member-img {
             width: 85%;
             max-height: 330px;
@@ -83,20 +77,20 @@
             </li>
         </ul>
     </div>
-    <div class="card-body">
+    <div class="card-body pb-0">
         @if (Model.Experts.Count() != 0)
         {
             <div class="row">
                 @foreach (var item in Model.Experts)
                 {
-                    <div class="col-lg-2 col-md-3 col-sm-4 mb-3 text-center">
-                        @if (item.ImageId != System.Guid.Empty)
+                    <div class="col-xl-2 col-lg-4 col-md-6 mb-4 text-center">
+                        @if (item.ImageId != null)
                         {
-                            <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="img-fluid img-thumbnail rounded-circle" />
+                            <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="img-thumbnail rounded-circle w-75" />
                         }
                         else
                         {
-                            <img src="~/img/default-person-picture.jpg" class="img-fluid img-thumbnail rounded-circle" />
+                            <img src="~/img/default-person-picture.jpg" class="img-thumbnail rounded-circle w-75" />
                         }
                         <div class="mt-2">
                             @if (string.IsNullOrEmpty(item.LastName))
@@ -123,7 +117,7 @@
         }
         else
         {
-            <div class="text-muted font-italic">Aun no tiene expertos, haga clic en el boton agregar para comenzar ...</div>
+            <div class="text-muted font-italic mb-4">Aun no tiene expertos, haga clic en el boton agregar para comenzar ...</div>
         }
     </div>
     <div class="card-footer">

@@ -3,7 +3,7 @@
 @model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonInputViewModel
 
 @{
-    ViewData["Title"] = "Editar Persona";
+    ViewData["Title"] = "Modificar Persona";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -14,7 +14,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Personas",
+            Caption = "Gestionar Personas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -63,9 +63,9 @@
 {
     @Html.HiddenFor(model => model.Id)
 
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card mb-3 mt-4">
         <div class="card-header">
-            <h4 class="mb-0">@ViewData["Title"]</h4>
+            <h4>@ViewData["Title"]</h4>
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Generales</a>
@@ -86,9 +86,9 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-4 mb-3">
+                <div class="col-lg-3 col-md-4 col-sm-4 mb-3 mb-sm-0">
                     <div class="card">
-                        @if (Model.ImageId != System.Guid.Empty)
+                        @if (Model.ImageId != null)
                         {
                             <img src="~/media/images/@Model.ImageId.@Model.ImageExtension" class="card-img-top" id="ImageFilePreview" />
                         }
@@ -128,28 +128,28 @@
                             @Html.DropDownListFor(model => model.Sex, new SelectListItem[] { new SelectListItem(GlobalViewLocalizationHelper.Localize("Male", ViewLocalizer), Sex.Male.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Famale", ViewLocalizer), Sex.Famale.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Unknown", ViewLocalizer), Sex.Unknown.ToString())  }, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Sex, null, new { @class = "text-danger" })
                         </div>
-                    </div>
+                    </div>                    
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-3">
                             @Html.LabelFor(model => model.SchoolingLevel, new { @class = "control-label" })
                             @Html.DropDownListFor(model => model.SchoolingLevel, new SelectListItem[] { new SelectListItem(GlobalViewLocalizationHelper.Localize("Primary", ViewLocalizer), SchoolingLevel.Primary.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Medium", ViewLocalizer), SchoolingLevel.Medium.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("UpperMiddle", ViewLocalizer), SchoolingLevel.UpperMiddle.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Higher", ViewLocalizer), SchoolingLevel.Higher.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Ultimate", ViewLocalizer), SchoolingLevel.Ultimate.ToString()) }, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.SchoolingLevel, null, new { @class = "text-danger" })
                         </div>
-                        <div id="show-hide-resolution" class="col-lg-4 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             @Html.LabelFor(model => model.ResearcherCategoryId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.ResearcherCategoryId, Model.ResearcherCategorys, new { @class = "form-control"})
+                            @Html.DropDownListFor(model => model.ResearcherCategoryId, Model.ResearcherCategorys, "Ninguna", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.ResearcherCategoryId, null, new { @class = "text-danger" })
                         </div>
-                        <div id="show-hide-resolution" class="col-lg-4 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             @Html.LabelFor(model => model.TeachingCategoryId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.TeachingCategoryId, Model.TeachingCategorys, new { @class = "form-control"})
+                            @Html.DropDownListFor(model => model.TeachingCategoryId, Model.TeachingCategorys, "Ninguna", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.TeachingCategoryId, null, new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-12 mb-3">
-                            @Html.LabelFor(model => model.About, new { @class = "control-label" })
-                            @Html.TextAreaFor(model => model.About, 4, 0, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
-                        </div>
+                    </div>
+                    <div>
+                        @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.About, 4, 0, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

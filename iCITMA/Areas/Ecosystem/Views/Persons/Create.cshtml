@@ -1,5 +1,6 @@
 ﻿@using MOROPO.CITMA.CMG.iCITMA.Persistence.Enumerators
 @using MOROPO.Framework.Guama.Identity.Persistence.Enumerations
+
 @model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonInputViewModel
 
 @{
@@ -14,7 +15,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Personas",
+            Caption = "Gestionar Personas",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -62,7 +63,7 @@
 @using (Html.BeginForm("create", "persons", new { Area = "ecosystem" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card mb-3 mt-4">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
 
         <div class="card-body">
@@ -79,7 +80,7 @@
                 </div>
                 <div class="col-lg-9 col-md-8 col-sm-8">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3 mb-sm-0">
                             @Html.LabelFor(model => model.Name, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
@@ -108,21 +109,21 @@
                             @Html.DropDownListFor(model => model.SchoolingLevel, new SelectListItem[] { new SelectListItem(GlobalViewLocalizationHelper.Localize("Primary", ViewLocalizer), SchoolingLevel.Primary.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Medium", ViewLocalizer), SchoolingLevel.Medium.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("UpperMiddle", ViewLocalizer), SchoolingLevel.UpperMiddle.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Higher", ViewLocalizer), SchoolingLevel.Higher.ToString()), new SelectListItem(GlobalViewLocalizationHelper.Localize("Ultimate", ViewLocalizer), SchoolingLevel.Ultimate.ToString()) }, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.SchoolingLevel, null, new { @class = "text-danger" })
                         </div>
-                        <div id="show-hide-resolution" class="col-lg-4 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             @Html.LabelFor(model => model.ResearcherCategoryId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.ResearcherCategoryId, Model.ResearcherCategorys, new { @class = "form-control"})
+                            @Html.DropDownListFor(model => model.ResearcherCategoryId, Model.ResearcherCategorys, "Ninguna", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.ResearcherCategoryId, null, new { @class = "text-danger" })
                         </div>
-                        <div id="show-hide-resolution" class="col-lg-4 col-md-6 mb-3">
+                        <div class="col-lg-4 col-md-6 mb-3">
                             @Html.LabelFor(model => model.TeachingCategoryId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.TeachingCategoryId, Model.TeachingCategorys, new { @class = "form-control"})
+                            @Html.DropDownListFor(model => model.TeachingCategoryId, Model.TeachingCategorys, "Ninguna", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.TeachingCategoryId, null, new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-12 mb-3">
-                            @Html.LabelFor(model => model.About, new { @class = "control-label" })
-                            @Html.TextAreaFor(model => model.About, 4, 0, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
-                        </div>
+                    </div>
+                    <div>
+                        @Html.LabelFor(model => model.About, new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.About, 4, 0, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.About, null, new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

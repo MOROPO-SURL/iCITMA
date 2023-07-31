@@ -15,7 +15,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "ImageFile")]
         public Microsoft.AspNetCore.Http.IFormFile ImageFile { get; set; }
 
-        public System.Guid ImageId { get; set; }
+        public System.Guid? ImageId { get; set; }
 
         public string ImageExtension { get; set; }
 
@@ -42,11 +42,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         [Display(Name = "ResearcherCategory")]
         public System.Guid? ResearcherCategoryId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ResearcherCategorys { get; set; }
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] ResearcherCategorys { get; set; }
 
         [Display(Name = "TeachingCategory")]
         public System.Guid? TeachingCategoryId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> TeachingCategorys { get; set; }
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] TeachingCategorys { get; set; }
 
         public ICollection<PersonResearchAreaSpecializationBridge> ResearchAreaSpecializationBridge { get; set; }
 
@@ -77,7 +77,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public void Import(Person entity)
         {
             Id = entity.Id;
-            ImageId = entity.Identity.Image?.Id ?? System.Guid.Empty;
+            ImageId = entity.Identity.ImageId;
             ImageExtension = entity.Identity.Image?.ContentType.ContentTypeToExtension() ?? null;
             Name = entity.Identity.Name;
             LastName = entity.Identity.LastName;

@@ -15,7 +15,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 
         protected override System.Linq.IQueryable<Entities.Person> GetQueryableDbSet()
         {
-            return base.GetQueryableDbSet().Include(p => p.Identity).ThenInclude(p => p.Image)
+            return base.GetQueryableDbSet()
+                .Include(p => p.Identity).ThenInclude(p => p.Image)
                 .Include(p => p.ResearcherCategory)
                 .Include(p => p.TeachingCategory)
                 .Include(p => p.ResearchAreaSpecializationBridges).ThenInclude(p => p.Stern)

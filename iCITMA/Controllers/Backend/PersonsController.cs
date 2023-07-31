@@ -146,8 +146,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             base.PreCreate(entity, modelInput);
 
-            entity.ResearcherCategory = ResearcherCategoryRepository.Get((System.Guid)modelInput.ResearcherCategoryId);
-            entity.TeachingCategory = TeachingCategoryRepository.Get((System.Guid)modelInput.TeachingCategoryId);
+            if (modelInput.ResearcherCategoryId != null)
+            {
+                entity.ResearcherCategory = ResearcherCategoryRepository.Get(modelInput.ResearcherCategoryId.Value);
+            }
+
+            if (modelInput.TeachingCategoryId != null)
+            {
+                entity.TeachingCategory = TeachingCategoryRepository.Get(modelInput.TeachingCategoryId.Value);
+            }
 
             if (modelInput.ImageFile == null) return;
 
@@ -167,14 +174,32 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             base.PreEdit(entity, modelInput);
 
-            if (entity.ResearcherCategory.Id != modelInput.ResearcherCategoryId)
+            if (entity.ResearcherCategoryId != modelInput.ResearcherCategoryId)
             {
-                entity.ResearcherCategory = ResearcherCategoryRepository.Get((System.Guid)modelInput.ResearcherCategoryId);
+                if (modelInput.ResearcherCategoryId == null)
+                {
+                    entity.ResearcherCategoryId = null;
+                    entity.ResearcherCategory = null;
+                }
+                else
+                {
+                    entity.ResearcherCategoryId = modelInput.ResearcherCategoryId;
+                    entity.ResearcherCategory = ResearcherCategoryRepository.Get(modelInput.ResearcherCategoryId.Value);
+                }
             }
 
-            if (entity.TeachingCategory.Id != modelInput.TeachingCategoryId)
+            if (entity.TeachingCategoryId != modelInput.TeachingCategoryId)
             {
-                entity.TeachingCategory = TeachingCategoryRepository.Get((System.Guid)modelInput.TeachingCategoryId);
+                if (modelInput.TeachingCategoryId == null)
+                {
+                    entity.TeachingCategoryId = null;
+                    entity.TeachingCategory = null;
+                }
+                else
+                {
+                    entity.TeachingCategoryId = modelInput.TeachingCategoryId;
+                    entity.TeachingCategory = TeachingCategoryRepository.Get(modelInput.TeachingCategoryId.Value);
+                }
             }
 
             if (modelInput.ImageFile == null)
