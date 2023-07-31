@@ -1,7 +1,5 @@
-﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
+﻿using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View;
 using System.Collections.Generic;
-using System.Security.Permissions;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Extensions
 {
@@ -196,7 +194,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
             {
                 { "Seguridad", securitySections },
                 { "Ecosistema", ecosistemaSections },
-                { "I_D_i", iDiSections },
+                { "I + D + i", iDiSections },
                 { "Auxiliares", auxiliaresSections },
             };
         }

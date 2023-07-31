@@ -4,6 +4,13 @@
     {
         public void DoConcretBind(object model, Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext bindingContext)
         {
+            (model as Models.View.UserProfileViewModel).Name = bindingContext.ValueProvider.GetValue("Name").FirstValue;
+
+            (model as Models.View.UserProfileViewModel).LastName = bindingContext.ValueProvider.GetValue("LastName").FirstValue;
+
+            (model as Models.View.UserProfileViewModel).Sex = System.Enum.Parse<Framework.Guama.Identity.Persistence.Enumerations.Sex>(bindingContext.ValueProvider.GetValue("Sex").FirstValue);
+
+            (model as Models.View.UserProfileViewModel).About = bindingContext.ValueProvider.GetValue("About").FirstValue;
         }
     }
 }

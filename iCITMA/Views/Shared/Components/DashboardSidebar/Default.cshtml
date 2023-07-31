@@ -2,10 +2,35 @@
 @using MOROPO.CITMA.CMG.iCITMA.Helpers.Localization;
 @using MOROPO.CITMA.CMG.iCITMA.Extensions;
 
-@model Dictionary<string, ICollection<MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Models.View.ManagementDashboardSectionViewModel>>
+@model MOROPO.CITMA.CMG.iCITMA.Models.View.DashboardSidebarViewModel
 
-<div style="position: relative; min-height: 100vh; z-index: 1000;  overflow-x: hidden; overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */">
+<div id="dashboard-sidebar" style="position: relative; min-height: 100vh; z-index: 1000;  overflow-x: hidden; overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */">
     <h1 class="text-center text-light m-4">iCITMA</h1>
+
+    <div class="row ml-3 mt-4 mb-4">
+        <div class="col-3 align-self-center p-0">
+            @if (Model.UserProfile.ImageId == null)
+            {
+                <img src="~/img/default-person-picture.jpg" class="img-thumbnail rounded-circle border-0" style="max-width: 72px; width: 72px; min-width: 72px;" />
+            }
+            else
+            {
+                var imageSource = string.Format("/media/images/{0}.{1}", Model.UserProfile.ImageId, Model.UserProfile.ImageExtension);
+
+                <img src="@imageSource" class="img-thumbnail rounded-circle border-0" style="max-width: 72px; width: 72px; min-width: 72px;" />
+            }
+        </div>
+        <div class="col align-self-center">
+            <div class="text-light text-truncate">@Model.UserProfile.Name</div>
+            @if (!string.IsNullOrEmpty(Model.UserProfile.LastName))
+            {
+                <div class="text-light text-truncate">@Model.UserProfile.LastName</div>
+            }
+            <a asp-action="index" asp-controller="account" asp-area="security"><span class="mdi mdi-square-edit-outline"></span> Perfil</a>
+        </div>
+    </div>
+    
+    <hr />
     
     <nav class="nav flex-column nav-pills nav-sidebar">
         @if (Context.Request.Path.Value == "/management/dashboard")
@@ -18,9 +43,10 @@
         }
     </nav>
 
-    @foreach (var group in Model)
+    @foreach (var group in Model.ManagementDashboardSections)
     {
-        <p class="text-muted" style="margin: 20px 16px 4px 16px; font-weight: bold;">@group.Key</p>
+        <p class="text-light" style="margin: 20px 16px 8px 16px; font-weight: bold;">@group.Key</p>
+        <hr class="m-0 mb-1 bg-secondary" />
         <nav class="nav flex-column nav-pills nav-sidebar">
             @foreach (var item in group.Value)
             {

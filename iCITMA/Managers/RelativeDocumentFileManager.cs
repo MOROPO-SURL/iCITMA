@@ -1,4 +1,4 @@
-﻿using MOROPO.CITMA.CMG.iCITMA.Extensions;
+﻿using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Managers
 {

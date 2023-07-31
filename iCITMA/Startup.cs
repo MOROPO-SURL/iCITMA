@@ -27,8 +27,6 @@ using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Persistence.ORM.EF.Extensions;
 using MOROPO.Framework.Guama.Security.Personal.Presentation.Web.Backend.Extensions;
 using Serilog;
-using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA
@@ -77,16 +75,16 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<OrganizationIdentity, System.Guid>, OrganizationIdentityRepository>();
             services.AddScoped<IEntityRepository<Person, System.Guid>, PersonRepository>();
             services.AddScoped<IEntityRepository<Framework.Guama.Core.Persistence.ORM.EF.Entities.Trace, long>, TraceRepository>();
-            services.AddScoped<IEntityRepository<Persistence.Entities.Program, Guid>, ProgramRepository>();
-            services.AddScoped<IEntityRepository<Document, Guid>, DocumentRepository>();
-            services.AddScoped<IEntityRepository<Project, Guid>, ProjectRepository>();
-            services.AddScoped<IEntityRepository<ProgramExpectResult, Guid>, ProgramExpectResultRepository>();
-            services.AddScoped<IEntityRepository<ProjectImpact, Guid>, ProjectImpactRepository>();
+            services.AddScoped<IEntityRepository<Persistence.Entities.Program, System.Guid>, ProgramRepository>();
+            services.AddScoped<IEntityRepository<Document, System.Guid>, DocumentRepository>();
+            services.AddScoped<IEntityRepository<Project, System.Guid>, ProjectRepository>();
+            services.AddScoped<IEntityRepository<ProgramExpectResult, System.Guid>, ProgramExpectResultRepository>();
+            services.AddScoped<IEntityRepository<ProjectImpact, System.Guid>, ProjectImpactRepository>();
 
-            services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Managers.RelativeImageFileManager>();
-            services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Managers.RelativeThumbnailFileManager>();
-            services.AddSingleton<Managers.RelativeAttachmentFileManager>();
-            services.AddSingleton<Managers.RelativeDocumentFileManager>();
+            services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathImageFileManager>();
+            services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathThumbnailFileManager>();
+            services.AddSingleton<RelativeAttachmentFileManager>();
+            services.AddSingleton<RelativeDocumentFileManager>();
 
             services.AddSingleton<Framework.Guama.Core.Persistence.ORM.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade, Persistence.EF.Providers.ApplicationDbSchemaConfigurationProvider>();
 
