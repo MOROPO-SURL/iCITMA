@@ -1,9 +1,6 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing.Drawing2D;
-using System.Xml.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
@@ -19,17 +16,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Name { get; set; }
 
         [Display(Name = "Fecha de Creación")]
-        public DateTime? CreatedAt { get; set; }
+        public System.DateTime? CreatedAt { get; set; }
 
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        public Institution? Owner { get; set; }
+        public InstitutionDisplayViewModel Owner { get; set; }
 
-        public Person Representative { get; set; }
+        public PersonDisplayViewModel Representative { get; set; }
 
         [Display(Name = "Alias")]
-        public string Alia { get; set; }
+        public string Alias { get; set; }
+
         public InstitutionProjectLogicViewModel InstitutionProjectLogicViewModel { get; set; }
 
         public void Import(Institution entity)
@@ -39,10 +37,27 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             ImageExtension = entity.Identity.Image?.ContentType.ContentTypeToExtension() ?? null;
             Name = entity.Identity.Name;
             Description = entity.Identity.About;
-            Owner = entity?.Owner;
-            Representative = entity.Representative;
             CreatedAt = entity.Identity.BornDate;
-            Alia = entity.Alia;
+            Alias = entity.Alia;
+
+            if (entity.OwnerId != null)
+            {
+                Owner = new InstitutionDisplayViewModel
+                {
+                    Id = entity.OwnerId.Value,
+                    Name = entity.Owner.Identity.Name
+                };
+            }
+
+            if (entity.RepresentativeId != null)
+            {
+                Representative = new PersonDisplayViewModel
+                {
+                    Id = entity.RepresentativeId.Value,
+                    Name = entity.Representative.Identity.Name,
+                    LastName = entity.Representative.Identity.LastName
+                };
+            }
         }
     }
 }

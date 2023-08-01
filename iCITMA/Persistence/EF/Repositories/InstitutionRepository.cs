@@ -20,7 +20,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
                 .Include(entity => entity.Identity.PostalContactItemBridges).ThenInclude(entity => entity.Stern)
                 .ThenInclude(entity => entity.Location).ThenInclude(entity => ((MunicipalityLocation)entity).Municipality)
                 .ThenInclude(entity => entity.State)
-                .Include(entity => entity.Representative).ThenInclude(entity => entity.Identity);            
+                .Include(entity => entity.Representative).ThenInclude(entity => entity.Identity)
+                .Include(entity => entity.Owner).ThenInclude(entity => entity.Identity);            
         }
     }
 }

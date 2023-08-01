@@ -1,6 +1,5 @@
 ﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionDisplayViewModel
 
-
 <!-- Modal -->
 <div class="modal fade " id="descrip-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -12,19 +11,83 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5>@Html.DisplayNameFor(model => model.Name)</h5>
-                            <p>@Model.Name</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5>@Html.DisplayNameFor(model => model.Description)</h5>
-                            <p>@Model.Description</p>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    @if (Model.ImageId != null)
+                    {
+                        <img class="img-thumbnail w-50 m-4 mb-5" src="~/media/images/@Model.ImageId.@Model.ImageExtension" />
+                    }
+                    else
+                    {
+                        <img class="img-thumbnail w-50 m-4 mb-5" src="~/img/default-organization-picture.png" />
+                    }
+                </div>
+                <div class="row">
+                    <dl class="col-md-12 mb-0">
+                        <dt>Nombre</dt>
+                        <dd>@Model.Name</dd>
+                    </dl>
+                    <dl class="col-md-6 mb-0">
+                        <dt>Alias</dt>
+                        @if (Model.Alias == null)
+                        {
+                            <dd class="text-muted">---</dd>
+                        }
+                        else
+                        {
+                            <dd>@Model.Alias</dd>
+                        }
+                    </dl>
+                    <dl class="col-md-6 mb-0">
+                        <dt>Fecha de Creación</dt>
+                        @if (Model.CreatedAt != null)
+                        {
+                            <dd>@Model.CreatedAt.Value.ToShortDateString()</dd>
+                        }
+                        else
+                        {
+                            <dd class="text-muted">---</dd>
+                        }
+                    </dl>
+                    <dl class="col-md-6 mb-0">
+                        <dt>Entidad Rectora</dt>
+                        @if (Model.Owner == null)
+                        {
+                            <dd class="text-muted">---</dd>
+                        }
+                        else
+                        {
+                            <dd>@Model.Owner.Name</dd>
+                        }
+                    </dl>
+                    <dl class="col-md-6 mb-0">
+                        <dt>Representante</dt>
+                        @if (Model.Representative != null)
+                        {
+                            @if (Model.Representative.LastName != null)
+                            {
+                                <dd>@Model.Representative.Name @Model.Representative.LastName</dd>
+                            }
+                            else
+                            {
+                                <dd>@Model.Representative.Name</dd>
+                            }
+                        }
+                        else
+                        {
+                            <dd class="text-muted">---</dd>
+                        }
+                    </dl>
+                    <dl class="col-md-12 mb-0">
+                        <dt>Descripción</dt>
+                        @if (Model.Description != null)
+                        {
+                            <dd class="mb-0">@Model.Description</dd>
+                        }
+                        else
+                        {
+                            <dd class="mb-0 text-muted">---</dd>
+                        }
+                    </dl>
                 </div>
             </div>
         </div>
