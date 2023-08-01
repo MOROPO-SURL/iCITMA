@@ -115,7 +115,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               new ManagementDashboardSectionViewModel
               {
                   Title = "Areas de Investigación",
-                  Controller = "ResearchAreas",
+                  Controller = "researchareas",
                   Action = "index",
                   Area = "i_d_i",
                   Role = Security.Authorization.Permission.ResearchAreaViewer
@@ -127,7 +127,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               new ManagementDashboardSectionViewModel
               {
                   Title = "Tipos de Salida",
-                  Controller = "OutputKinds",
+                  Controller = "outputkinds",
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.OutputKindViewer
@@ -135,7 +135,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               new ManagementDashboardSectionViewModel
               {
                   Title = "Tipos de Escenario",
-                  Controller = "SceneryKinds",
+                  Controller = "scenerykinds",
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.SceneryKindViewer
@@ -143,7 +143,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
               new ManagementDashboardSectionViewModel
               {
                   Title = "Fuentes de Presupuesto",
-                  Controller = "FundingSources",
+                  Controller = "fundingsources",
                   Action = "index",
                   Area = "Auxiliares",
                   Role = Security.Authorization.Permission.FundingSourceViewer
