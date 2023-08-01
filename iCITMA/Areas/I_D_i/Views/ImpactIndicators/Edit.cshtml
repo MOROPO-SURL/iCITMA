@@ -1,7 +1,7 @@
 ﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ImpactIndicatorInputViewModel
 
 @{
-    ViewData["Title"] = "Agregar Indicadores de Impacto";
+    ViewData["Title"] = "Editar Indicadores de Impacto";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -24,9 +24,10 @@
     Layout = "_BackendLayout";
 }
 
-@using (Html.BeginForm("create", "impactindicators", new { Area = "Auxiliares" }, FormMethod.Post))
+@using (Html.BeginForm("edit", "impactindicators", new { Area = "i_d_i", key = string.Empty }, FormMethod.Post))
 {
-    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+
     <div class="card">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
         <div class="card-body">
@@ -43,12 +44,11 @@
                     @Html.TextAreaFor(model => model.Description, 4, 0, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
                 </div>
-            </div>
+            </div>            
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Agregar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Modificar</button>
+            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
         </div>
     </div>
 }
-

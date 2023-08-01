@@ -11,7 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("i_d_i")]
     public class ResearchAreasController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<ResearchArea, System.Guid, ResearchAreaInputViewModel, ResearchAreaDisplayViewModel>
     {
         public ResearchAreasController(IEntityRepository<ResearchArea, System.Guid> repository, IStringLocalizer<ResearchAreasController> localizer, ILogger<ResearchAreasController> logger) : base(repository, localizer, logger)

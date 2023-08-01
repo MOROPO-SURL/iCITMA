@@ -31,6 +31,8 @@
     <None Remove="Areas\I_D_i\Views\ProjectCategories\" />
     <None Remove="Areas\I_D_i\Views\Projects\" />
     <None Remove="Areas\I_D_i\Views\ProjectStates\" />
+    <None Remove="Areas\I_D_i\Views\ImpactIndicators\" />
+    <None Remove="Areas\I_D_i\Views\ResearchAreas\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +70,8 @@
     <Folder Include="Areas\I_D_i\Views\ProjectCategories\" />
     <Folder Include="Areas\I_D_i\Views\Projects\" />
     <Folder Include="Areas\I_D_i\Views\ProjectStates\" />
+    <Folder Include="Areas\I_D_i\Views\ImpactIndicators\" />
+    <Folder Include="Areas\I_D_i\Views\ResearchAreas\" />
   </ItemGroup>
 
 </Project>
