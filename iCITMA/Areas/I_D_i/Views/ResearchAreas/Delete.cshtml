@@ -33,7 +33,7 @@
     <dd>@Html.DisplayFor(model => model.Description)</dd>    
 </dl>
 
-@using (Html.BeginForm("delete", "ResearchAreas", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post, true, null))
+@using (Html.BeginForm("delete", "ResearchAreas", new { Area = "i_d_i", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)
     <div>

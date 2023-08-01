@@ -11,7 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
-    [Area("Auxiliares")]
+    [Area("i_d_i")]
     public class ImpactIndicatorsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController <ImpactIndicator, System.Guid, ImpactIndicatorInputViewModel, ImpactIndicatorDisplayViewModel>
     {
         public ImpactIndicatorsController(IEntityRepository<ImpactIndicator, System.Guid> repository, IStringLocalizer<ImpactIndicatorsController> localizer, ILogger<ImpactIndicatorsController> logger) : base(repository, localizer, logger)

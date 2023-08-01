@@ -103,17 +103,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Action = "index",
                   Area = "i_d_i",
                   Role = Security.Authorization.Permission.ProjectCategoryViewer
-              }
-            };
-
-            var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
-            {
+              },
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Indicador de Impacto",
+                  Title = "Indicadores de Impacto",
                   Controller = "impactindicators",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "i_d_i",
                   Role = Security.Authorization.Permission.ImpactIndicatorViewer
               },
               new ManagementDashboardSectionViewModel
@@ -121,12 +117,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Areas de Investigación",
                   Controller = "ResearchAreas",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "i_d_i",
                   Role = Security.Authorization.Permission.ResearchAreaViewer
-              },
+              }
+            };
+
+            var auxiliaresSections = new List<ManagementDashboardSectionViewModel>
+            {
               new ManagementDashboardSectionViewModel
               {
-                  Title = "Tipo de Salida",
+                  Title = "Tipos de Salida",
                   Controller = "OutputKinds",
                   Action = "index",
                   Area = "Auxiliares",
