@@ -4,7 +4,7 @@
 
 @model MOROPO.CITMA.CMG.iCITMA.Models.View.DashboardSidebarViewModel
 
-<div id="dashboard-sidebar" style="position: relative; min-height: 100vh; z-index: 1000;  overflow-x: hidden; overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */">
+<div id="dashboard-sidebar" style="position: relative; width: 280px; min-height: 100vh; z-index: 1000;  overflow-x: hidden; overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */">
     <h1 class="text-center text-light m-4">iCITMA</h1>
 
     <div class="row ml-3 mt-4 mb-4">
@@ -35,11 +35,11 @@
     <nav class="nav flex-column nav-pills nav-sidebar">
         @if (Context.Request.Path.Value == "/management/dashboard")
         {
-            <a class="nav-link active" href="#"><span class="mdi mdi-cogs" style="margin-right: 4px;"></span>@GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer)</a>
+            <a class="nav-link active" href="#"><span class="mdi mdi-desktop-mac-dashboard" style="margin-right: 4px;"></span>@GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer)</a>
         }
         else
         {
-            <a class="nav-link" href="@Url.Action("index", "dashboard", new { area = string.Empty, key = string.Empty })"><span class="mdi mdi-cogs" style="margin-right: 4px;"></span>@GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer)</a>
+            <a class="nav-link" href="@Url.Action("index", "dashboard", new { area = string.Empty, key = string.Empty })"><span class="mdi mdi-desktop-mac-dashboard" style="margin-right: 4px;"></span>@GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer)</a>
         }
     </nav>
 
