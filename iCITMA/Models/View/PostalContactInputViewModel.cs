@@ -18,13 +18,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid LocationId { get; set; }
         
         [Display(Name = "ZipCode")]
-        public int ZipCode { get; set; }
+        public int? ZipCode { get; set; }
         
         [Display(Name = "Longitude")]
-        public decimal Longitude { get; set; }
+        public decimal? Longitude { get; set; }
         
         [Display(Name = "Latitude")]
-        public decimal Latitude { get; set; }
+        public decimal? Latitude { get; set; }
 
         public PostalContactItem Export()
         {
@@ -42,9 +42,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Address = entity.Address;
             Location = entity.Location;
             LocationId = (System.Guid)entity.LocationId;
-            ZipCode = entity.ZipCode;
-            Latitude = entity.Latitude;
-            Longitude = entity.Longitude;
+            ZipCode = entity.ZipCode == 0 ? null : entity.ZipCode;
+            Latitude = entity.Latitude == 0 ? null : entity.Latitude;
+            Longitude = entity.Longitude == 0 ? null : entity.Longitude;
         }
 
         public void Mergue(PostalContactItem entity)
@@ -53,9 +53,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.Address = Address;
             entity.Location = Location;
             entity.LocationId = LocationId;
-            entity.ZipCode = ZipCode;
-            entity.Latitude = Latitude;
-            entity.Longitude = Longitude;
+            entity.ZipCode = ZipCode ?? 0;
+            entity.Latitude = Latitude ?? 0;
+            entity.Longitude = Longitude ?? 0;
         }
     }
 }

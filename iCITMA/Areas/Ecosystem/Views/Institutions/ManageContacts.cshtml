@@ -249,9 +249,9 @@
             <table class="table" style="margin: 0;">
                 <thead>
                     <tr>
+                        <th style="width: 1px; white-space: nowrap;">Posición</th>
                         <th>@GlobalViewLocalizationHelper.Localize("Address")</th>
                         <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
-                        <th>Posición</th>
                         <th style="width: 1px; white-space: nowrap;">Acciones</th>
                     </tr>
                 </thead>
@@ -260,9 +260,28 @@
                     {
                         @foreach (var item in Model.AddressContacts)
                         {
-                            <tr>
-                                <td style="vertical-align: middle;">@item.Address</td>
-                                <td style="vertical-align: middle;">@item.Longitude</td>
+                            <tr>                            
+                                <td class="text-center" style="vertical-align: middle;">
+                                    @if (item.Longitude != 0 || item.Latitude != 0)
+                                    {
+                                        <span class="mdi mdi-map-marker" title="@string.Format("{0};{1}", item.Latitude, item.Longitude)"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">---</span>
+                                    }
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    @{
+                                        var composedAddress = string.Format("{0}, {1}, {2}, Cuba", item.Address, item.Municipality.Name, item.State.Name);
+
+                                        if (item.ZipCode != 0)
+                                        {
+                                            composedAddress += string.Format(", CP: {0}", item.ZipCode);
+                                        }
+                                    }
+                                    <span>@composedAddress</span>
+                                </td>
                                 <td style="vertical-align: middle;">
                                     @if (item.Label != null)
                                     {

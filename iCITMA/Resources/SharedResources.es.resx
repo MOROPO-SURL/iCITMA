@@ -738,4 +738,7 @@
   <data name="UserProfileEditSuccessMessage" xml:space="preserve">
     <value>Cambios aplicados con éxito.</value>
   </data>
+  <data name="Address" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
 </root>

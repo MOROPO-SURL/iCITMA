@@ -686,16 +686,39 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             if (ModelState.IsValid)
             {
-                var municipality = municipalityRepository.GetAll().FirstOrDefault(m => m.Id == modelInput.MunicipalityId);
+                var municipality = municipalityRepository.Get(modelInput.MunicipalityId);
                 
-                var municipalityLocaction = municipalityLocationRepository.GetAll().FirstOrDefault(m => m.MunicipalityId == modelInput.MunicipalityId);              
+                var municipalityLocaction = municipalityLocationRepository.GetAll().FirstOrDefault(m => m.MunicipalityId == modelInput.MunicipalityId);
                 
-                var postalContactItem = new PostalContactItem { Address = modelInput.Address, Latitude = modelInput.Latitude, Longitude = modelInput.Longitude, LocationId = municipalityLocaction.Id, ZipCode = modelInput.ZipCode };
+                if (municipalityLocaction == null)
+                {
+                    municipalityLocaction = new MunicipalityLocation
+                    {
+                        MunicipalityId = modelInput.MunicipalityId,
+                        Municipality = municipality
+                    };
+
+                    municipalityLocationRepository.Add(municipalityLocaction, User.Identity.Name, false);
+                }
+                
+                var postalContactItem = new PostalContactItem 
+                {
+                    Label = modelInput.Label,
+                    Address = modelInput.Address, 
+                    Latitude = modelInput.Latitude ?? 0, 
+                    Longitude = modelInput.Longitude ?? 0, 
+                    LocationId = municipalityLocaction.Id, 
+                    ZipCode = modelInput.ZipCode ?? 0
+                };
                 
                 postalContactItemRepository.Add(postalContactItem, User.Identity.Name, false);
 
-                entity.Identity.PostalContactItemBridges.Add(new OrganizationPostalContactItemBridge { ProwId = (System.Guid)entity.IdentityId, 
-                    Stern = postalContactItem, SternId = modelInput.Id });
+                entity.Identity.PostalContactItemBridges.Add(new OrganizationPostalContactItemBridge 
+                { 
+                    ProwId = entity.IdentityId.Value, 
+                    Stern = postalContactItem, 
+                    SternId = modelInput.Id 
+                });
 
                 Repository.Update(entity, User.Identity.Name);
 
