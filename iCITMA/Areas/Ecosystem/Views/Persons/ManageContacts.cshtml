@@ -1,0 +1,420 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonContactsManageViewModel
+
+@{
+    ViewData["Title"] = "Modificar Persona (Contactos)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Gestionar Personas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#StateId').on("change", function () {
+                var stateId = $('#StateId').val();
+               
+                $.ajax({
+                    url: '/api/location/municipalities/bystate/' + stateId,
+                    type: 'GET',
+                    contentType: 'application/json'
+                }).done(function (response) {
+                    if (response.length > 0) {
+                        $('#MunicipalityId').html('');
+                        
+                        var options = '';
+                        
+                        $('#AddressPostal').html('');
+                        
+                        for (var i = 0; i < response.length; i++) {
+                            options += '<option value="' + response[i].id + '">' + response[i].name + '</option>';
+                        }
+                        
+                        $('#MunicipalityId').append(options);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<div class="card mb-3 mt-4">
+    <div class="card-header">
+        <h4 class="mb-3">Modificar Persona</h4>
+        @await Html.PartialAsync("_ContextPartial.cshtml", Model.Person)
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Person.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Contactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("manageinstitutions", @Model.Person.Id)">Instituciones</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("managespecializations", @Model.Person.Id)">Especialidades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("managedoctorates", @Model.Person.Id)">Doctorados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("managemasterys", @Model.Person.Id)">Maestrías</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="page-header">
+                    <a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-phonecontact"><span class="mdi mdi-plus"></span> Agregar</a>
+                    <h4 class="clearfix">Teléfonos</h4>
+                </div>
+
+                @await Html.PartialAsync("_AddPhoneContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.PhoneContactInputViewModel
+                {
+                    ContextId = Model.Person.Id
+                })
+
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("Number")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PhoneContacts.Count > 0)
+                        {
+                            @foreach (var item in Model.PhoneContacts)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Number")">@item.Number</td>
+                                    <td style="vertical-align: middle;">
+                                        @if (item.Label != null)
+                                        {
+                                            <span>@item.Label</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">---</span>
+                                        }
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-phonecontact-@item.Id">Eliminar</a>
+                                        
+                                        <div class="modal fade" id="delete-phonecontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="delete-phonecontact-@item.Id-title">Eliminar Teléfono</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @using (Html.BeginForm("deletephonecontact", "Institutions", new { key = Model.Person.Id }, FormMethod.Post, true, null))
+                                                    {
+                                                        @Html.Hidden("contactId", item.Id);
+
+                                                        <div class="modal-body">
+                                                            <p class="mb-0">Está seguro que desea eliminar este teléfóno?</p>
+                                                        </div>
+
+                                                        <div class="modal-footer" style="margin-top: 0;">
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="page-header">
+                    <a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-nautacontact"><span class="mdi mdi-plus"></span> Agregar</a>
+                    <h4 class="clearfix">Correos Electrónicos</h4>
+                </div>
+                
+                @await Html.PartialAsync("_AddEmailContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.EmailContactInputViewModel
+                {
+                    ContextId = Model.Person.Id
+                })
+                
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("Email")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.EmailContacts.Count > 0)
+                        {
+                            @foreach (var item in Model.EmailContacts)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Email")">@item.Email</td>
+                                    <td style="vertical-align: middle;">
+                                    @if (item.Label != null)
+                                    {
+                                        <span>@item.Label</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">---</span>
+                                    }
+                                </td>
+                                    <td style="vertical-align: middle;">
+                                        <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-emailcontact-@item.Id">Eliminar</a>
+                                        
+                                        <div class="modal fade" id="delete-emailcontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="delete-phonecontact-@item.Id-title">Eliminar Correo Electrónico</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @using (Html.BeginForm("DeleteEmailContact", "Institutions", new { key = Model.Person.Id }, FormMethod.Post, true, null))
+                                                    {
+                                                        @Html.Hidden("contactId", item.Id)
+
+                                                        <div class="modal-body">
+                                                            <p class="mb-0">Está seguro que desea eliminar este correo electrónico?</p>
+                                                        </div>
+
+                                                        <div class="modal-footer" style="margin-top: 0;">
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="page-header">
+                <a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-webcontact"><span class="mdi mdi-plus"></span> Agregar</a>
+                <h4 class="clearfix">Web Sociales</h4>
+            </div>
+
+            @await Html.PartialAsync("_AddWebContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.WebContactInputViewModel
+            {
+                ContextId = Model.Person.Id
+            })
+
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>Dirección</th>
+                        <th>Etiqueta</th>
+                        <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.WebContacts.Count > 0)
+                    {
+                        @foreach (var item in Model.WebContacts)
+                        {
+                            <tr>
+                                <td style="vertical-align: middle;"><a href="@item.Url" target="_blank">@item.Url</a></td>
+                                <td style="vertical-align: middle;">
+                                    @if (item.Label != null)
+                                    {
+                                        <span>@item.Label</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">---</span>
+                                    }
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-webcontact-@item.Id">Eliminar</a>
+                                    
+                                    <div class="modal fade" id="delete-webcontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete-socialcontact-@item.Id-title">Eliminar Web Social</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                @using (Html.BeginForm("deletewebcontact", "Institutions", new { key = Model.Person.Id }, FormMethod.Post, true, null))
+                                                {
+                                                    @Html.Hidden("contactId", item.Id)
+
+                                                    <div class="modal-body">
+                                                        <p class="mb-0">Está seguro que desea eliminar esta web social?</p>
+                                                    </div>
+
+                                                    <div class="modal-footer" style="margin-top: 0;">
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="page-header">
+                <a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-postaladdress"><span class="mdi mdi-plus"></span> Agregar</a>
+                <h4 class="clearfix">Direcciones Postales</h4>
+            </div>
+
+            @await Html.PartialAsync("_AddPostalContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.PostalContactInputViewModel
+            {
+                ContextId = Model.Person.Id,
+                SelectStates = Model.StateSelectListItems,
+                SelectMunicipalities = Model.MunicipalitySelectListItems
+            })
+
+            <table class="table" style="margin: 0;">
+                <thead>
+                    <tr>
+                        <th style="width: 1px; white-space: nowrap;">Posición</th>
+                        <th>@GlobalViewLocalizationHelper.Localize("Address")</th>
+                        <th>@GlobalViewLocalizationHelper.Localize("Label")</th>
+                        <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.AddressContacts.Count > 0)
+                    {
+                        @foreach (var item in Model.AddressContacts)
+                        {
+                            <tr>                            
+                                <td class="text-center" style="vertical-align: middle;">
+                                    @if (item.Longitude != 0 || item.Latitude != 0)
+                                    {
+                                        <span class="mdi mdi-map-marker" title="@string.Format("{0};{1}", item.Latitude, item.Longitude)"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">---</span>
+                                    }
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    @{
+                                        var composedAddress = string.Format("{0}, {1}, {2}, Cuba", item.Address, item.Municipality, item.State);
+
+                                        if (item.ZipCode != 0)
+                                        {
+                                            composedAddress += string.Format(", CP: {0}", item.ZipCode);
+                                        }
+                                    }
+                                    <span>@composedAddress</span>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    @if (item.Label != null)
+                                    {
+                                        <span>@item.Label</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">---</span>
+                                    }
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-postaladdress-@item.Id">Eliminar</a>
+                                    
+                                    <div class="modal fade" id="delete-postaladdress-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete-socialcontact-@item.Id-title">Eliminar Dirección Postal</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                @using (Html.BeginForm("DeletePostalContact", "Institutions", new { key = Model.Person.Id }, FormMethod.Post, true, null))
+                                                {
+                                                    @Html.Hidden("contactId", item.Id)
+
+                                                    <div class="modal-body">
+                                                        <p class="mb-0">Está seguro que desea eliminar esta dirección postal?</p>
+                                                    </div>
+
+                                                    <div class="modal-footer" style="margin-top: 0;">
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+    </div>
+</div>

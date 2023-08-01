@@ -29,35 +29,28 @@
         $(function () {
             $('#StateId').on("change", function () {
                 var stateId = $('#StateId').val();
-                
-                var state = $('#StateId option:selected').text();
-                
-                var obj = { state: stateId };
                
-                AjaxCall('PopulateStateToMunicipality/' + stateId, stateId, 'GET').done(function (response) {
+                $.ajax({
+                    url: '/api/location/municipalities/bystate/' + stateId,
+                    type: 'GET',
+                    contentType: 'application/json'
+                }).done(function (response) {
                     if (response.length > 0) {
                         $('#MunicipalityId').html('');
+                        
                         var options = '';
+                        
                         $('#AddressPostal').html('');
+                        
                         for (var i = 0; i < response.length; i++) {
-                            console.log(response[i]);
                             options += '<option value="' + response[i].id + '">' + response[i].name + '</option>';
                         }
+                        
                         $('#MunicipalityId').append(options);
                     }
                 });
             });
         });
-
-        function AjaxCall(url, data, type) {
-            console.log(url);
-            return $.ajax({
-                url: url,
-                type: type ? type : 'GET',
-                data: data,
-                contentType: 'application/json'
-            });
-        }
     </script>
 }
 
@@ -82,9 +75,9 @@
                     <h4 class="clearfix">Teléfonos</h4>
                 </div>
 
-                @await Html.PartialAsync("AddPhoneContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPhoneContactInputViewModel
+                @await Html.PartialAsync("_AddPhoneContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.PhoneContactInputViewModel
                 {
-                    InstitutionId = Model.Institution.Id
+                    ContextId = Model.Institution.Id
                 })
 
                 <table class="table m-0">
@@ -114,7 +107,32 @@
                                     </td>
                                     <td style="vertical-align: middle;">
                                         <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-phonecontact-@item.Id">Eliminar</a>
-                                        @await Html.PartialAsync("DeletePhoneContactPartial", item)
+                                        
+                                        <div class="modal fade" id="delete-phonecontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="delete-phonecontact-@item.Id-title">Eliminar Teléfono</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @using (Html.BeginForm("deletephonecontact", "Institutions", new { key = Model.Institution.Id }, FormMethod.Post, true, null))
+                                                    {
+                                                        @Html.Hidden("contactId", item.Id);
+
+                                                        <div class="modal-body">
+                                                            <p class="mb-0">Está seguro que desea eliminar este teléfóno?</p>
+                                                        </div>
+
+                                                        <div class="modal-footer" style="margin-top: 0;">
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -134,9 +152,9 @@
                     <h4 class="clearfix">Correos Electrónicos</h4>
                 </div>
                 
-                @await Html.PartialAsync("AddEmailContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionEmailContactInputViewModel
+                @await Html.PartialAsync("_AddEmailContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.EmailContactInputViewModel
                 {
-                    InstitutionId = Model.Institution.Id
+                    ContextId = Model.Institution.Id
                 })
                 
                 <table class="table m-0">
@@ -166,7 +184,32 @@
                                 </td>
                                     <td style="vertical-align: middle;">
                                         <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-emailcontact-@item.Id">Eliminar</a>
-                                        @await Html.PartialAsync("DeleteEmailContactPartial", item)
+                                        
+                                        <div class="modal fade" id="delete-emailcontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="delete-phonecontact-@item.Id-title">Eliminar Correo Electrónico</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @using (Html.BeginForm("DeleteEmailContact", "Institutions", new { key = Model.Institution.Id }, FormMethod.Post, true, null))
+                                                    {
+                                                        @Html.Hidden("contactId", item.Id)
+
+                                                        <div class="modal-body">
+                                                            <p class="mb-0">Está seguro que desea eliminar este correo electrónico?</p>
+                                                        </div>
+
+                                                        <div class="modal-footer" style="margin-top: 0;">
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -187,9 +230,9 @@
                 <h4 class="clearfix">Web Sociales</h4>
             </div>
 
-            @await Html.PartialAsync("_AddWebContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionWebContactInputViewModel
+            @await Html.PartialAsync("_AddWebContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.WebContactInputViewModel
             {
-                InstitutionId = Model.Institution.Id
+                ContextId = Model.Institution.Id
             })
 
             <table class="table m-0">
@@ -219,7 +262,32 @@
                                 </td>
                                 <td style="vertical-align: middle;">
                                     <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-webcontact-@item.Id">Eliminar</a>
-                                    @await Html.PartialAsync("_DeleteWebContactPartial", item)
+                                    
+                                    <div class="modal fade" id="delete-webcontact-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete-socialcontact-@item.Id-title">Eliminar Web Social</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                @using (Html.BeginForm("deletewebcontact", "Institutions", new { key = Model.Institution.Id }, FormMethod.Post, true, null))
+                                                {
+                                                    @Html.Hidden("contactId", item.Id)
+
+                                                    <div class="modal-body">
+                                                        <p class="mb-0">Está seguro que desea eliminar esta web social?</p>
+                                                    </div>
+
+                                                    <div class="modal-footer" style="margin-top: 0;">
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -239,11 +307,11 @@
                 <h4 class="clearfix">Direcciones Postales</h4>
             </div>
 
-            @await Html.PartialAsync("_AddPostalAddressPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionPostalContactInputViewModel
+            @await Html.PartialAsync("_AddPostalContactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.PostalContactInputViewModel
             {
-                InstitutionId = Model.Institution.Id,
-                SelectStates = Model.SelectStates,
-                SelectMunicipalities = Model.SelectMunicipalities
+                ContextId = Model.Institution.Id,
+                SelectStates = Model.StateSelectListItems,
+                SelectMunicipalities = Model.MunicipalitySelectListItems
             })
 
             <table class="table" style="margin: 0;">
@@ -273,7 +341,7 @@
                                 </td>
                                 <td style="vertical-align: middle;">
                                     @{
-                                        var composedAddress = string.Format("{0}, {1}, {2}, Cuba", item.Address, item.Municipality.Name, item.State.Name);
+                                        var composedAddress = string.Format("{0}, {1}, {2}, Cuba", item.Address, item.Municipality, item.State);
 
                                         if (item.ZipCode != 0)
                                         {
@@ -295,7 +363,31 @@
                                 <td style="vertical-align: middle;">
                                     <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-postaladdress-@item.Id">Eliminar</a>
                                     
-                                    @await Html.PartialAsync("_DeletePostalAddressPartial", item)
+                                    <div class="modal fade" id="delete-postaladdress-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete-socialcontact-@item.Id-title">Eliminar Dirección Postal</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                @using (Html.BeginForm("DeletePostalContact", "Institutions", new { key = Model.Institution.Id }, FormMethod.Post, true, null))
+                                                {
+                                                    @Html.Hidden("contactId", item.Id)
+
+                                                    <div class="modal-body">
+                                                        <p class="mb-0">Está seguro que desea eliminar esta dirección postal?</p>
+                                                    </div>
+
+                                                    <div class="modal-footer" style="margin-top: 0;">
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }

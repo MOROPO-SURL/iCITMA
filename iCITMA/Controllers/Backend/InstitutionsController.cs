@@ -26,14 +26,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         private readonly IEntityRepository<OrganizationIdentity, System.Guid> identityRepository;
         private readonly IEntityRepository<PhoneContactItem, System.Guid> phoneContactItemRepository;
         private readonly IEntityRepository<EmailContactItem, System.Guid> emailContactItemRepository;
-        private readonly IEntityRepository<SocialContactItem, System.Guid> socialContactItemRepository;
         private readonly IEntityRepository<PostalContactItem, System.Guid> postalContactItemRepository;
         private readonly IEntityRepository<WebSiteContactItem, System.Guid> webSiteContactItemRepository;
         private readonly IEntityRepository<Municipality, System.Guid> municipalityRepository;
         private readonly IEntityRepository<State, System.Guid> stateRepository;
         private readonly IEntityRepository<MunicipalityLocation, System.Guid> municipalityLocationRepository;
-        private readonly IEntityRepository<Location, System.Guid> locationRepository;
-        private readonly IEntityRepository<StateLocation, System.Guid> stateLocationRepository;        
         private readonly IEntityRepository<Person, System.Guid> personRepository;        
 
         public InstitutionsController(IEntityRepository<Institution, System.Guid> repository,
@@ -44,14 +41,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             IEntityRepository<OrganizationIdentity, System.Guid> identityRepository,
             IEntityRepository<PhoneContactItem, System.Guid> phoneContactItemRepository,
             IEntityRepository<EmailContactItem, System.Guid> emailContactItemRepository,
-            IEntityRepository<SocialContactItem, System.Guid> socialContactItemRepository,
             IEntityRepository<PostalContactItem, System.Guid> postalContactItemRepository,
             IEntityRepository<WebSiteContactItem, System.Guid> webSiteContactItemRepository,
             IEntityRepository<Municipality, System.Guid> municipalityRepository,
             IEntityRepository<State, System.Guid> stateRepository,
             IEntityRepository<MunicipalityLocation, System.Guid> municipalityLocationRepository,
-            IEntityRepository<Location, System.Guid> locationRepository,
-            IEntityRepository<StateLocation, System.Guid> stateLocationRepository,
             IEntityRepository<Person, System.Guid> personRepository
             ) : base(repository, localizer, logger)
         {
@@ -60,14 +54,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.identityRepository = identityRepository;
             this.phoneContactItemRepository = phoneContactItemRepository;
             this.emailContactItemRepository = emailContactItemRepository;
-            this.socialContactItemRepository = socialContactItemRepository;
             this.postalContactItemRepository = postalContactItemRepository;
             this.webSiteContactItemRepository = webSiteContactItemRepository;
             this.municipalityRepository = municipalityRepository;
             this.stateRepository = stateRepository;
             this.municipalityLocationRepository = municipalityLocationRepository;
-            this.locationRepository = locationRepository;
-            this.stateLocationRepository = stateLocationRepository;
             this.personRepository = personRepository;
         }
 
@@ -133,17 +124,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         [RequirePermissions(Permission.InstitusionRemover)]
         public override IActionResult Delete(InstitutionDisplayViewModel displayViewModel) => base.Delete(displayViewModel);
-
-        [Route("edit/{key}/PopulateStateToMunicipality/{stateId}")]
-        [HttpGet("PopulateStateToMunicipality/{stateId}")]
-        public IActionResult PopulateStateToMunicipality(string stateId)
-        {
-            var stateIdParse = System.Guid.Parse(stateId);
-
-            var municipalities = municipalityRepository.GetAll().Where(entity => entity.StateId == stateIdParse).ToList();
-            
-            return Ok(municipalities);
-        }
 
         private void Populate(InstitutionInputViewModel inputViewModel)
         {
@@ -295,56 +275,62 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 var entity = Repository.Get(key);
 
-                var resultModel = new InstitutionContactsManageViewModel
+                var model = new InstitutionContactsManageViewModel
                 {
                     Institution = new InstitutionDisplayViewModel(),
-                    PhoneContacts = entity.Identity.PhoneContactItemBridges.Select(bridge => new InstitutionPhoneContactDisplayViewModel
+                    PhoneContacts = entity.Identity.PhoneContactItemBridges.Select(bridge => new PhoneContactDisplayViewModel
                     {
                         Id = bridge.Stern.Id,
                         Label = bridge.Stern.Label,
-                        Number = bridge.Stern.PhoneNumber,
-                        InstitutionId = entity.Id
+                        Number = bridge.Stern.PhoneNumber
                     }).ToList(),
-                    EmailContacts = entity.Identity.EmailContactItemBridges.Select(bridge => new InstitutionEmailContactDisplayViewModel
+                    EmailContacts = entity.Identity.EmailContactItemBridges.Select(bridge => new EmailContactDisplayViewModel
                     {
                         Id = bridge.Stern.Id,
                         Label = bridge.Stern.Label,
-                        Email = bridge.Stern.EmailAddress,
-                        InstitutionId = entity.Id
+                        Email = bridge.Stern.EmailAddress
                     }).ToList(),
-                    WebContacts = entity.Identity.WebSiteContactItemBridges.Select( bridge => new InstitutionWebContactDisplayViewModel
+                    WebContacts = entity.Identity.WebSiteContactItemBridges.Select(bridge => new WebContactDisplayViewModel
                     {
                         Id = bridge.SternId,
-                        Label= bridge.Stern.Label,
-                        Url = bridge.Stern.Url,                        
-                        InstitutionId = entity.Id,
+                        Label = bridge.Stern.Label,
+                        Url = bridge.Stern.Url
                     }).ToList(),
-                    AddressContacts = entity.Identity.PostalContactItemBridges.Select(bridge => new InstitutionPostalContactDisplayViewModel 
-                    { 
+                    AddressContacts = entity.Identity.PostalContactItemBridges.Select(bridge => new PostalContactDisplayViewModel
+                    {
                         Id = bridge.SternId,
                         Label = bridge.Stern.Label,
                         Address = bridge.Stern.Address,
                         Longitude = bridge.Stern.Longitude,
                         Latitude = bridge.Stern.Latitude,
                         ZipCode = bridge.Stern.ZipCode,
-                        InstitutionId = entity.Id,
-                        Municipality = ((MunicipalityLocation)bridge.Stern.Location).Municipality,
-                        State = ((MunicipalityLocation)bridge.Stern.Location).Municipality.State
-                    }).ToList()
+                        Municipality = ((MunicipalityLocation)bridge.Stern.Location).Municipality.Name,
+                        State = ((MunicipalityLocation)bridge.Stern.Location).Municipality.State.Name
+                    }).ToList(),
+                    StateSelectListItems = stateRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name }).ToArray()
                 };
 
-                PopulateStateWithMunicipality(resultModel);
+                if (model.StateSelectListItems.Length > 0)
+                {
+                    var firstStateId = System.Guid.Parse(model.StateSelectListItems[0].Value);
 
-                resultModel.Institution.Import(entity);
+                    model.MunicipalitySelectListItems = municipalityRepository.FindBy(entity => entity.StateId == firstStateId).Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name }).ToArray();
+                }
+                else
+                {
+                    model.MunicipalitySelectListItems = System.Array.Empty<SelectListItem>();
+                }
 
-                return View(resultModel);
+                model.Institution.Import(entity);
+
+                return View(model);
             }
             catch (System.Exception e)
             {
                 logger.LogError(e.InnerException, e.Message);
             }
 
-            SetDefaultNotification(MOROPO.Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
+            SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
 
             return GetDefaultActionResult();
         }
@@ -355,13 +341,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPhoneContact(InstitutionPhoneContactInputViewModel modelInput)
+        public IActionResult AddPhoneContact(PhoneContactInputViewModel modelInput)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelInput.InstitutionId);
+                entity = Repository.Get(modelInput.ContextId);
             }
             catch { }
 
@@ -412,17 +398,17 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return RedirectToAction("ManageContacts", new { key = entity.Id });
         }
 
-        [Route("edit/contacts/phone/delete")]
+        [Route("edit/{key}/contacts/phone/delete")]
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePhoneContact(InstitutionPhoneContactDisplayViewModel modelDisplay)
+        public IActionResult DeletePhoneContact(System.Guid key, System.Guid contactId)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelDisplay.InstitutionId);
+                entity = Repository.Get(key);
             }
             catch { }
 
@@ -435,7 +421,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             try
             {
-                var bridge = entity.Identity.PhoneContactItemBridges.FirstOrDefault(b => b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
+                var bridge = entity.Identity.PhoneContactItemBridges.FirstOrDefault(b => b.ProwId == entity.IdentityId && b.SternId == contactId);
 
                 entity.Identity.PhoneContactItemBridges.Remove(bridge);
 
@@ -465,13 +451,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEmailContact(InstitutionEmailContactInputViewModel modelInput)
+        public IActionResult AddEmailContact(EmailContactInputViewModel modelInput)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelInput.InstitutionId);
+                entity = Repository.Get(modelInput.ContextId);
             }
             catch { }
 
@@ -513,17 +499,17 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return RedirectToAction("ManageContacts", new { key = entity.Id });
         }
 
-        [Route("edit/contacts/email/delete")]
+        [Route("edit/{key}/contacts/email/delete")]
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteEmailContact(InstitutionEmailContactDisplayViewModel modelDisplay)
+        public IActionResult DeleteEmailContact(System.Guid key, System.Guid contactId)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelDisplay.InstitutionId);
+                entity = Repository.Get(key);
             }
             catch { }
 
@@ -536,110 +522,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             try
             {
-                var bridge = entity.Identity.EmailContactItemBridges.First(b =>b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
+                var bridge = entity.Identity.EmailContactItemBridges.First(b =>b.ProwId == entity.IdentityId && b.SternId == contactId);
 
                 entity.Identity.EmailContactItemBridges.Remove(bridge);
-
-                Repository.Update(entity, User.Identity.Name);
-
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetDeletionSuccessMessage());
-            }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
-            {
-                logger.LogError(e.InnerException, e.Message);
-
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
-            }
-            catch (System.Exception e)
-            {
-                logger.LogError(e.InnerException, e.Message);
-            }
-
-            return RedirectToAction("ManageContacts", new { key = entity.Id });
-        }
-
-        #endregion
-
-        #region Social
-
-        [Route("edit/contacts/social/add")]
-        [RequirePermissions(Permission.InstitusionEditor)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddSocialContact(InstitutionSocialContactInputViewModel modelInput)
-        {
-            Institution entity = null;
-
-            try
-            {
-                entity = Repository.Get(modelInput.InstitutionId);
-            }
-            catch { }
-
-            if (entity == null)
-            {
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
-
-                return GetDefaultActionResult();
-            }
-
-            if (ModelState.IsValid)
-            {
-                var socialContactItem = new SocialContactItem { Label = modelInput.Label, SocialId = modelInput.SocialId };
-                socialContactItemRepository.Add(socialContactItem, User.Identity.Name, false);
-
-                entity.Identity.SocialContactItemBridges.Add(new OrganizationSocialContactItemBridge { ProwId = entity.IdentityId.Value, Stern = socialContactItem, SternId = modelInput.Id });
-
-                Repository.Update(entity, User.Identity.Name);
-
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
-            }
-            else
-            {
-                var messages = new List<string>();
-
-                foreach (var item in ModelState)
-                {
-                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
-
-                    foreach (var error in item.Value.Errors)
-                    {
-                        messages.Add(error.ErrorMessage);
-                    }
-                }
-
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
-            }
-
-            return RedirectToAction("ManageContacts", new { key = entity.Id });
-        }
-
-        [Route("edit/contacts/social/delete")]
-        [RequirePermissions(Permission.InstitusionEditor)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteSocialContact(InstitusionSocialContactDisplayViewModel modelDisplay)
-        {
-            Institution entity = null;
-
-            try
-            {
-                entity = Repository.Get(modelDisplay.InstitutionId);
-            }
-            catch { }
-
-            if (entity == null)
-            {
-                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, GetNotFoundMessage());
-
-                return GetDefaultActionResult();
-            }
-
-            try
-            {
-                var bridge = entity.Identity.SocialContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
-
-                entity.Identity.SocialContactItemBridges.Remove(bridge);
 
                 Repository.Update(entity, User.Identity.Name);
 
@@ -667,13 +552,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPostalAddress(InstitutionPostalContactInputViewModel modelInput)
+        public IActionResult AddPostalContact(PostalContactInputViewModel modelInput)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelInput.InstitutionId);
+                entity = Repository.Get(modelInput.ContextId);
             }
             catch { }
 
@@ -744,17 +629,17 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return RedirectToAction("ManageContacts", new { key = entity.Id });
         }
 
-        [Route("edit/contacts/postal/delete")]
+        [Route("edit/{key}/contacts/postal/delete")]
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePostalAddress(InstitutionPostalContactDisplayViewModel modelDisplay)
+        public IActionResult DeletePostalContact(System.Guid key, System.Guid contactId)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelDisplay.InstitutionId);
+                entity = Repository.Get(key);
             }
             catch { }
 
@@ -767,7 +652,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             try
             {
-                var bridge = entity.Identity.PostalContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
+                var bridge = entity.Identity.PostalContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == contactId);
 
                 entity.Identity.PostalContactItemBridges.Remove(bridge);
 
@@ -797,13 +682,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddWeb(InstitutionWebContactInputViewModel modelInput)
+        public IActionResult AddWebContact(WebContactInputViewModel modelInput)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelInput.InstitutionId);
+                entity = Repository.Get(modelInput.ContextId);
             }
             catch { }
 
@@ -852,17 +737,17 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return RedirectToAction("ManageContacts", new { key = entity.Id });
         }
 
-        [Route("edit/contacts/web/delete")]
+        [Route("edit/{key}/contacts/web/delete")]
         [RequirePermissions(Permission.InstitusionEditor)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteWeb(InstitutionWebContactDisplayViewModel modelDisplay)
+        public IActionResult DeleteWebContact(System.Guid key, System.Guid contactId)
         {
             Institution entity = null;
 
             try
             {
-                entity = Repository.Get(modelDisplay.InstitutionId);
+                entity = Repository.Get(key);
             }
             catch { }
 
@@ -875,7 +760,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             try
             {
-                var bridge = entity.Identity.WebSiteContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == modelDisplay.Id);
+                var bridge = entity.Identity.WebSiteContactItemBridges.First(b => b.ProwId == entity.IdentityId && b.SternId == contactId);
 
                 entity.Identity.WebSiteContactItemBridges.Remove(bridge);
 
@@ -900,21 +785,5 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         #endregion
 
         #endregion
-
-        private void PopulateStateWithMunicipality(InstitutionContactsManageViewModel model)
-        {
-            model.SelectStates = stateRepository.GetAll().Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name}).ToArray();
-            
-            if (model.SelectStates.Length > 0)
-            {
-                var firstStateId = System.Guid.Parse(model.SelectStates[0].Value);
-
-                model.SelectMunicipalities = municipalityRepository.FindBy(entity => entity.StateId == firstStateId).Select(entity => new SelectListItem { Value = entity.Id.ToString(), Text = entity.Name }).ToArray();
-            }
-            else
-            {
-                model.SelectMunicipalities = new SelectListItem[] {};
-            }
-        }
     }
 }

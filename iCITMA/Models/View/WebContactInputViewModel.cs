@@ -1,12 +1,13 @@
 ﻿using MOROPO.Framework.Guama.Identity.Persistence.Entities;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class WebContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<WebSiteContactItem, System.Guid>
     {
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
+
+        public System.Guid ContextId { get; set; }
 
         [Display(Name = "Label")]
         public string Label { get; set; }

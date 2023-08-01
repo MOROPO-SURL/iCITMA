@@ -1,13 +1,13 @@
 ﻿using MOROPO.Framework.Guama.Identity.Persistence.Entities;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class EmailContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<EmailContactItem, System.Guid>
     {
         public System.Guid Id { get; set; }
+
+        public System.Guid ContextId { get; set; }
 
         [Display(Name = "Label")]
         public string Label { get; set; }

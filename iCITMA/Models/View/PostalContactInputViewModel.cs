@@ -7,15 +7,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     {
         public System.Guid Id { get; set; }
 
+        public System.Guid ContextId { get; set; }
+
         [Display(Name = "Label")]
         public string Label { get; set; }
         
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Direction")]
         public string Address { get; set; }
-        
-        public Framework.Guama.Location.Persistence.Entities.Location Location { get; set; }
-        public System.Guid LocationId { get; set; }
         
         [Display(Name = "ZipCode")]
         public int? ZipCode { get; set; }
@@ -25,6 +24,18 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         
         [Display(Name = "Latitude")]
         public decimal? Latitude { get; set; }
+
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "State")]
+        public System.Guid StateId { get; set; }
+
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Municipality")]
+        public System.Guid MunicipalityId { get; set; }
+
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] SelectMunicipalities { get; set; }
+
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] SelectStates { get; set; }
 
         public PostalContactItem Export()
         {
@@ -40,8 +51,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         {
             Label = entity.Label;
             Address = entity.Address;
-            Location = entity.Location;
-            LocationId = (System.Guid)entity.LocationId;
             ZipCode = entity.ZipCode == 0 ? null : entity.ZipCode;
             Latitude = entity.Latitude == 0 ? null : entity.Latitude;
             Longitude = entity.Longitude == 0 ? null : entity.Longitude;
@@ -51,8 +60,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         {
             entity.Label = Label;
             entity.Address = Address;
-            entity.Location = Location;
-            entity.LocationId = LocationId;
             entity.ZipCode = ZipCode ?? 0;
             entity.Latitude = Latitude ?? 0;
             entity.Longitude = Longitude ?? 0;
