@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete-phonecontact-@Model.Id-title">Eliminar Contacto telefónico</h5>
+                <h5 class="modal-title" id="delete-phonecontact-@Model.Id-title">Eliminar Teléfono</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -16,7 +16,7 @@
                 @Html.HiddenFor(model => model.InstitutionId)
 
                 <div class="modal-body">
-                    <p>Está seguro que desea eliminar el contacto telefónico con la etiqueta <b>@Model.Label</b> y número <b>@Model.Number</b>?</p>
+                    <p class="mb-0">Está seguro que desea eliminar este teléfóno?</p>
                 </div>
 
                 <div class="modal-footer" style="margin-top: 0;">

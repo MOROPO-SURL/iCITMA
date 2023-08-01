@@ -6,15 +6,23 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     public class PostalContactInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<PostalContactItem, System.Guid>
     {
         public System.Guid Id { get; set; }
+
+        [Display(Name = "Label")]
+        public string Label { get; set; }
+        
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Direction")]
         public string Address { get; set; }
+        
         public Framework.Guama.Location.Persistence.Entities.Location Location { get; set; }
         public System.Guid LocationId { get; set; }
+        
         [Display(Name = "ZipCode")]
         public int ZipCode { get; set; }
+        
         [Display(Name = "Longitude")]
         public decimal Longitude { get; set; }
+        
         [Display(Name = "Latitude")]
         public decimal Latitude { get; set; }
 
@@ -30,6 +38,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         public void Import(PostalContactItem entity)
         {
+            Label = entity.Label;
             Address = entity.Address;
             Location = entity.Location;
             LocationId = (System.Guid)entity.LocationId;
@@ -40,13 +49,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         public void Mergue(PostalContactItem entity)
         {
+            entity.Label = Label;
             entity.Address = Address;
             entity.Location = Location;
             entity.LocationId = LocationId;
             entity.ZipCode = ZipCode;
             entity.Latitude = Latitude;
-            entity.Longitude = Longitude; 
-
+            entity.Longitude = Longitude;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionInputViewModel
 
 @{
-    ViewData["Title"] = "Editar Institución";
+    ViewData["Title"] = "Modificar Institución";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Instituciones",
+            Caption = "Gestionar Instituciones",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -51,7 +51,7 @@
             header: true,
             footer: true,
             format: 'dd/mm/yyyy',
-            value: '@Model.CreatedAt?.ToString("dd-MM-yyyy")'
+            value: '@Model.CreatedAt?.ToString("dd/MM/yyyy")'
         });
 
         $(function () {           
@@ -75,20 +75,19 @@
     </script>
 }
 
-
 @using (Html.BeginForm("edit", "Institutions", new { Area = "ecosystem", key = string.Empty }, FormMethod.Post, true, new { enctype = "multipart/form-data"}))
 {
     @Html.HiddenFor(model => model.Id)
 
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card mb-3 mt-4">
         <div class="card-header">
-            <h4 class="mb-0">@ViewData["Title"]</h4>
+            <h4>@ViewData["Title"]</h4>
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Generales</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("contacts", Model.Id)">Contactos</a>
+                    <a class="nav-link" href="@Url.Action("ManageContacts", Model.Id)">Contactos</a>
                 </li>
             </ul>
         </div>
@@ -97,7 +96,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-4 mb-3">
                     <div class="card">
-                        @if (Model.ImageId != System.Guid.Empty)
+                        @if (Model.ImageId != null)
                         {
                             <img src="~/media/images/@Model.ImageId.@Model.ImageExtension" class="card-img-top" id="ImageFilePreview" />
                         }
@@ -114,43 +113,41 @@
                     @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
                 </div>
                 <div class="col-lg-9 col-md-8">
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
                     <div class="row">
-                        <div class="col-lg-5 col-md-12" style="margin-bottom: 20px;">
-                            @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
-                        </div>
-                        <div class="col-lg-5 col-md-12" style="margin-bottom: 20px;">
+                        <div class="col-md-6 mb-3">
                             @Html.LabelFor(model => model.Alia, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Alia, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Alia, null, new { @class = "text-danger" })
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            @Html.LabelFor(model => model.OwnerId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.OwnerId, Model.OwnwerSelected, "Seleccionar", new { @class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.OwnerId, null, new { @class = "text-danger" })
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            @Html.LabelFor(model => model.RepresentativeId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.RepresentativeId, Model.RepresentativeSelected, "Seleccionar", new { @class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.RepresentativeId, null, new { @class = "text-danger" })
-                        </div>
                         <div class="col-md-6 mb-3">
                             @Html.LabelFor(model => model.CreatedAt, new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.CreatedAt, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.CreatedAt, new { @class = "form-control", @readonly = "readonly" })
                             @Html.ValidationMessageFor(model => model.CreatedAt, null, new { @class = "text-danger" })
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.OwnerId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.OwnerId, Model.OwnerSelectedListItems, "Ninguna", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.OwnerId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.RepresentativeId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.RepresentativeId, Model.PersonSelectedListItems, "Ninguno", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.RepresentativeId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
-            </div> 
-            <div class="row">
-                <div class="col-12" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.Description, new { @class = "control-label" })
-                    @Html.TextAreaFor(model => model.Description,4 , 0, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
-                </div>
+            </div>
+            <div>
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Description, 6, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
             </div>
         </div>
         <div class="card-footer">

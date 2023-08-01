@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-socialcontact-title">Agregar Contacto de Redes Sociales</h5>
+                <h5 class="modal-title" id="add-socialcontact-title">Agregar Web Social</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,16 +15,16 @@
                     @Html.HiddenFor(model => model.InstitutionId)
 
                     <div class="row">
-                        <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="col-md-6 mb-3">
                             @Html.LabelFor(model => model.Label, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Label, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Label, null, new { @class = "text-danger" })
-                        </div>     
-                        <div class="col-md-6" style="margin-bottom: 20px;">
-                            @Html.LabelFor(model => model.Url, new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.Url, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Url, null, new { @class = "text-danger" })
                         </div>                       
+                    </div>                         
+                    <div class="mb-1">
+                        @Html.LabelFor(model => model.Url, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Url, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Url, null, new { @class = "text-danger" })
                     </div>
                 </div>
 

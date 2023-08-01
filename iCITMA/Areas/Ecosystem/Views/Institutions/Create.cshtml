@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Instituciones",
+            Caption = "Gestionar Instituciones",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -67,15 +67,15 @@
     </script>
 }
 
-@using (Html.BeginForm("create", "Institutions", new { Area = "ecosystem" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("create", "institutions", new { Area = "ecosystem" }, FormMethod.Post, true, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card mb-3 mt-4">
         <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
 
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-4 mb-3">
+                <div class="col-lg-3 col-md-4 col-sm-4 mb-3 mb-sm-0">
                     <div class="card">
                         <img src="~/img/default-organization-picture.png" class="card-img-top" id="ImageFilePreview" />
                         <label class="btn btn-light" style="border-top-left-radius: 0; border-top-right-radius: 0; margin-bottom: 0;">
@@ -86,43 +86,41 @@
                     @Html.ValidationMessageFor(model => model.ImageFile, null, new { @class = "text-danger" })
                 </div>
                 <div class="col-lg-9 col-md-8">
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+                    </div>
                     <div class="row">
-                        <div class="col-lg-5 col-md-12" style="margin-bottom: 20px;">
-                            @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
-                        </div>
-                        <div class="col-lg-5 col-md-12" style="margin-bottom: 20px;">
+                        <div class="col-md-6 mb-3">
                             @Html.LabelFor(model => model.Alia, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Alia, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Alia, null, new { @class = "text-danger" })
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            @Html.LabelFor(model => model.OwnerId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.OwnerId, Model.OwnwerSelected, "Seleccionar", new { @class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.OwnerId, null, new { @class = "text-danger" })
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            @Html.LabelFor(model => model.RepresentativeId, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.RepresentativeId, Model.RepresentativeSelected, "Seleccionar", new { @class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.RepresentativeId, null, new { @class = "text-danger" })
-                        </div>
                         <div class="col-md-6 mb-3">
                             @Html.LabelFor(model => model.CreatedAt, new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.CreatedAt, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.CreatedAt, new { @class = "form-control", @readonly = "readonly" })
                             @Html.ValidationMessageFor(model => model.CreatedAt, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.OwnerId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.OwnerId, Model.OwnerSelectedListItems, "Ninguna", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.OwnerId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.RepresentativeId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.RepresentativeId, Model.PersonSelectedListItems, "Ninguno", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.RepresentativeId, null, new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12" style="margin-bottom: 20px;">
-                    @Html.LabelFor(model => model.Description, new { @class = "control-label" })
-                    @Html.TextAreaFor(model => model.Description,4 , 0, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
-                </div>
+            <div>
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Description, 6, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
             </div>
         </div>
         <div class="card-footer">

@@ -116,7 +116,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return base.Delete(displayModel);
         }
 
-        private void PopulateLists(PersonInputViewModel inputModel)
+        private void Populate(PersonInputViewModel inputModel)
         {
             inputModel.ResearcherCategorys = ResearcherCategoryRepository.GetAll().Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name }).ToArray();
             inputModel.TeachingCategorys = TeachingCategoryRepository.GetAll().Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name }).ToArray();
@@ -124,22 +124,22 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         protected override void ConfigureCreate(PersonInputViewModel modelInput)
         {
-            PopulateLists(modelInput);
+            Populate(modelInput);
         }
 
         protected override void ConfigurePostFailCreateValidation(PersonInputViewModel modelInput)
         {
-            PopulateLists(modelInput);
+            Populate(modelInput);
         }
 
         protected override void ConfigureEdit(Person entity, PersonInputViewModel modelInput)
         {
-            PopulateLists(modelInput);
+            Populate(modelInput);
         }
 
         protected override void ConfigurePostFailEditValidation(Person entity, PersonInputViewModel modelInput)
         {
-            PopulateLists(modelInput);
+            Populate(modelInput);
         }
 
         protected override void PreCreate(Person entity, PersonInputViewModel modelInput)
@@ -148,11 +148,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             if (modelInput.ResearcherCategoryId != null)
             {
+                entity.ResearcherCategoryId = modelInput.ResearcherCategoryId;
                 entity.ResearcherCategory = ResearcherCategoryRepository.Get(modelInput.ResearcherCategoryId.Value);
             }
 
             if (modelInput.TeachingCategoryId != null)
             {
+                entity.TeachingCategoryId = modelInput.TeachingCategoryId;
                 entity.TeachingCategory = TeachingCategoryRepository.Get(modelInput.TeachingCategoryId.Value);
             }
 

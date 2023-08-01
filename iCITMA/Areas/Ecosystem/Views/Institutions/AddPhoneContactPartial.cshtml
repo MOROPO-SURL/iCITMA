@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-phonecontact-title">Agregar Contacto Telefónico</h5>
+                <h5 class="modal-title" id="add-phonecontact-title">Agregar Teléfono</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,12 +15,12 @@
                     @Html.HiddenFor(model => model.InstitutionId)
 
                     <div class="row">
-                        <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="col-md-6 mb-3 mb-md-1">
                             @Html.LabelFor(model => model.Label, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Label, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Label, null, new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="col-md-6 mb-1">
                             @Html.LabelFor(model => model.Number, new { @class = "control-label" })
                             @Html.TextBoxFor(model => model.Number, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Number, null, new { @class = "text-danger" })

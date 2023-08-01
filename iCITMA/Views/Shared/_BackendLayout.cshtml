@@ -121,11 +121,11 @@
                                     {
                                         if (count < total)
                                         {
-                                                        <li class="breadcrumb-item"><a href="@breadcrumb.Url">@Html.Raw(breadcrumb.Caption)</a></li>
+                                            <li class="breadcrumb-item"><a href="@breadcrumb.Url">@Html.Raw(breadcrumb.Caption)</a></li>
                                         }
                                         else
                                         {
-                                                        <li class="breadcrumb-item active">@Html.Raw(breadcrumb.Caption)</li>
+                                            <li class="breadcrumb-item active">@Html.Raw(breadcrumb.Caption)</li>
                                         }
 
                                         count++;
@@ -147,6 +147,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                                
                                 @if (notification.Title != null)
                                 {
                                     <h4>@GlobalViewLocalizationHelper.Localize(notification.Title, ViewLocalizer)</h4>
@@ -159,7 +160,7 @@
 
                                 @if (notification.Messages != null)
                                 {
-                                    <ul>
+                                    <ul class="mb-0">
                                         @foreach (var item in notification.Messages)
                                         {
                                             <li>@GlobalViewLocalizationHelper.Localize(item, ViewLocalizer)</li>

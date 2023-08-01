@@ -16,9 +16,8 @@
         public System.Collections.Generic.List<InstitutionWebContactDisplayViewModel> WebContacts { get; set; }
         public System.Collections.Generic.List<InstitutionPostalContactDisplayViewModel> AddressContacts { get; set; }
 
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> SelectMunicipalities { get; set; } = 
-            new System.Collections.Generic.List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> SelectStates { get; set; } =
-           new System.Collections.Generic.List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] SelectMunicipalities { get; set; }
+        
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] SelectStates { get; set; }
     }
 }

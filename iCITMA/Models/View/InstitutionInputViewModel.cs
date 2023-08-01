@@ -1,18 +1,13 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Common.ComponentModel.DataAnnotations;
-using MOROPO.Framework.Guama.Media.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Extensions;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
-using System.Xml.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class InstitutionInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Institution, System.Guid>
     {
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
         [FormFileContentTypes(ContentTypes = new string[] { "image/png", "image/jpeg" }, ErrorMessage = "PNG_JPEG_FileAllowedOnlyMessage")]
         [FormFileMaxLength(Length = 3145728, ErrorMessage = "FileLimitSizeExcededMessage")]
@@ -33,7 +28,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Alia { get;set; }
 
         [Display(Name = "CreatedAt")]
-        public DateTime? CreatedAt { get; set; }
+        public System.DateTime? CreatedAt { get; set; }
 
         [Display(Name = "Description")]
         public string Description { get; set; }        
@@ -44,10 +39,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [Display(Name = "Representative")]
         public System.Guid? RepresentativeId { get; set; }
 
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> OwnwerSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> RepresentativeSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] OwnerSelectedListItems { get; set; }
+        public Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[] PersonSelectedListItems { get; set; }
 
         public Institution Export()
         {
@@ -61,7 +54,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public void Import(Institution entity)
         {
             Id = entity.Id;
-            ImageId = entity.Identity.Image?.Id ?? System.Guid.Empty;
+            ImageId = entity.Identity.ImageId;
             ImageExtension = entity.Identity.Image?.ContentType.ContentTypeToExtension() ?? null;
             Name = entity.Identity.Name;
             Alia = entity.Alia;
@@ -76,9 +69,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.Identity.Name = Name;
             entity.Alia = Alia;
             entity.Identity.BornDate = CreatedAt;
-            entity.OwnerId = OwnerId;
             entity.Identity.About = Description;
-            entity.RepresentativeId = RepresentativeId;
         }
     }
 }
