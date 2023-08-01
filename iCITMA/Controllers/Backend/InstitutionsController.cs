@@ -705,10 +705,10 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 {
                     Label = modelInput.Label,
                     Address = modelInput.Address, 
-                    Latitude = modelInput.Latitude, 
-                    Longitude = modelInput.Longitude, 
+                    Latitude = modelInput.Latitude ?? 0, 
+                    Longitude = modelInput.Longitude ?? 0, 
                     LocationId = municipalityLocaction.Id, 
-                    ZipCode = modelInput.ZipCode 
+                    ZipCode = modelInput.ZipCode ?? 0
                 };
                 
                 postalContactItemRepository.Add(postalContactItem, User.Identity.Name, false);
