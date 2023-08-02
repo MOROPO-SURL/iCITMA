@@ -129,7 +129,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Tipos de Salida",
                   Controller = "outputkinds",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "auxiliares",
                   Role = Security.Authorization.Permission.OutputKindViewer
               },
               new ManagementDashboardSectionViewModel
@@ -137,7 +137,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Tipos de Escenario",
                   Controller = "scenerykinds",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "auxiliares",
                   Role = Security.Authorization.Permission.SceneryKindViewer
               },
               new ManagementDashboardSectionViewModel
@@ -145,7 +145,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Fuentes de Presupuesto",
                   Controller = "fundingsources",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "auxiliares",
                   Role = Security.Authorization.Permission.FundingSourceViewer
               },
               new ManagementDashboardSectionViewModel
@@ -153,7 +153,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Palabras Claves",
                   Controller = "keywords",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "auxiliares",
                   Role = Security.Authorization.Permission.KeyWordViewer
               },
                new ManagementDashboardSectionViewModel
@@ -161,7 +161,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Extensions
                   Title = "Indicadores ODS",
                   Controller = "ODSIndicators",
                   Action = "index",
-                  Area = "Auxiliares",
+                  Area = "auxiliares",
                   Role = Security.Authorization.Permission.ODSIndicatorViewer
               },
               new ManagementDashboardSectionViewModel
