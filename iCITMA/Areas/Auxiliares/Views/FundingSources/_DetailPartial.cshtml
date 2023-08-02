@@ -12,21 +12,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5>@Html.DisplayNameFor(model => model.Name)</h5>
-                            <p>@Model.Name</p>
-                        </div>                        
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5>@Html.DisplayNameFor(model => model.Description)</h5>
-                            <p>@Model.Description</p>
-                        </div>                        
-                    </div>                     
-                </div>
-            </div>            
+                <dl class="mb-0">
+                    <dt>Nombre</dt>
+                    <dd>@Html.DisplayFor(model => model.Name)</dd>
+                    <dt>Descripción</dt>
+                    @if (Model.Description != null)
+                    {
+                        <dd class="mb-0 text-wrap">@Model.Description</dd>
+                    }
+                    else
+                    {
+                        <dd class="mb-0 text-muted">---</dd>
+                    }
+                </dl>
+            </div>
         </div>
     </div>
 </div>
