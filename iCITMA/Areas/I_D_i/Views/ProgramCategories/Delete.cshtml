@@ -39,6 +39,7 @@
     }    
 </dl>
 <hr />
+
 @using (Html.BeginForm("delete", "programcategories", new { Area = "I_D_i", key = string.Empty }, FormMethod.Post, true, null))
 {
     @Html.HiddenFor(model => model.Id)
