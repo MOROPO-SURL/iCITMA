@@ -4,7 +4,7 @@
     ViewData["Title"] = "Eliminar Fuente de Presupuesto";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
-    {
+{
         new BreadcrumbViewModel
         {
             Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
@@ -12,7 +12,7 @@
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Fuentes de Presupuesto",
+            Caption = "Gestionar Fuentes de Presupuesto",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -24,14 +24,21 @@
     Layout = "_BackendLayout";
 }
 
-<h3>Está seguro que desea eliminar la fuente de presupuesto detallado a continuación?</h3>
+<h3 class="mb-3 mt-4">Está seguro que desea eliminar la fuente de presupuesto detallado a continuación?</h3>
 <dl>
-
-    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dt>Nombre</dt>
     <dd>@Html.DisplayFor(model => model.Name)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Description)</dt>
-    <dd>@Html.DisplayFor(model => model.Description)</dd>    
+    <dt>Descripción</dt>
+    @if (Model.Description != null)
+    {
+        <dd class="mb-0 text-wrap">@Model.Description</dd>
+    }
+    else
+    {
+        <dd class="mb-0 text-muted">---</dd>
+    }
 </dl>
+<hr />
 
 @using (Html.BeginForm("delete", "FundingSources", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post, true, null))
 {
