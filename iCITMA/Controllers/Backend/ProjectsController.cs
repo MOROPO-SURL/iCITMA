@@ -3,15 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Models.View;
-using MOROPO.Framework.Guama.Core.Presentation.Web.Backend.Controllers;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
-using MOROPO.Framework.Guama.Location.Persistence.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,28 +17,38 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
     [Microsoft.AspNetCore.Authorization.Authorize]
     [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("I_D_i")]
-    public class ProjectsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Project, System.Guid, ProjectInputViewModel, ProjectDisplayViewModel>
+    public class ProjectsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<Project, Guid, ProjectInputViewModel, ProjectDisplayViewModel>
     {
-        public readonly IEntityRepository<Person, System.Guid> leaderRepository;
-        public readonly IEntityRepository<ProjectCategory, System.Guid> categoryRepository;
-        public readonly IEntityRepository<Institution, System.Guid> managerRepository;
-        public readonly IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository;
-        public readonly IEntityRepository<ProjectState, System.Guid> projectStateRepository;
-        public readonly IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository;
-        public readonly IEntityRepository<Institution, System.Guid> institutionRepository;
-        public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
-        public readonly IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository;
-        public readonly IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository;
-        public readonly IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository;
-        public readonly IEntityRepository<Person, System.Guid> personRepository;
-        public readonly IEntityRepository<ProjectOutput, System.Guid> projectOutputRepository;
-        public ProjectsController(IEntityRepository<ProjectOutput, System.Guid> projectOutputRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<ODSIndicator, System.Guid> odsIndicatorRepository,
-            IEntityRepository<ImpactIndicator, System.Guid> impactIndicatorRepository, IEntityRepository<ProjectImpact, System.Guid> projectImpactRepository,
-            IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<Institution, System.Guid> institutionRepository,
-            IEntityRepository<ProgramExpectResult, System.Guid> programExpectResultRepository, IEntityRepository<ProjectState, System.Guid> projectStateRepository,
-            IEntityRepository<Persistence.Entities.Program, System.Guid> programRepository, IEntityRepository<Institution, System.Guid> managerRepository,
-            IEntityRepository<ProjectCategory, System.Guid> categoryRepository, IEntityRepository<Person, System.Guid> leaderRepository, IEntityRepository<Project, Guid> repository,
-            IStringLocalizer<ProjectsController> localizer, ILogger<ProjectsController> logger) : base(repository, localizer, logger)
+        public readonly IEntityRepository<Person, Guid> leaderRepository;
+        public readonly IEntityRepository<ProjectCategory, Guid> categoryRepository;
+        public readonly IEntityRepository<Institution, Guid> managerRepository;
+        public readonly IEntityRepository<Persistence.Entities.Program, Guid> programRepository;
+        public readonly IEntityRepository<ProjectState, Guid> projectStateRepository;
+        public readonly IEntityRepository<ProgramExpectResult, Guid> programExpectResultRepository;
+        public readonly IEntityRepository<Institution, Guid> institutionRepository;
+        public readonly IEntityRepository<KeyWord, Guid> keyWordRepository;
+        public readonly IEntityRepository<ProjectImpact, Guid> projectImpactRepository;
+        public readonly IEntityRepository<ImpactIndicator, Guid> impactIndicatorRepository;
+        public readonly IEntityRepository<ODSIndicator, Guid> odsIndicatorRepository;
+        public readonly IEntityRepository<Person, Guid> personRepository;
+        public readonly IEntityRepository<ProjectOutput, Guid> projectOutputRepository;
+        public ProjectsController(
+            IEntityRepository<ProjectOutput, Guid> projectOutputRepository, 
+            IEntityRepository<Person, Guid> personRepository, 
+            IEntityRepository<ODSIndicator, Guid> odsIndicatorRepository,
+            IEntityRepository<ImpactIndicator, Guid> impactIndicatorRepository, 
+            IEntityRepository<ProjectImpact, Guid> projectImpactRepository,
+            IEntityRepository<KeyWord, Guid> keyWordRepository, 
+            IEntityRepository<Institution, Guid> institutionRepository,
+            IEntityRepository<ProgramExpectResult, Guid> programExpectResultRepository, 
+            IEntityRepository<ProjectState, Guid> projectStateRepository,
+            IEntityRepository<Persistence.Entities.Program, Guid> programRepository, 
+            IEntityRepository<Institution, Guid> managerRepository,
+            IEntityRepository<ProjectCategory, Guid> categoryRepository, 
+            IEntityRepository<Person, Guid> leaderRepository, 
+            IEntityRepository<Project, Guid> repository,
+            IStringLocalizer<ProjectsController> localizer, 
+            ILogger<ProjectsController> logger) : base(repository, localizer, logger)
         {
             this.leaderRepository = leaderRepository;
             this.categoryRepository = categoryRepository;
@@ -63,6 +69,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             return View();
         }
+
         [RequirePermissions(Permission.ProjectCreator)]
         public override IActionResult Create() => base.Create();
 
@@ -91,104 +98,131 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             return base.Delete(key);
         }
 
-        private void PopulateCategory(ProjectInputViewModel modelInput)
+        private void Populate(ProjectInputViewModel modelInput)
         {
-            modelInput.CategorySelected = categoryRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            modelInput.CategorySelectListItems = categoryRepository.GetAll().Select(c => new SelectListItem
             {
                 Value = c.Id.ToString(),
                 Text = c.Name
             }).ToArray();
-        }
-
-        private void PopulateManager(ProjectInputViewModel modelInput)
-        {
-            modelInput.ManagerSelected = managerRepository.GetAll().Select(m => new SelectListItem
+            modelInput.InstitutionSelectListItems = managerRepository.GetAll().Select(m => new SelectListItem
             {
                 Value = m.Id.ToString(),
                 Text = m.Identity.Name
             }).ToArray();
-        }
-
-        private void PopulateLeader(ProjectInputViewModel modelInput)
-        {
-            modelInput.LeaderSelected = leaderRepository.GetAll().Select(l => new SelectListItem
+            modelInput.PersonSelectListItems = leaderRepository.GetAll().Select(l => new SelectListItem
             {
                 Value = l.Id.ToString(),
                 Text = $"{l.Identity.Name} {l.Identity.LastName}"
             }).ToArray();
-        }
-
-        private void PopulateProgram(ProjectInputViewModel modelInput)
-        {
-            modelInput.ProgramSelected = programRepository.GetAll().Select(p => new SelectListItem
+            modelInput.ProgramSelectListItems = programRepository.GetAll().Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),
                 Text = p.Name
             }).ToArray();
-        }
-
-        private void PopulateProjectState(ProjectInputViewModel modelInput)
-        {
-            modelInput.ProjectStateSelected = projectStateRepository.GetAll().Select(p => new SelectListItem
+            modelInput.StateSelectListItems = projectStateRepository.GetAll().Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),
                 Text = p.Name
             }).ToArray();
-        }
-
-        protected override void PreCreate(Project entity, ProjectInputViewModel modelInput)
-        {
-            base.PreCreate(entity, modelInput);
-
-            PopulateCategory(modelInput);
-            PopulateManager(modelInput);
-            PopulateLeader(modelInput);
-            PopulateProgram(modelInput);
-            PopulateProjectState(modelInput);
-
         }
 
         protected override void ConfigureCreate(ProjectInputViewModel modelInput)
         {
             base.ConfigureCreate(modelInput);
 
-            PopulateCategory(modelInput);
-            PopulateManager(modelInput);
-            PopulateLeader(modelInput);
-            PopulateProgram(modelInput);
-            PopulateProjectState(modelInput);
+            Populate(modelInput);
         }
-
-
 
         protected override void ConfigurePostFailCreateValidation(ProjectInputViewModel modelInput)
         {
             base.ConfigurePostFailCreateValidation(modelInput);
 
-            PopulateCategory(modelInput);
-            PopulateManager(modelInput);
-            PopulateLeader(modelInput);
-            PopulateProgram(modelInput);
-            PopulateProjectState(modelInput);
+            Populate(modelInput);
         }
 
         protected override void ConfigureEdit(Project entity, ProjectInputViewModel modelInput)
         {
             base.ConfigureEdit(entity, modelInput);
 
-            PopulateCategory(modelInput);
-            PopulateManager(modelInput);
-            PopulateLeader(modelInput);
-            PopulateProgram(modelInput);
-            PopulateProjectState(modelInput);
+            Populate(modelInput);
         }
 
-        protected override void PostCreate(Project entity, ProjectInputViewModel modelInput)
+        protected override void ConfigurePostFailEditValidation(Project entity, ProjectInputViewModel modelInput)
         {
-            base.PostCreate(entity, modelInput);
+            base.ConfigurePostFailEditValidation(entity, modelInput);
+
+            Populate(modelInput);
+        }
+
+        protected override void ValidateCreate(ProjectInputViewModel modelInput)
+        {
+            base.ValidateCreate(modelInput);
+
+            if (modelInput.EndAt != null && modelInput.EndAt.Value.Date < modelInput.StartAt.Date)
+            {
+                ModelState.AddModelError("EndAt", "La Fecha de Terminación no puede ser menor que la Fecha de Inicio");
+            }
+        }
+
+        protected override void ValidateEdit(ProjectInputViewModel modelInput)
+        {
+            base.ValidateEdit(modelInput);
+
+            if (modelInput.EndAt != null && modelInput.EndAt.Value.Date < modelInput.StartAt.Date)
+            {
+                ModelState.AddModelError("EndAt", "La Fecha de Terminación no puede ser menor que la Fecha de Inicio");
+            }
+        }
+
+        protected override void PreCreate(Project entity, ProjectInputViewModel modelInput)
+        {
+            base.PreCreate(entity, modelInput);
+
+            entity.CategoryId = modelInput.CategoryId.Value;
+            entity.ManagerId = modelInput.ManagerId.Value;
+            entity.LeaderId = modelInput.LeaderId.Value;
+            entity.ProgramId = modelInput.ProgramId.Value;
+            entity.StateId = modelInput.StateId.Value;
+        }
+
+        protected override void PreEdit(Project entity, ProjectInputViewModel modelInput)
+        {
+            base.PreEdit(entity, modelInput);
+
+            if (entity.CategoryId != modelInput.CategoryId)
+            {
+                entity.CategoryId = modelInput.CategoryId.Value;
+                entity.Category = categoryRepository.Get(modelInput.CategoryId.Value);
+            }
+
+            if (entity.ManagerId != modelInput.ManagerId)
+            {
+                entity.ManagerId = modelInput.ManagerId.Value;
+                entity.Manager = institutionRepository.Get(modelInput.ManagerId.Value);
+            }
+
+            if (entity.LeaderId != modelInput.LeaderId)
+            {
+                entity.LeaderId = modelInput.LeaderId.Value;
+                entity.Leader = personRepository.Get(modelInput.LeaderId.Value);
+            }
+
+            if (entity.ProgramId != modelInput.ProgramId)
+            {
+                entity.ProgramId = modelInput.ProgramId.Value;
+                entity.Program = programRepository.Get(modelInput.ProgramId.Value);
+            }
+
+            if (entity.StateId != modelInput.StateId)
+            {
+                entity.StateId = modelInput.StateId.Value;
+                entity.State = projectStateRepository.Get(modelInput.StateId.Value);
+            }
         }
 
         #region ProgramExpectResult
+
         [Route("edit/{key}/ProgramExpectResults")]
         [RequirePermissions(Permission.ProjectViewer)]
         public IActionResult ProgramExpectResults(System.Guid key)
@@ -469,28 +503,29 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         #endregion
 
         #region ProjectKeyWorld
-        [HttpGet]
-        [Route("edit/{key}/projectKeyWorlds")]
-        [RequirePermissions(Permission.ProjectEditor)]
-        public IActionResult EditProjectKeyWorlds(Guid key)
-        {
-            var entity = Repository.Get(key);
+        
+        //[HttpGet]
+        //[Route("edit/{key}/projectKeyWorlds")]
+        //[RequirePermissions(Permission.ProjectEditor)]
+        //public IActionResult EditProjectKeyWorlds(Guid key)
+        //{
+        //    var entity = Repository.Get(key);
 
-            var model = new ProjectInputViewModel();
+        //    var model = new ProjectInputViewModel();
 
-            if (entity != null)
-            {
+        //    if (entity != null)
+        //    {
 
-                PopulateKeyWords(entity, model.KeyWordsToSelect);
+        //        PopulateKeyWords(entity, model.KeyWordsToSelect);
 
-                model.Import(entity);
+        //        model.Import(entity);
 
-                return View(model);
-            }
-            return View(model);
-        }
+        //        return View(model);
+        //    }
+        //    return View(model);
+        //}
 
-        private void PopulateKeyWords(Persistence.Entities.Project entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        private void PopulateKeyWords(Project entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
         {
             var keyWords = keyWordRepository.GetAll();
 
@@ -506,46 +541,47 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
         }
 
-        [HttpPost]
-        [Route("edit/{key}/projectKeyWorlds")]
-        [RequirePermissions(Permission.ProjectEditor)]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditProjectKeyWorlds(Guid key, ProjectInputViewModel modelInput)
-        {
-            Persistence.Entities.Project entity = null;
+        //[HttpPost]
+        //[Route("edit/{key}/projectKeyWorlds")]
+        //[RequirePermissions(Permission.ProjectEditor)]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult EditProjectKeyWorlds(Guid key, ProjectInputViewModel modelInput)
+        //{
+        //    Persistence.Entities.Project entity = null;
 
-            try
-            {
-                entity = Repository.Get(key);
-            }
-            catch { }
+        //    try
+        //    {
+        //        entity = Repository.Get(key);
+        //    }
+        //    catch { }
 
-            if (entity == null)
-            {
-                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+        //    if (entity == null)
+        //    {
+        //        SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
 
-                return GetDefaultActionResult();
-            }
+        //        return GetDefaultActionResult();
+        //    }
 
-            entity.KeyWordBridges.Clear();
+        //    entity.KeyWordBridges.Clear();
 
-            foreach (var item in modelInput.KeyWordsToSelect)
-            {
-                if (!item.Selected) continue;
+        //    foreach (var item in modelInput.KeyWordsToSelect)
+        //    {
+        //        if (!item.Selected) continue;
 
-                entity.KeyWordBridges.Add(new ProjectKeyWordBridge
-                {
-                    ProwId = entity.Id,
-                    SternId = item.Id
-                });
-            }
+        //        entity.KeyWordBridges.Add(new ProjectKeyWordBridge
+        //        {
+        //            ProwId = entity.Id,
+        //            SternId = item.Id
+        //        });
+        //    }
 
-            Repository.Update(entity, User.Identity.Name);
+        //    Repository.Update(entity, User.Identity.Name);
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        //    SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
 
-            return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
-        }
+        //    return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
+        //}
+
         #endregion
 
         #region Client

@@ -65,8 +65,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-
-                @if (Model.KeyWordsToSelect != null || Model.KeyWordsToSelect.Count() > 0)
+                @*@if (Model.KeyWordsToSelect != null || Model.KeyWordsToSelect.Count() > 0)
                 {
                     @foreach (var item in Model.KeyWordsToSelect)
                     {
@@ -74,9 +73,7 @@
                             @Html.EditorFor(model => item, "SelectionDescriptedGuidIDItemInputViewModel", string.Format("KeyWordsToSelect[{0}]", selectableIndex++))
                         </div>
                     }
-                }
-
-
+                }*@
             </div>
         </div>
         <div class="card-footer">

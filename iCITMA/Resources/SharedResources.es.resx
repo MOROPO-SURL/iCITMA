@@ -741,4 +741,31 @@
   <data name="Address" xml:space="preserve">
     <value>Dirección</value>
   </data>
+  <data name="Beneficiary" xml:space="preserve">
+    <value>Beneficiarios</value>
+  </data>
+  <data name="Budget" xml:space="preserve">
+    <value>Presupuesto</value>
+  </data>
+  <data name="Context" xml:space="preserve">
+    <value>Contexto</value>
+  </data>
+  <data name="MainExecutor" xml:space="preserve">
+    <value>Entidad Ejecutora Principal</value>
+  </data>
+  <data name="MainObjetive" xml:space="preserve">
+    <value>Objetivo Principal</value>
+  </data>
+  <data name="Problem" xml:space="preserve">
+    <value>Problema</value>
+  </data>
+  <data name="StartAt" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Resumen</value>
+  </data>
 </root>

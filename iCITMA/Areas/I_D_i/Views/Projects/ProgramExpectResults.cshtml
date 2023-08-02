@@ -69,8 +69,8 @@
 
                 @await Html.PartialAsync("AddProgramExpectResultPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectProgramExpectResultInputViewModel
                 {
-                ProjectId = Model.Id,
-                ProgramId = Model.ProgramId
+                    ProjectId = Model.Id,
+                    ProgramId = Model.ProgramId.Value
                 })
                 <table class="table" style="margin: 0;">
                     <thead>

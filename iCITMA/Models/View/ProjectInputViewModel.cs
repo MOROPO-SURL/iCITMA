@@ -1,67 +1,79 @@
-﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
     public class ProjectInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<Project, System.Guid>
     {
-        public Guid Id { get; set; }
+        public ProjectInputViewModel()
+        {
+            StartAt = System.DateTime.Now;
+        }
+
+        public System.Guid Id { get; set; }
+        
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Title")]
         public string Title { get; set; }
+        
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Code")]
         public string Code { get; set; }
+        
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Program")]
-        public System.Guid ProgramId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ProgramSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+        public System.Guid? ProgramId { get; set; }
+        public SelectListItem[] ProgramSelectListItems { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Category")]
-        public System.Guid CategoryId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> CategorySelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+        public System.Guid? CategoryId { get; set; }
+        public SelectListItem[] CategorySelectListItems { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
-        [Display(Name = "Principal Executor")]
-        public System.Guid ManagerId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ManagerSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+        [Display(Name = "MainExecutor")]
+        public System.Guid? ManagerId { get; set; }
+        public SelectListItem[] InstitutionSelectListItems { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
-        [Display(Name = "Boss")]
-        public System.Guid LeaderId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> LeaderSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-        [Display(Name = "ProjectState")]
-        public System.Guid ProjectStateId { get; set; }
-        public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> ProjectStateSelected { get; set; }
-            = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
-        [Display(Name = "Start At")]
-        [DataType(DataType.Date)]        
-        public System.DateTime StartAt { get; set; } = DateTime.Now;
-        [Display(Name = "End At")]        
+        [Display(Name = "Leader")]
+        public System.Guid? LeaderId { get; set; }
+        public SelectListItem[] PersonSelectListItems { get; set; }
+
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
+        [Display(Name = "Status")]
+        public System.Guid? StateId { get; set; }
+        public SelectListItem[] StateSelectListItems { get; set; }
+
+        [Display(Name = "StartAt")]      
+        public System.DateTime StartAt { get; set; }
+
+        [Display(Name = "EndAt")]        
         public System.DateTime? EndAt { get; set; }
+        
         [Display(Name = "Budget")]
         public decimal? Budget { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Summary")]
         public string Summary { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Problem")]
         public string Problem { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Context")]
         public string Context { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         [Display(Name = "Beneficiary")]
         public string Beneficiary { get; set; }
+
         [Required(ErrorMessage = "RequiredValidationErrorMessage")]
-        [Display(Name = "Main Objetive")]
+        [Display(Name = "MainObjetive")]
         public string MainObjetive { get; set; }
-
-        public List<ProjectProgramExpectResultBridge> ProgramExpectResultBridges { get; set; }
-
-        public List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>> KeyWordsToSelect { get; set; } = new List<Framework.Guama.Core.Presentation.Models.View.SelectionDescriptedItemInputViewModel<System.Guid>>();
 
         public Project Export()
         {
@@ -77,11 +89,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Id = entity.Id;
             Title = entity.Title;
             Code = entity.Code;
-            ProgramId = (Guid)entity.ProgramId;
-            CategoryId = (Guid)entity.CategoryId;
-            ManagerId = (Guid)entity.ManagerId;
-            LeaderId = (Guid)entity.LeaderId;
-            ProjectStateId = (Guid)entity.StateId;
+            ProgramId = entity.ProgramId;
+            CategoryId = entity.CategoryId;
+            ManagerId = entity.ManagerId;
+            LeaderId = entity.LeaderId;
+            StateId = entity.StateId;
             StartAt = entity.StartAt;
             EndAt = entity.EndAt;
             Budget = entity.Budget;
@@ -90,18 +102,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             Context = entity.Context;
             Beneficiary = entity.Beneficiary;
             MainObjetive = entity.MainObjetive;
-            ProgramExpectResultBridges = entity.ProgramExpectResultBridges;
         }
 
         public void Mergue(Project entity)
         {
             entity.Title = Title;
-            entity.Code = Code; 
-            entity.ProgramId = ProgramId;
-            entity.CategoryId = CategoryId;
-            entity.ManagerId = ManagerId;
-            entity.LeaderId = LeaderId;
-            entity.StateId = ProjectStateId;
+            entity.Code = Code;
             entity.StartAt = StartAt;
             entity.EndAt = EndAt;
             entity.Budget = Budget;
@@ -110,7 +116,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             entity.Context = Context;
             entity.Beneficiary = Beneficiary;
             entity.MainObjetive = MainObjetive;
-            entity.ProgramExpectResultBridges = ProgramExpectResultBridges;
         }
     }
 }
