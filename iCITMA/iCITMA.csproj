@@ -42,6 +42,7 @@
     <None Include="Views\Shared\EditorTemplates\SelectionIntIDItemInputViewModel.cshtml" />
     <None Include="Views\Shared\EditorTemplates\SelectionLongIDItemInputViewModel.cshtml" />
     <None Include="Views\Shared\EditorTemplates\SelectionStringIDItemInputViewModel.cshtml" />
+    <None Include="wwwroot\lib\chartjs\chart.min.js" />
   </ItemGroup>
 
   <ItemGroup>
