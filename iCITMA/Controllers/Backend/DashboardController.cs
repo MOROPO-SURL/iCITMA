@@ -52,7 +52,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 UserTotalCount = userRepository.Count(),
                 UserDisabledCount = userRepository.Count(entity => !entity.Enabled),
                 TraceTotalCount = traceRepository.Count(),
-                TraceWeekCount = traceRepository.Count(),
                 UserActivityMap = new Dictionary<string, long>(),
                 WeekTracesMap = new Dictionary<string, int>()
             };
@@ -76,7 +75,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             for (System.DateTime currentDate = passWeekEdgeDate; currentDate <= startEdgeDate; currentDate = currentDate.AddDays(1))
             {
-                model.WeekTracesMap.Add(DAYS_OF_WEEK[(int)currentDate.DayOfWeek], traceRepository.Count(entity => entity.Registered.Date == currentDate));
+                var dailyCount = traceRepository.Count(entity => entity.Registered.Date == currentDate);
+
+                model.TraceWeekCount += dailyCount;
+
+                model.WeekTracesMap.Add(DAYS_OF_WEEK[(int)currentDate.DayOfWeek], dailyCount);
             }
 
             return View(model);
