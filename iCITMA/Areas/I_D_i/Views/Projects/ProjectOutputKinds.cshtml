@@ -1,0 +1,120 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectOutputManagerViewModel
+
+@{
+    ViewData["Title"] = "Editar Proyecto (Tipos de Salida)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración de Proyectos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4>Editar Proyecto</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Project.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades que Tributa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Project.Id)">Participantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectKeyWorlds", Model.Project.Id)">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Project.Id)">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Objetivos específicos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Resultados esperados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Project.Id)">Impactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Salidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Participantes </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <div class="page-header">
+                    <h4>Agregar<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-expectresult"><span class="mdi mdi-plus"></span> Agregar</a></h4>
+                </div>
+
+                @await Html.PartialAsync("AddProjectOutputPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectOutputInputViewModel
+                {
+                ProjectId = Model.Project.Id,
+                OutputKindSelected = ViewBag.OutputKinds
+                })
+                <table class="table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("Tipo de Salida")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Descripción")</th>                           
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ProjectOuputs.Count() > 0)
+                        {
+                            @foreach (var item in Model.ProjectOuputs)
+                            {
+                                var modelInput = new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectOutputInputViewModel();
+                                var modelDisplay = new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectOutputDisplayViewModel();
+
+                                modelInput.Import(item);
+                                modelDisplay.Import(item);
+
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")">@item.Kind.Name</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Descrición")">
+                                        @item.Description
+                                    </td>                                   
+                                    <td style="vertical-align: middle;">
+                                        <div class="btn-group btn-group-sm">                                            
+                                            <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-projectimpact-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</a>
+                                            @await Html.PartialAsync("DeleteProjectOutputPartial", modelDisplay)
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

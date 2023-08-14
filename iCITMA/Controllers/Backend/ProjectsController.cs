@@ -32,7 +32,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ODSIndicator, Guid> odsIndicatorRepository;
         public readonly IEntityRepository<Person, Guid> personRepository;
         public readonly IEntityRepository<ProjectOutput, Guid> projectOutputRepository;
+        public readonly IEntityRepository<OutputKind, Guid> outputKindRepository;
         public ProjectsController(
+            IEntityRepository<OutputKind, Guid> outputKindRepository,
             IEntityRepository<ProjectOutput, Guid> projectOutputRepository, 
             IEntityRepository<Person, Guid> personRepository, 
             IEntityRepository<ODSIndicator, Guid> odsIndicatorRepository,
@@ -63,6 +65,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.odsIndicatorRepository = odsIndicatorRepository;
             this.personRepository = personRepository;
             this.projectOutputRepository = projectOutputRepository;
+            this.outputKindRepository = outputKindRepository;
         }
 
         public IActionResult Index()
@@ -1212,7 +1215,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
         #endregion
 
-       /* #region OutputKinds
+        #region OutputKinds
         [Route("edit/{key}/ProjectOutputKinds")]
         [RequirePermissions(Permission.ProjectEditor)]
         public IActionResult ProjectOutputKinds(System.Guid key)
@@ -1221,7 +1224,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 var entity = Repository.Get(key);                
                 var projectOutputs = projectOutputRepository.GetAll().Where(p => p.ProjectId == key).ToList();
-                
+                var outputKinds = outputKindRepository.GetAll().ToArray();
 
                 var projectOuputManagerModel = new ProjectOutputManagerViewModel
                 {
@@ -1230,31 +1233,21 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 projectOuputManagerModel.Project.Import(entity);
                 projectOuputManagerModel.ProjectOuputs = projectOutputs;
 
-                ViewBag.ImpactIndicator = impactIndicatorRepository.GetAll().Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Name
-                }).ToArray();
+                
 
-                var selectedExpectResults = SelectedProgramExpectResult(projectImpacts);
-                var notSelectedExpectResults = programExpectResults.Except(selectedExpectResults).ToArray();
+                var selectedOutputKinds = SelectedOutputKind(projectOutputs);
+                var notSelectedOutputKinds = outputKinds.Except(selectedOutputKinds).ToArray();
+                                
 
-                var selectedODSs = SelectedODSIndicator(projectImpacts);
-                var notSelectedODSs = odsIndicators.Except(selectedODSs).ToArray();
-
-                ViewBag.ProgramExpectResults = notSelectedExpectResults.Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = $"{p.Title} - {p.Program.Name}"
-                }).ToArray();
-
-                ViewBag.ODSIndicators = notSelectedODSs.Select(p => new SelectListItem
+                ViewBag.OutputKinds = notSelectedOutputKinds.Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
                     Text = $"{p.Name}"
                 }).ToArray();
 
-                return View(projectImpactManagerModel);
+                
+
+                return View(projectOuputManagerModel);
             }
             catch (Exception)
             {
@@ -1262,6 +1255,106 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 throw;
             }
         }
-        #endregion*/
+
+        private OutputKind[] SelectedOutputKind(List<ProjectOutput> projectOutputs)
+        {
+            var selectedOutputKinds = new List<OutputKind>();
+
+            foreach (var projectOutput in projectOutputs)
+            {
+                var outputKind = projectOutput.Kind;
+                selectedOutputKinds.Add(outputKind);
+            }
+
+            return selectedOutputKinds.ToArray();
+        }
+
+        [Route("edit/{key}/ProjectOutputKinds/add")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult AddProjectOutputKinds(ProjectOutputInputViewModel modelInput)
+        {
+            var key = (System.Guid)modelInput.ProjectId;
+
+            var project = Repository.Get(key);
+
+            var outputKind = outputKindRepository.Get(modelInput.OutputKindId);
+            try
+            {
+                if (key != System.Guid.Empty && project != null && outputKind != null)
+                {
+                    var entity = Repository.Get(key);
+
+                    var projectOutput = new ProjectOutput
+                    {
+                        ProjectId = key,
+                        Project = project,
+                        KindId = modelInput.OutputKindId,
+                        Kind = outputKind,
+                        Description = modelInput.Description
+                    };
+
+                    projectOutputRepository.Add(projectOutput, User.Identity.Name, false);
+
+                    Repository.Update(entity, User.Identity.Name, true);
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                }
+                else
+                {
+                    var messages = new List<string>();
+
+                    foreach (var item in ModelState)
+                    {
+                        if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                        foreach (var error in item.Value.Errors)
+                        {
+                            messages.Add(error.ErrorMessage);
+                        }
+                    }
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return RedirectToAction("ProjectOutputKinds", new { key = project.Id });
+        }
+
+        [Route("edit/{key}/ProjectOutputKinds/delete")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult DeleteProjectOutputKinds(ProjectOutputDisplayViewModel displayViewModel)
+        {
+            var projectOutput = projectOutputRepository.GetAll().FirstOrDefault(p => p.Id == displayViewModel.Id);
+            var ProjectId = projectOutput.ProjectId;
+
+            try
+            {
+
+                projectOutputRepository.Delete(projectOutput, User.Identity.Name, true);
+
+
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("ProjectOutputKinds", new { key = ProjectId });
+        }
+
+
+        #endregion
     }
 }
