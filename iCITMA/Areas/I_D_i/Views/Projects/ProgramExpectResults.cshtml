@@ -1,7 +1,7 @@
 ﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectInputViewModel
 
 @{
-    ViewData["Title"] = "Editar Proyecto (Resultados esperados del programa)";
+    ViewData["Title"] = "Editar Proyecto (Prioridades que Tributa)";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
     {
@@ -32,7 +32,7 @@
                 <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">Prioridades que Tributa</a>
+                <a class="nav-link active" href="#">Prioridades</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Id)">Participantes</a>
@@ -44,10 +44,10 @@
                 <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Id)">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Objetivos específicos</a>
+                <a class="nav-link" href="#">Objetivos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Resultados esperados</a>
+                <a class="nav-link" href="#">Resultados</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Id)">Impactos</a>
@@ -56,7 +56,7 @@
                 <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Id)">Salidas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Id)">Participantes </a>
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Id)">Investigadores</a>
             </li>
         </ul>
     </div>

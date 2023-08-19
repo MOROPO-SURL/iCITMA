@@ -768,4 +768,13 @@
   <data name="Summary" xml:space="preserve">
     <value>Resumen</value>
   </data>
+  <data name="Program" xml:space="preserve">
+    <value>Programa</value>
+  </data>
+  <data name="Participan" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="ImpactIndicators" xml:space="preserve">
+    <value>Indicadores de Impacto</value>
+  </data>
 </root>

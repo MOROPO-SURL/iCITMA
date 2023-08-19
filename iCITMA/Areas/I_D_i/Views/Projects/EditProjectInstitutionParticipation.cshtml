@@ -73,7 +73,7 @@
                 <a class="nav-link" href="@Url.Action("edit", @Model.Project.Id)">Generales</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades que Tributa</a>
+                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" href="#">Participantes</a>
@@ -85,10 +85,10 @@
                 <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Project.Id)">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Objetivos específicos</a>
+                <a class="nav-link" href="#">Objetivos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Resultados esperados</a>
+                <a class="nav-link" href="#">Resultados</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Project.Id)">Impactos</a>
@@ -97,7 +97,7 @@
                 <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Project.Id)">Salidas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Participantes </a>
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Investigadores </a>
             </li>
         </ul>
     </div>
@@ -121,7 +121,7 @@
                             
                             <div class="mt-2">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detail</span></button>
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detalles</span></button>
                                     <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-participant-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
                                 </div>
                             </div>

@@ -6,7 +6,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
     {
         public System.Guid ProjectId { get; set; }
 
-        [Display(Name = "Client")]
+        [Display(Name = "clients")]
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> NotSelectedClients { get; set; } = new System.Collections.Generic.List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
         [Required(ErrorMessage = "RequiredArtistValidationErrorMessage")]
         [Display(Name = "InstitutionId")]

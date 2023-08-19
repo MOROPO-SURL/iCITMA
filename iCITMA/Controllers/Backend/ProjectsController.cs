@@ -852,57 +852,45 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.ProjectViewer)]
         public IActionResult AddProjectImpact(ProjectImpactInputViewModel modelInput)
         {
-            var key =(System.Guid) modelInput.ProjectId;                       
-
-            var project = Repository.Get(key);
+            var entity = Repository.Get(modelInput.ProjectId.Value);
 
             var indicator = impactIndicatorRepository.Get(modelInput.ImpactIndicatorId);
-            try
+
+            if (ModelState.IsValid)
             {
-                if (key != System.Guid.Empty && project != null && indicator != null) 
+                var projectImpact = new ProjectImpact
                 {
-                    var entity = Repository.Get(key);
+                    ProjectId = entity.Id,
+                    Project = entity,
+                    IndicatorId = modelInput.ImpactIndicatorId,
+                    Indicator = indicator,
+                    Description = modelInput.Description
+                };
 
-                    var projectImpact = new ProjectImpact
-                    {
-                        ProjectId = key,
-                        Project = project,
-                        IndicatorId = modelInput.ImpactIndicatorId,
-                        Indicator = indicator,
-                        Description = modelInput.Description
-                    };
-                    
-                    projectImpactRepository.Add(projectImpact, User.Identity.Name, false);
+                projectImpactRepository.Add(projectImpact, User.Identity.Name, false);
 
-                    Repository.Update(entity, User.Identity.Name, true);
+                Repository.Update(entity, User.Identity.Name, true);
 
-                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
-                }
-                else
-                {
-                    var messages = new List<string>();
-
-                    foreach (var item in ModelState)
-                    {
-                        if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
-
-                        foreach (var error in item.Value.Errors)
-                        {
-                            messages.Add(error.ErrorMessage);
-                        }
-                    }
-
-                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
-                }
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
             }
-            catch (Exception)
+            else
             {
+                var messages = new List<string>();
 
-                throw;
-            }           
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
 
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
 
-            return RedirectToAction("ProjectImpact", new { key = project.Id });
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, "Agregar Impacto", messages.ToArray());
+            }
+
+            return RedirectToAction("ProjectImpact", new { key = entity.Id });
         }
 
         [Route("edit/{key}/ProjectImpact/delete")]
