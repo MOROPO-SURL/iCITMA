@@ -357,3 +357,4 @@ MigrationBackup/
 /.vscode/launch.json
 /.vscode/tasks.json
 /iCITMA/wwwroot/media/attachments
+iCITMA/.DS_Store
