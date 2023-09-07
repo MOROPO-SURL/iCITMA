@@ -33,7 +33,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<Person, Guid> personRepository;
         public readonly IEntityRepository<ProjectOutput, Guid> projectOutputRepository;
         public readonly IEntityRepository<OutputKind, Guid> outputKindRepository;
+        public readonly IEntityRepository<SpecificObjective, Guid> specificObjectiveRepository;
         public ProjectsController(
+            IEntityRepository<SpecificObjective, Guid> specificObjectiveRepository,
             IEntityRepository<OutputKind, Guid> outputKindRepository,
             IEntityRepository<ProjectOutput, Guid> projectOutputRepository, 
             IEntityRepository<Person, Guid> personRepository, 
@@ -66,6 +68,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.personRepository = personRepository;
             this.projectOutputRepository = projectOutputRepository;
             this.outputKindRepository = outputKindRepository;
+            this.specificObjectiveRepository = specificObjectiveRepository;
         }
 
         public IActionResult Index()
@@ -1431,6 +1434,109 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
 
+        #endregion
+
+        #region SpecificObjective       
+        [Route("edit/{key}/SpecificObjectives")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult SpecificObjectives(System.Guid key)
+        {
+            try
+            {
+                var entity = Repository.Get(key);
+                var projectSpecificObjectives = specificObjectiveRepository.GetAll().Where(s => s.ProjectId == entity.Id).ToList();
+                
+
+                var projectSpecificObjectiveManagerModel = new ProjectSpecificObjectiveManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel(),
+                    Objectives = projectSpecificObjectives
+                };
+                
+                projectSpecificObjectiveManagerModel.Project.Import(entity);
+
+                return View(projectSpecificObjectiveManagerModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [Route("edit/{key}/SpecificObjectives/add")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult AddSpecificObjectives(SpecificObjectiveInputViewModel modelInput)
+        {
+            var entity = Repository.Get(modelInput.ProjectId);
+            
+            try
+            {
+                if (entity != null)
+                {
+
+                    var spObjective = new SpecificObjective
+                    {
+                        Objective = modelInput.Objective,
+                        ProjectId = modelInput.ProjectId
+                    };                                       
+
+
+                    specificObjectiveRepository.Add(spObjective, User.Identity.Name, true);
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                }
+                else
+                {
+                    var messages = new List<string>();
+
+                    foreach (var item in ModelState)
+                    {
+                        if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                        foreach (var error in item.Value.Errors)
+                        {
+                            messages.Add(error.ErrorMessage);
+                        }
+                    }
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return RedirectToAction("SpecificObjectives", new { key = entity.Id });
+        }
+
+        [Route("edit/{key}/SpecificObjectives/delete")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult DeleteSpecificObjectives(SpecificObjectiveDisplayViewModel displayViewModel)
+        {           
+            var spObjective = specificObjectiveRepository.Get(displayViewModel.Id);           
+            try
+            {
+                specificObjectiveRepository.Delete(spObjective, User.Identity.Name, true);            
+                
+
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("SpecificObjectives", new { key = spObjective.Project.Id });
+        }
         #endregion
     }
 }
