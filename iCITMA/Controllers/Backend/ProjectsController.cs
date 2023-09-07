@@ -507,83 +507,171 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         #region ProjectKeyWorld
         
-        //[HttpGet]
-        //[Route("edit/{key}/projectKeyWorlds")]
-        //[RequirePermissions(Permission.ProjectEditor)]
-        //public IActionResult EditProjectKeyWorlds(Guid key)
-        //{
-        //    var entity = Repository.Get(key);
-
-        //    var model = new ProjectInputViewModel();
-
-        //    if (entity != null)
-        //    {
-
-        //        PopulateKeyWords(entity, model.KeyWordsToSelect);
-
-        //        model.Import(entity);
-
-        //        return View(model);
-        //    }
-        //    return View(model);
-        //}
-
-        private void PopulateKeyWords(Project entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
+        [HttpGet]
+        [Route("edit/{key}/projectKeyWorlds")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult EditProjectKeyWorlds(Guid key)
         {
-            var keyWords = keyWordRepository.GetAll();
-
-            if (keyWords.Count() > 0)
+            try
             {
-                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<Guid>
+                var entity = Repository.Get(key);
+
+                var keyWords = entity.KeyWordBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedKeyWords = keyWordRepository.GetAll().ToArray();
+
+                if (keyWords.Count() != 0)
                 {
-                    Id = item.Id,
-                    Label = item.Name,
-                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),
-                    Description = item.Description
-                }));
+                    notSelectedKeyWords = notSelectedKeyWords.Except(keyWords).ToArray();
+                }
+                var resultModel = new KeyWordManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel
+                    {
+
+                    }
+                };
+                
+                resultModel.Project.Import(entity);
+
+                resultModel.NotSelectedKeyWords = notSelectedKeyWords.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Name}"
+                }).ToArray();
+
+                resultModel.KeyWordss = keyWords.Select(item =>
+                {
+                    var model = new KeyWordDisplayViewModel
+                    {
+                        ProjectKeyWordDisplayViewModel = new ProjectKeyWordDisplayViewModel
+                        {
+                            ProjectId = key,
+                            KeyWordId = item.Id,
+                            KeyWordName = $"{item.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
             }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
-        //[HttpPost]
-        //[Route("edit/{key}/projectKeyWorlds")]
-        //[RequirePermissions(Permission.ProjectEditor)]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult EditProjectKeyWorlds(Guid key, ProjectInputViewModel modelInput)
-        //{
-        //    Persistence.Entities.Project entity = null;
+        [HttpPost]
+        [Route("edit/projectKeyWorlds/add")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddProjectKeyWord(ProjectKeyWordInputViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
 
-        //    try
-        //    {
-        //        entity = Repository.Get(key);
-        //    }
-        //    catch { }
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch { }
 
-        //    if (entity == null)
-        //    {
-        //        SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
 
-        //        return GetDefaultActionResult();
-        //    }
+                return GetDefaultActionResult();
+            }
 
-        //    entity.KeyWordBridges.Clear();
+            if (ModelState.IsValid)
+            {
+                entity.KeyWordBridges.Add(new ProjectKeyWordBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = modelInput.KeyWordId,
+                    Prow = entity,
+                    Stern = keyWordRepository.Get(modelInput.KeyWordId)
+                });
 
-        //    foreach (var item in modelInput.KeyWordsToSelect)
-        //    {
-        //        if (!item.Selected) continue;
+                Repository.Update(entity, User.Identity.Name);
 
-        //        entity.KeyWordBridges.Add(new ProjectKeyWordBridge
-        //        {
-        //            ProwId = entity.Id,
-        //            SternId = item.Id
-        //        });
-        //    }
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
 
-        //    Repository.Update(entity, User.Identity.Name);
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
 
-        //    SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
 
-        //    return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
-        //}
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/projectKeyWorlds/remove")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveProjectKeyWord(ProjectKeyWordDisplayViewModel modelInput)
+        {
+            Persistence.Entities.Project entity = null;
+
+            try
+            {
+                entity = Repository.Get(modelInput.ProjectId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.KeyWordBridges.FirstOrDefault(exp => exp.ProwId == modelInput.ProjectId && exp.SternId == modelInput.KeyWordId);
+
+                entity.KeyWordBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
+        }        
 
         #endregion
 

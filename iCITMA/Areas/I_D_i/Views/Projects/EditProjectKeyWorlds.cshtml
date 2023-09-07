@@ -1,4 +1,4 @@
-﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectInputViewModel
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.KeyWordManagerViewModel
 
 @{
     ViewData["Title"] = "Editar Proyecto (Palabras Claves)";
@@ -24,64 +24,123 @@
     Layout = "_BackendLayout";
 }
 
-@using (Html.BeginForm("EditProjectKeyWorlds", "projects", new { key = Model.Id }, FormMethod.Post, true, null))
-{
-    var selectableIndex = 0;
-    <div class="card" style="margin-bottom: 20px;">
-        <div class="card-header">
-            <h4 class="mb-0">@ViewData["Title"]</h4>
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Id)">Prioridades</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Id)">Participantes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Palabras Claves</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Id)">Clientes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Objetivos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Resultados</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Id)">Impactos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Id)">Salidas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Id)">Investigadores </a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                @*@if (Model.KeyWordsToSelect != null || Model.KeyWordsToSelect.Count() > 0)
-                {
-                    @foreach (var item in Model.KeyWordsToSelect)
-                    {
-                        <div class="col-md-4">
-                            @Html.EditorFor(model => item, "SelectionDescriptedGuidIDItemInputViewModel", string.Format("KeyWordsToSelect[{0}]", selectableIndex++))
-                        </div>
-                    }
-                }*@
-            </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Modificar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
-        </div>
-    </div>
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .member-img {
+            width: 85%;
+            max-height: 330px;
+        }
+
+        .dropdown-toggle {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin-left: -1px;
+            line-height: 36px;
+        }
+
+            .dropdown-toggle::after {
+                margin: 0 5px;
+            }
+
+        ul.dropdown-menu {
+            width: 100%;
+        }
+    </style>
 }
+
+@section scripts {
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+    <script type="text/javascript">
+        $('.member-select').combobox();
+    </script>
+
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4 class="mb-0">@ViewData["Title"]</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Project.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="@Url.Action("EditProjectInstitutionParticipation", Model.Project.Id)">Participantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Project.Id)">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Objetivos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Resultados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Project.Id)">Impactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Project.Id)">Salidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Investigadores </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        @if (Model.KeyWordss.Count() != 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.KeyWordss)
+                {
+                    <div class="col-lg-2 col-md-6 col-sm-6" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>@item.Name</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group btn-group-sm float-right">
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detalles</span></button>
+                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-key-word-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    await Html.RenderPartialAsync("_ProjectKeyWordDetailPartial", @item);
+                    await Html.RenderPartialAsync("_DeleteProjectKeyWordPartial", @item.ProjectKeyWordDisplayViewModel);
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-muted font-italic">Aun no tiene participantes, haga clic en el boton agregar para comenzar ...</div>
+        }
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-member">Agregar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+    </div>
+    @await Html.PartialAsync("AddProjectKeyWordPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectKeyWordInputViewModel
+    {
+    ProjectId = Model.Project.Id,
+    NotSelectedKeyWords = Model.NotSelectedKeyWords
+    })
+</div>
+
 
 
 
