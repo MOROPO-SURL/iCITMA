@@ -12,6 +12,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]
         public string Description { get; set; }
 
+        public ProjectKeyWordDisplayViewModel ProjectKeyWordDisplayViewModel { get; set; }
+
         public void Import(KeyWord entity)
         {
             Id = entity.Id;

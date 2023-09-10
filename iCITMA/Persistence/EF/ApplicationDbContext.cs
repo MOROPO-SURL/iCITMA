@@ -100,5 +100,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF
         public DbSet<Entities.SceneryKind> SceneryKinds { get; set; }
         public DbSet<Entities.TeachingCategory> TeachingCategories { get; set; }
         public DbSet<Entities.ProgramInstitutionResponsibleBridge> ProgramInstitutionResponsibleBridges { get; set; }
+        public DbSet<Entities.SpecificObjective> SpecificObjectives { get; set; }
     }
 }

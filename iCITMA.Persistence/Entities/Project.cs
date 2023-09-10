@@ -13,7 +13,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
             CurrencyBudgetBridges = new List<ProjectCurrencyBudgetBridge>();
             KeyWordBridges = new List<ProjectKeyWordBridge>();
             InstitutionClientBridges = new List<ProjectInstitutionClientBridge>();
-            PersonParticipationBridges = new List<ProjectPersonParticipationBridge>();
+            PersonParticipationBridges = new List<ProjectPersonParticipationBridge>();            
         }
 
         [System.ComponentModel.DataAnnotations.Key]
@@ -79,6 +79,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 
         public List<ProjectInstitutionClientBridge> InstitutionClientBridges { get; set; }
 
-        public List<ProjectPersonParticipationBridge> PersonParticipationBridges { get; set; }
+        public List<ProjectPersonParticipationBridge> PersonParticipationBridges { get; set; }        
     }
 }
