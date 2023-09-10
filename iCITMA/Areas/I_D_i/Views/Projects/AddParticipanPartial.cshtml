@@ -18,13 +18,13 @@
                     {
                         <div>
                             @Html.LabelFor(model => model.NotSelectedParticipans, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.PersonId, Model.NotSelectedParticipans, "Escribar para buscar partcipante ...", new { @class = "form-control member-select" })
+                            @Html.DropDownListFor(model => model.PersonId, Model.NotSelectedParticipans, "Escriba para buscar participantes ...", new { @class = "form-control member-select" })
                             @Html.ValidationMessageFor(model => model.PersonId, null, new { @class = "text-danger" })
                         </div>
                     }
                     else
                     {
-                        <div class="text-muted font-italic">No hay mas participantes que puedan ser miembros del proyecto</div>
+                        <div class="text-muted font-italic">No hay más participantes que puedan ser miembros del proyecto</div>
                     }
                 </div>
 
