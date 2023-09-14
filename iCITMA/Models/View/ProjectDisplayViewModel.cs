@@ -1,6 +1,8 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
@@ -25,6 +27,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public DateTime? EndAt { get; set; }
         [Display(Name = "Budget")]
         public decimal? Budget { get; set; }
+        public List<InstitutionDisplayViewModel> Participants { get; set; }
+        public List<InstitutionDisplayViewModel> Clients { get; set; }
 
         public void Import(Project entity)
         {
@@ -38,6 +42,21 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
             StartAt = entity.StartAt;
             EndAt = entity.EndAt;
             Budget = entity.Budget;
+            Participants = entity.InstitutionParticipationBridges.Select(i => new InstitutionDisplayViewModel
+            {
+                Name= i.Stern.Identity.Name,
+                Description = i.Stern.Identity.About,
+                CreatedAt = i.Stern.Identity.BornDate
+            }).ToList();
+
+            Clients = entity.InstitutionClientBridges.Select(i => new InstitutionDisplayViewModel
+            {
+                Name = $"{i.Stern.Identity.Name}",
+                Alias = i.Stern.Alia,
+                Description = i.Stern.Identity.About,
+                CreatedAt = i.Stern.Identity.BornDate
+            }).ToList();
+
         }
     }
 }

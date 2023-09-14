@@ -11,11 +11,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <dl class="col-md-12 mb-0">
-                        <dt>Categoría</dt>
-                        <dd>@Model.Category</dd>
-                    </dl>
+                <div class="row">                    
                     <dl class="col-md-6 mb-0">
                         <dt>Representante</dt>
                         <dd>@Model.Manager</dd>
@@ -39,15 +35,33 @@
                     <dl class="col-md-6 mb-0">
                         <dt>Fecha de Terminación</dt>
                         <dd>@Model.EndAt.ToString()</dd>
+                    </dl>                   
+                    
+                    <dl class="col-md-6 mb-0">
+                        <dt>Participantes</dt>
+                        @if(Model.Participants.Count() > 0 )
+                        {
+                            foreach (var participant in Model.Participants)
+                            {
+                                <dd>Nombre: @participant.Name </dd>                               
+
+                            }
+                        }
+                        
                     </dl>
                     <dl class="col-md-6 mb-0">
-                        <dt>Gestor</dt>
-                        <dd>@Model.Manager</dd>
+                        <dt>Clientes</dt>
+                        @if (Model.Clients.Count() > 0)
+                        {
+                            foreach (var participant in Model.Participants)
+                            {
+                                <dd>Nombre: @participant.Name </dd>
+                                
+
+                            }
+                        }
+
                     </dl>
-                    <dl class="col-md-6 mb-0">
-                        <dt>Jefe</dt>
-                        <dd>@Model.Leader</dd>
-                    </dl>                    
                 </div>
             </div>
         </div>
