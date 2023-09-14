@@ -777,4 +777,7 @@
   <data name="ImpactIndicators" xml:space="preserve">
     <value>Indicadores de Impacto</value>
   </data>
+  <data name="keyWord" xml:space="preserve">
+    <value>Palabra Clave</value>
+  </data>
 </root>

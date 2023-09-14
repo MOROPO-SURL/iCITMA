@@ -18,13 +18,13 @@
                     {
                         <div>
                             @Html.LabelFor(model => model.NotSelectedODS, new { @class = "control-label" })
-                            @Html.DropDownListFor(model => model.ODSIndicatorId, Model.NotSelectedODS, "Escribar para buscar ODS ...", new { @class = "form-control member-select" })
+                            @Html.DropDownListFor(model => model.ODSIndicatorId, Model.NotSelectedODS, "Escriba para buscar ODS ...", new { @class = "form-control member-select" })
                             @Html.ValidationMessageFor(model => model.ODSIndicatorId, null, new { @class = "text-danger" })
                         </div>
                     }
                     else
                     {
-                        <div class="text-muted font-italic">No hay mas indicador ODS que puedan formar parte del proyecto</div>
+                        <div class="text-muted font-italic">No hay más indicador ODS que puedan formar parte del proyecto</div>
                     }
                 </div>
 
