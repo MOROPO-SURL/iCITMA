@@ -82,6 +82,7 @@ namespace MOROPO.CITMA.CMG.iCITMA
             services.AddScoped<IEntityRepository<ProjectImpact, System.Guid>, ProjectImpactRepository>();
             services.AddScoped<IEntityRepository<ProjectOutput, System.Guid>, ProjectOutputRepository>();
             services.AddScoped<IEntityRepository<SpecificObjective, System.Guid>, SpecificObjectiveRepository>();
+            services.AddScoped<IEntityRepository<ProjectResult, System.Guid>, ProjectResultRepository>();
 
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IImageFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathImageFileManager>();
             services.AddSingleton<Framework.Guama.Media.Presentation.Web.Common.Managers.Facade.IThumbnailFileManagerFacade, Framework.Guama.Media.Presentation.Web.Common.Managers.RelativePathThumbnailFileManager>();

@@ -35,7 +35,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<ProjectOutput, Guid> projectOutputRepository;
         public readonly IEntityRepository<OutputKind, Guid> outputKindRepository;
         public readonly IEntityRepository<SpecificObjective, Guid> specificObjectiveRepository;
+        public readonly IEntityRepository<ProjectResult, Guid> projectResultRepository;
         public ProjectsController(
+            IEntityRepository<ProjectResult, Guid> projectResultRepository,
             IEntityRepository<SpecificObjective, Guid> specificObjectiveRepository,
             IEntityRepository<OutputKind, Guid> outputKindRepository,
             IEntityRepository<ProjectOutput, Guid> projectOutputRepository,
@@ -70,6 +72,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             this.projectOutputRepository = projectOutputRepository;
             this.outputKindRepository = outputKindRepository;
             this.specificObjectiveRepository = specificObjectiveRepository;
+            this.projectResultRepository = projectResultRepository;
         }
 
         public IActionResult Index()
@@ -1562,6 +1565,112 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("SpecificObjectives", new { key = spObjective.Project.Id });
+        }
+        #endregion
+
+        #region Results
+        [Route("edit/{key}/Results")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        public IActionResult Results(System.Guid key)
+        {
+            try
+            {  
+                var entity = Repository.Get(key);
+                var projectResults = projectResultRepository.GetAll().Where(s => s.ProjectId == entity.Id).ToList();
+
+
+                var projectResultManagerModel = new ProjectResultManagerViewModel
+                {
+                    Project = new ProjectDisplayViewModel(),
+                    Results = projectResults
+                };
+
+                projectResultManagerModel.Project.Import(entity);
+
+                return View(projectResultManagerModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [Route("edit/{key}/Results/add")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult AddResults(ProjectResultInputViewModel modelInput)
+        {
+
+            var entity = Repository.Get(modelInput.ProjectId);
+
+
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+
+                    var projectResut = new ProjectResult
+                    {
+                        Result = modelInput.Result,
+                        ProjectId = modelInput.ProjectId
+                    };
+
+
+                    projectResultRepository.Add(projectResut, User.Identity.Name, true);
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                }
+                else
+                {
+                    var messages = new List<string>();
+
+                    foreach (var item in ModelState)
+                    {
+                        if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                        foreach (var error in item.Value.Errors)
+                        {
+                            messages.Add(error.ErrorMessage);
+                        }
+                    }
+
+                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return RedirectToAction("Results", new { key = entity.Id });
+        }
+
+        [Route("edit/{key}/Results/delete")]
+        [RequirePermissions(Permission.ProjectViewer)]
+        public IActionResult DeleteResults(ProjectResultDisplayViewModel displayViewModel)
+        {
+            var projectResult = projectResultRepository.Get(displayViewModel.Id);
+            try
+            {
+                projectResultRepository.Delete(projectResult, User.Identity.Name, true);
+
+
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("Results", new { key = projectResult.Project.Id });
         }
         #endregion
     }
