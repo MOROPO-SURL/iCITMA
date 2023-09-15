@@ -11,11 +11,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public System.Guid? ProjectId { get; set; }
         [System.ComponentModel.DataAnnotations.Required]
         public System.Guid OutputKindId { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = " Se debe seleccionar una salida")]
         public System.Collections.Generic.ICollection<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> OutputKindSelected { get; set; }
             = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
 
-        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = " Se debe poner una descripción")]
         public string Description { get; set; }
 
         public ProjectOutput Export()

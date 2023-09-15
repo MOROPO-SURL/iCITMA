@@ -8,9 +8,10 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-            @using (Html.BeginForm("AddSpecificObjectives", "Projects", null, FormMethod.Post, true, null))
+            </div>            
+            @using (Html.BeginForm("AddSpecificObjectives", "projects", new { Area = "I_D_i" }, FormMethod.Post))
             {
+                @Html.ValidationSummary(true)
                 <div class="modal-body">
                     @Html.HiddenFor(model => model.ProjectId)                        
                         <div>

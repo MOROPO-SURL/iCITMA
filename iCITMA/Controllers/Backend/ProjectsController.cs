@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
+using MOROPO.Framework.Guama.Core.Persistence.Entities.Contract;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Models.View;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
@@ -37,21 +38,21 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public ProjectsController(
             IEntityRepository<SpecificObjective, Guid> specificObjectiveRepository,
             IEntityRepository<OutputKind, Guid> outputKindRepository,
-            IEntityRepository<ProjectOutput, Guid> projectOutputRepository, 
-            IEntityRepository<Person, Guid> personRepository, 
+            IEntityRepository<ProjectOutput, Guid> projectOutputRepository,
+            IEntityRepository<Person, Guid> personRepository,
             IEntityRepository<ODSIndicator, Guid> odsIndicatorRepository,
-            IEntityRepository<ImpactIndicator, Guid> impactIndicatorRepository, 
+            IEntityRepository<ImpactIndicator, Guid> impactIndicatorRepository,
             IEntityRepository<ProjectImpact, Guid> projectImpactRepository,
-            IEntityRepository<KeyWord, Guid> keyWordRepository, 
+            IEntityRepository<KeyWord, Guid> keyWordRepository,
             IEntityRepository<Institution, Guid> institutionRepository,
-            IEntityRepository<ProgramExpectResult, Guid> programExpectResultRepository, 
+            IEntityRepository<ProgramExpectResult, Guid> programExpectResultRepository,
             IEntityRepository<ProjectState, Guid> projectStateRepository,
-            IEntityRepository<Persistence.Entities.Program, Guid> programRepository, 
+            IEntityRepository<Persistence.Entities.Program, Guid> programRepository,
             IEntityRepository<Institution, Guid> managerRepository,
-            IEntityRepository<ProjectCategory, Guid> categoryRepository, 
-            IEntityRepository<Person, Guid> leaderRepository, 
+            IEntityRepository<ProjectCategory, Guid> categoryRepository,
+            IEntityRepository<Person, Guid> leaderRepository,
             IEntityRepository<Project, Guid> repository,
-            IStringLocalizer<ProjectsController> localizer, 
+            IStringLocalizer<ProjectsController> localizer,
             ILogger<ProjectsController> logger) : base(repository, localizer, logger)
         {
             this.leaderRepository = leaderRepository;
@@ -382,7 +383,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                         {
                             ProjectId = key,
                             InstitutionId = item.Id,
-                            InstitutionName = $"{item.Identity.Name}"                           
+                            InstitutionName = $"{item.Identity.Name}"
                         }
                     };
 
@@ -509,7 +510,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         #endregion
 
         #region ProjectKeyWorld
-        
+
         [HttpGet]
         [Route("edit/{key}/projectKeyWorlds")]
         [RequirePermissions(Permission.ProjectEditor)]
@@ -534,7 +535,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
                     }
                 };
-                
+
                 resultModel.Project.Import(entity);
 
                 resultModel.NotSelectedKeyWords = notSelectedKeyWords.Select(exp => new SelectListItem
@@ -674,7 +675,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("EditProjectKeyWorlds", new { key = entity.Id });
-        }        
+        }
 
         #endregion
 
@@ -866,7 +867,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 projectImpactManagerModel.Project.Import(entity);
                 projectImpactManagerModel.ProjectImpacts = projectImpacts;
 
-                ViewBag.ImpactIndicator = impactIndicatorRepository.GetAll().Select(p => new SelectListItem 
+                ViewBag.ImpactIndicator = impactIndicatorRepository.GetAll().Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
                     Text = p.Name
@@ -990,20 +991,20 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             var projectImpact = projectImpactRepository.GetAll().FirstOrDefault(p => p.Id == displayViewModel.Id);
             var ProjectId = projectImpact.ProjectId;
-            
+
             try
-            {               
-                
+            {
+
                 projectImpactRepository.Delete(projectImpact, User.Identity.Name, true);
-                               
-                
+
+
             }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException e) 
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
             {
                 logger.LogError(e.InnerException, e.Message);
 
                 SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
-            }            
+            }
             catch (System.Exception e)
             {
                 logger.LogError(e.InnerException, e.Message);
@@ -1301,7 +1302,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             try
             {
-                var entity = Repository.Get(key);                
+                var entity = Repository.Get(key);
                 var projectOutputs = projectOutputRepository.GetAll().Where(p => p.ProjectId == key).ToList();
                 var outputKinds = outputKindRepository.GetAll().ToArray();
 
@@ -1312,11 +1313,11 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 projectOuputManagerModel.Project.Import(entity);
                 projectOuputManagerModel.ProjectOuputs = projectOutputs;
 
-                
+
 
                 var selectedOutputKinds = SelectedOutputKind(projectOutputs);
                 var notSelectedOutputKinds = outputKinds.Except(selectedOutputKinds).ToArray();
-                                
+
 
                 ViewBag.OutputKinds = notSelectedOutputKinds.Select(p => new SelectListItem
                 {
@@ -1324,7 +1325,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                     Text = $"{p.Name}"
                 }).ToArray();
 
-                
+
 
                 return View(projectOuputManagerModel);
             }
@@ -1356,6 +1357,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
             var project = Repository.Get(key);
 
+
+
             var outputKind = outputKindRepository.Get(modelInput.OutputKindId);
             try
             {
@@ -1363,20 +1366,40 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 {
                     var entity = Repository.Get(key);
 
-                    var projectOutput = new ProjectOutput
+                    if (ModelState.IsValid)
                     {
-                        ProjectId = key,
-                        Project = project,
-                        KindId = modelInput.OutputKindId,
-                        Kind = outputKind,
-                        Description = modelInput.Description
-                    };
 
-                    projectOutputRepository.Add(projectOutput, User.Identity.Name, false);
+                        var projectOutput = new ProjectOutput
+                        {
+                            ProjectId = key,
+                            Project = project,
+                            KindId = modelInput.OutputKindId,
+                            Kind = outputKind,
+                            Description = modelInput.Description
+                        };
 
-                    Repository.Update(entity, User.Identity.Name, true);
+                        projectOutputRepository.Add(projectOutput, User.Identity.Name, false);
 
-                    SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                        Repository.Update(entity, User.Identity.Name, true);
+
+                        SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Success, GetCreationSuccessMessage());
+                    }
+                    else
+                    {
+                        var messages = new List<string>();
+
+                        foreach (var item in ModelState)
+                        {
+                            if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                            foreach (var error in item.Value.Errors)
+                            {
+                                messages.Add(error.ErrorMessage);
+                            }
+                        }
+
+                        SetDefaultNotification(Framework.Guama.Core.Presentation.Models.View.NotificationType.Danger, messages.ToArray());
+                    }
                 }
                 else
                 {
@@ -1445,14 +1468,14 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             {
                 var entity = Repository.Get(key);
                 var projectSpecificObjectives = specificObjectiveRepository.GetAll().Where(s => s.ProjectId == entity.Id).ToList();
-                
+
 
                 var projectSpecificObjectiveManagerModel = new ProjectSpecificObjectiveManagerViewModel
                 {
                     Project = new ProjectDisplayViewModel(),
                     Objectives = projectSpecificObjectives
                 };
-                
+
                 projectSpecificObjectiveManagerModel.Project.Import(entity);
 
                 return View(projectSpecificObjectiveManagerModel);
@@ -1468,18 +1491,21 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [RequirePermissions(Permission.ProjectViewer)]
         public IActionResult AddSpecificObjectives(SpecificObjectiveInputViewModel modelInput)
         {
+
             var entity = Repository.Get(modelInput.ProjectId);
-            
+
+
             try
             {
-                if (entity != null)
+
+                if (ModelState.IsValid)
                 {
 
                     var spObjective = new SpecificObjective
                     {
                         Objective = modelInput.Objective,
                         ProjectId = modelInput.ProjectId
-                    };                                       
+                    };
 
 
                     specificObjectiveRepository.Add(spObjective, User.Identity.Name, true);
@@ -1516,12 +1542,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/{key}/SpecificObjectives/delete")]
         [RequirePermissions(Permission.ProjectViewer)]
         public IActionResult DeleteSpecificObjectives(SpecificObjectiveDisplayViewModel displayViewModel)
-        {           
-            var spObjective = specificObjectiveRepository.Get(displayViewModel.Id);           
+        {
+            var spObjective = specificObjectiveRepository.Get(displayViewModel.Id);
             try
             {
-                specificObjectiveRepository.Delete(spObjective, User.Identity.Name, true);            
-                
+                specificObjectiveRepository.Delete(spObjective, User.Identity.Name, true);
+
 
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
