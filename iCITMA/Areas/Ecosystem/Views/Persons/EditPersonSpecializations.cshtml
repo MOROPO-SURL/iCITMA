@@ -35,16 +35,19 @@
                     <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("managecontacts", @Model.Id)">Contactos</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("editpersoninstitutions", @Model.Id)">Instituciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Especialidades</a>
+                </li>                
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("editpersondoctorates", @Model.Id)">Doctorados</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("editpersonmasterys", @Model.Id)">Maestrías</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("editpersondoctorates", @Model.Id)">Doctorados</a>
                 </li>
             </ul>
         </div>
