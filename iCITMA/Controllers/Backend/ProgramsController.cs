@@ -333,7 +333,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 
         #region ProgramKeyWorld
         [HttpGet]
-        [Route("edit/{key}/program /keyworlds")]
+        [Route("edit/{key}/program/keyworlds")]
         [RequirePermissions(Permission.ProgramEditor)]
         public IActionResult EditProgramKeyWorlds(System.Guid key)
         {
@@ -370,6 +370,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
+        //[Route("edit/{key}/program/keyworlds/{modelInput}")]
         [Route("edit/{key}/program/keyworlds")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]
