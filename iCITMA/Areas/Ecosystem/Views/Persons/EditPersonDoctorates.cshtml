@@ -30,6 +30,7 @@
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-header">
             <h4 class="mb-0">@ViewData["Title"]</h4>
+            @await Html.PartialAsync("_ContextPartialInput.cshtml", Model)
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
