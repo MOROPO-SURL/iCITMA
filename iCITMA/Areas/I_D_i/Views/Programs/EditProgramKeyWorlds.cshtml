@@ -65,23 +65,21 @@
 
 }
 
-@using (Html.BeginForm("EditProgramKeyWorlds", "programs", new { key = Model.Program.Id }, FormMethod.Post, true, null))
-{
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-header">
             <h4 class="mb-0">@ViewData["Title"]</h4>
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("edit", @Model.Program.Id)">Generales</a>
+                    <a class="nav-link" href="@Url.Action("edit", @Model.EntityViewModel.Id)">Generales</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ManageExperts", Model.Program.Id)">Expertos</a>
+                    <a class="nav-link" href="@Url.Action("ManageExperts", Model.EntityViewModel.Id)">Expertos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Palabras Claves</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.Program.Id)">Documentos</a>
+                    <a class="nav-link" href="@Url.Action("EditProgramDocuments", Model.EntityViewModel.Id)">Documentos</a>
                 </li>
             </ul>
         </div>
@@ -116,7 +114,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    @using (Html.BeginForm("RemoveProgramKeyWord", "programs", new { key = Model.Program.Id}, FormMethod.Post, true, null))
+                                    @using (Html.BeginForm("RemoveProgramKeyWord", "programs", new { key = Model.EntityViewModel.Id}, FormMethod.Post, true, null))
                                     {
 
 
@@ -148,10 +146,10 @@
         </div>
         @await Html.PartialAsync("AddProgramKeyWordPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramKeyWordInputViewModel
     {
-    ProgramId = Model.Program.Id,
+    ProgramId = Model.EntityViewModel.Id,
     NotSelectedKeyWords = Model.NotSelectedKeyWords
     })
     </div>
-}
+
 
 

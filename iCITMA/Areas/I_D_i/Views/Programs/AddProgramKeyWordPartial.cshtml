@@ -31,8 +31,7 @@
                 <div class="modal-footer">
                     @if (Model.NotSelectedKeyWords.Count > 0)
                     {
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                        <a class="btn btn-primary" href="@Url.Action("AddOwnUrlAction", "programs", new { ProgramId = Model.ProgramId, KeyWordId=Model.KeyWordId})">Documentos</a>
+                        <button type="submit" class="btn btn-primary">Agregar</button>                        
                     }
                     <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
                 </div>

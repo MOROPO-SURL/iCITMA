@@ -354,13 +354,13 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 }
                 var resultModel = new KeyWordProgramManagerViewModel
                 {
-                    Program = new ProgramDisplayViewModel
+                    EntityViewModel = new ProgramDisplayViewModel
                     {
 
                     }
                 };
 
-                resultModel.Program.Import(entity);
+                resultModel.EntityViewModel.Import(entity);
 
                 resultModel.NotSelectedKeyWords = notSelectedKeyWords.Select(exp => new SelectListItem
                 {
@@ -401,7 +401,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [Route("edit/KeyWorlds/add")]
         [RequirePermissions(Permission.ProgramEditor)]
         [ValidateAntiForgeryToken]        
-        public IActionResult AddProgramKeyWord([FromForm] ProgramKeyWordInputViewModel modelInput)
+        public IActionResult AddProgramKeyWord(ProgramKeyWordInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
@@ -450,62 +450,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
             }
 
             return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
-        }
-
-        [HttpGet]
-        [Route("edit/KeyWorlds/addUrlAction/{ProgramId}/{KeyWordId}")]
-        [RequirePermissions(Permission.ProgramEditor)]
-        //[ValidateAntiForgeryToken]
-        public IActionResult AddOwnUrlAction(System.Guid ProgramId, System.Guid KeyWordId)
-        {
-            Persistence.Entities.Program entity = null;
-
-            try
-            {
-                entity = Repository.Get(ProgramId);
-            }
-            catch { }
-
-            if (entity == null)
-            {
-                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
-
-                return GetDefaultActionResult();
-            }
-
-            if (ModelState.IsValid)
-            {
-                entity.KeyWordBridges.Add(new ProgramKeyWordBridge
-                {
-                    ProwId = entity.Id,
-                    SternId = KeyWordId,
-                    Prow = entity,
-                    Stern = keyWordRepository.Get(KeyWordId)
-                });
-
-                Repository.Update(entity, User.Identity.Name);
-
-                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
-            }
-            else
-            {
-                var messages = new List<string>();
-
-                foreach (var item in ModelState)
-                {
-                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
-
-                    foreach (var error in item.Value.Errors)
-                    {
-                        messages.Add(error.ErrorMessage);
-                    }
-                }
-
-                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
-            }
-
-            return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
-        }
+        }        
 
         [HttpPost]
         [Route("edit/{key}/KeyWorlds/remove")]

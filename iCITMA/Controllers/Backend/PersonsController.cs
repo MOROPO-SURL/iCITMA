@@ -12,6 +12,7 @@ using MOROPO.Framework.Guama.Identity.Persistence.Entities;
 using MOROPO.Framework.Guama.Location.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Persistence.Entities;
 using MOROPO.Framework.Guama.Media.Presentation.Web.Common.Managers.Facade;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -868,17 +869,64 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personSpecializations")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonSpecializations(System.Guid key)
+        public IActionResult EditPersonSpecializations(System.Guid key)
         {
-            var entity = Repository.Get(key);
+            try
+            {
+                var entity = Repository.Get(key);
 
-            var model = new PersonInputViewModel();
+                var specializations = entity.ResearchAreaSpecializationBridges.Select(p => p.Stern).ToArray();
 
-            PopulateSpecializations(entity, model.SpecializationsToSelect);
+                var notSelectedSpecialization = researchAreaRepository.GetAll().ToArray();
 
-            model.Import(entity);
+                if (specializations.Count() != 0)
+                {
+                    notSelectedSpecialization = notSelectedSpecialization.Except(specializations).ToArray();
+                }
 
-            return View(model);
+                var resultModel = new PersonSpecializationsManagerViewModel
+                {
+                    Person = new PersonDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Person.Import(entity);
+
+                resultModel.NotSelectedSpecializations = notSelectedSpecialization.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Name}"
+                }).ToArray();
+
+                resultModel.Specializations = specializations.Select(item =>
+                {
+                    var model = new ResearchAreaDisplayViewModel
+                    {
+                        PersonMasteryLogicViewModel = new PersonMasteryLogicViewModel
+                        {
+                            PersonId = key,
+                            ResearchAreaId = item.Id,
+                            ResearchAreaName = $"{item.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
         private void PopulateSpecializations(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> SpecializationsForSelecting)
@@ -899,16 +947,16 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         }
 
         [HttpPost]
-        [Route("edit/{key}/personSpecializations")]
+        [Route("edit/personSpecializations/add")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonSpecializations(System.Guid key, PersonInputViewModel modelInput)
+        public IActionResult AddPersonSpecializations(PersonSpecializationInputViewModel modelInput)
         {
-            Person entity = null;
+            Persistence.Entities.Person entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.PersonId);
             }
             catch { }
 
@@ -919,24 +967,87 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.ResearchAreaSpecializationBridges.Clear();
-
-            foreach (var item in modelInput.SpecializationsToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.ResearchAreaSpecializationBridges.Add(new PersonResearchAreaSpecializationBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.ResearchAreaId,
+                    Prow = entity,
+                    Stern = researchAreaRepository.Get(modelInput.ResearchAreaId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditPersonSpecializations", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpPost]
+        [Route("edit/{key}/personSpecializations/remove")]
+        [RequirePermissions(Permission.PersonEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemovePersonSpecializations(System.Guid key, System.Guid ResearchAreaId)
+        {
+            Persistence.Entities.Person entity = null;
 
-            return RedirectToAction("editpersonspecializations", new { key = entity.Id });
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.ResearchAreaSpecializationBridges.FirstOrDefault(exp => exp.SternId == ResearchAreaId);
+
+                entity.ResearchAreaSpecializationBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditPersonSpecializations", new { key = entity.Id });
         }
 
         #endregion
@@ -946,47 +1057,77 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personMasterys")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonMasterys(System.Guid key)
+        public IActionResult EditPersonMasterys(System.Guid key)
         {
-            var entity = Repository.Get(key);
-
-            var model = new PersonInputViewModel();
-
-            PopulateMasterys(entity, model.MasterysToSelect);
-
-            model.Import(entity);
-
-            return View(model);
-        }
-
-        private void PopulateMasterys(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> MasterysForSelecting)
-        {
-            var Masterys = researchAreaRepository.GetAll();
-
-            if (Masterys.Count() > 0)
+            try
             {
-                MasterysForSelecting.AddRange(Masterys.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
+                var entity = Repository.Get(key);
+
+                var masterys = entity.ResearchAreaMasteryBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedMasterys = researchAreaRepository.GetAll().ToArray();
+
+                if (masterys.Count() != 0)
                 {
-                    Id = item.Id,
-                    Label = item.Name,
-                    Selected = entity.ResearchAreaMasteryBridges.Any(a => a.SternId == item.Id),
-                    Description = string.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
-                }));
+                    notSelectedMasterys = notSelectedMasterys.Except(masterys).ToArray();
+                }
+
+                var resultModel = new PersonMasteryManagerViewModel
+                {
+                    Person = new PersonDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Person.Import(entity);
+
+                resultModel.NotSelectedMasterys = notSelectedMasterys.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Name}"
+                }).ToArray();
+
+                resultModel.Masterys = masterys.Select(item =>
+                {
+                    var model = new ResearchAreaDisplayViewModel
+                    {
+                        PersonMasteryLogicViewModel = new PersonMasteryLogicViewModel
+                        {
+                            PersonId = key,
+                            ResearchAreaId = item.Id,
+                            ResearchAreaName = $"{item.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
             }
 
-        }
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
+        }  
 
         [HttpPost]
-        [Route("edit/{key}/personMasterys")]
+        [Route("edit/personMasterys/add")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonMasterys(System.Guid key, PersonInputViewModel modelInput)
+        public IActionResult AddPersonMasterys(PersonMasteryInputViewModel modelInput)
         {
-            Person entity = null;
+            Persistence.Entities.Person entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.PersonId);
             }
             catch { }
 
@@ -997,24 +1138,87 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.ResearchAreaMasteryBridges.Clear();
-
-            foreach (var item in modelInput.MasterysToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.ResearchAreaMasteryBridges.Add(new PersonResearchAreaMasteryBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.ResearchAreaId,
+                    Prow = entity,
+                    Stern = researchAreaRepository.Get(modelInput.ResearchAreaId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditPersonMasterys", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpPost]
+        [Route("edit/{key}/personMasterys/remove")]
+        [RequirePermissions(Permission.PersonEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemovePersonMasterysn(System.Guid key, System.Guid ResearchAreaId)
+        {
+            Persistence.Entities.Person entity = null;
 
-            return RedirectToAction("editpersonmasterys", new { key = entity.Id });
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.ResearchAreaMasteryBridges.FirstOrDefault( exp => exp.SternId == ResearchAreaId);
+
+                entity.ResearchAreaMasteryBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditPersonMasterys", new { key = entity.Id });
         }
 
         #endregion
@@ -1024,47 +1228,78 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personDoctorates")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonDoctorates(System.Guid key)
+        public IActionResult EditPersonDoctorates(System.Guid key)
         {
-            var entity = Repository.Get(key);
-
-            var model = new PersonInputViewModel();
-
-            PopulateDoctorates(entity, model.DoctoratesToSelect);
-
-            model.Import(entity);
-
-            return View(model);
-        }
-
-        private void PopulateDoctorates(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> DoctoratesForSelecting)
-        {
-            var Doctorates = researchAreaRepository.GetAll();
-
-            if (Doctorates.Count() > 0)
+            try
             {
-                DoctoratesForSelecting.AddRange(Doctorates.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
+                var entity = Repository.Get(key);
+
+                var doctorates = entity.ResearchAreaDoctorateBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedDoctorates = researchAreaRepository.GetAll().ToArray();
+
+                if (doctorates.Count() != 0)
                 {
-                    Id = item.Id,
-                    Label = item.Name,
-                    Selected = entity.ResearchAreaDoctorateBridges.Any(a => a.SternId == item.Id),
-                    Description = string.IsNullOrWhiteSpace(item.Description) ? "Sin Descripción" : item.Description
-                }));
+                    notSelectedDoctorates = notSelectedDoctorates.Except(doctorates).ToArray();
+                }
+
+                var resultModel = new PersonDoctorateManagerViewModel
+                {
+                    Person = new PersonDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Person.Import(entity);
+
+                resultModel.NotSelectedDoctorates = notSelectedDoctorates.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Name}"
+                }).ToArray();
+
+                resultModel.Doctorates = doctorates.Select(item =>
+                {
+                    var model = new ResearchAreaDisplayViewModel
+                    {
+                        PersonMasteryLogicViewModel = new PersonMasteryLogicViewModel
+                        {
+                            PersonId = key,
+                            ResearchAreaId = item.Id,
+                            ResearchAreaName = $"{item.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
             }
 
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
+        
 
         [HttpPost]
-        [Route("edit/{key}/personDoctorates")]
+        [Route("edit/personDoctorates/add")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonDoctorates(System.Guid key, PersonInputViewModel modelInput)
+        public IActionResult AddPersonDoctorates(PersonDoctorateInputViewModel modelInput)
         {
-            Person entity = null;
+            Persistence.Entities.Person entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.PersonId);
             }
             catch { }
 
@@ -1075,24 +1310,87 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.ResearchAreaDoctorateBridges.Clear();
-
-            foreach (var item in modelInput.DoctoratesToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.ResearchAreaDoctorateBridges.Add(new PersonResearchAreaDoctorateBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.ResearchAreaId,
+                    Prow = entity,
+                    Stern = researchAreaRepository.Get(modelInput.ResearchAreaId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditPersonDoctorates", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpPost]
+        [Route("edit/{key}/personDoctorates/remove")]
+        [RequirePermissions(Permission.PersonEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemovePersonDoctorates(System.Guid key, System.Guid ResearchAreaId)
+        {
+            Persistence.Entities.Person entity = null;
 
-            return RedirectToAction("editpersondoctorates", new { key = entity.Id });
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.ResearchAreaDoctorateBridges.FirstOrDefault(exp => exp.SternId == ResearchAreaId);
+
+                entity.ResearchAreaDoctorateBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditPersonDoctorates", new { key = entity.Id });
         }
 
         #endregion
