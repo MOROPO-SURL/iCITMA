@@ -13,6 +13,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Description { get; set; }
 
         public ProjectKeyWordDisplayViewModel ProjectKeyWordDisplayViewModel { get; set; }
+        public ProgramKeyWordDisplayViewModel ProgramKeyWordDisplayViewModel { get; set; }
 
         public void Import(KeyWord entity)
         {

@@ -8,6 +8,7 @@ using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
 using MOROPO.Framework.Guama.Core.Presentation.Models.View;
 using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Document = MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Document;
@@ -25,7 +26,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         public readonly IEntityRepository<FundingSource, System.Guid> fundingSourceRepository;
         public readonly IEntityRepository<KeyWord, System.Guid> keyWordRepository;
         public readonly IEntityRepository<Document, System.Guid> documentRepository;
-        private readonly Managers.RelativeDocumentFileManager attachmentFileManager;        
+        private readonly Managers.RelativeDocumentFileManager attachmentFileManager;
 
 
         public ProgramsController(Managers.RelativeDocumentFileManager attachmentFileManager, IEntityRepository<Document, System.Guid> documentRepository, IEntityRepository<KeyWord, System.Guid> keyWordRepository, IEntityRepository<FundingSource, System.Guid> fundingSourceRepository, IEntityRepository<ProgramCategory, System.Guid> programCategoryRepository, IEntityRepository<Person, System.Guid> personRepository, IEntityRepository<Institution, System.Guid> institutionRepository, IEntityRepository<Persistence.Entities.Program, System.Guid> repository, IStringLocalizer<ProgramsController> localizer, ILogger<ProgramsController> logger) : base(repository, localizer, logger)
@@ -80,21 +81,21 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         protected override void ConfigureCreate(ProgramInputViewModel modelInput)
         {
             base.ConfigureCreate(modelInput);
-            
+
             Populate(modelInput);
         }
 
         protected override void ConfigurePostFailCreateValidation(ProgramInputViewModel modelInput)
         {
             base.ConfigurePostFailCreateValidation(modelInput);
-            
+
             Populate(modelInput);
         }
 
         protected override void ConfigureEdit(Persistence.Entities.Program entity, ProgramInputViewModel modelInput)
         {
             base.ConfigureEdit(entity, modelInput);
-            
+
             Populate(modelInput);
         }
 
@@ -332,55 +333,81 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         #endregion
 
         #region ProgramKeyWorld
+
+       
         [HttpGet]
-        [Route("edit/{key}/program/keyworlds")]
+        [Route("edit/{key}/KeyWorlds")]
         [RequirePermissions(Permission.ProgramEditor)]
-        public IActionResult EditProgramKeyWorlds(System.Guid key)
+        public IActionResult EditProgramKeyWorlds(Guid key)
         {
-            var entity = Repository.Get(key);
-
-            var model = new ProgramInputViewModel();
-
-            if (entity != null)
+            try
             {
+                var entity = Repository.Get(key);
 
-                PopulateKeyWords(entity, model.KeyWordsToSelect);
+                var keyWords = entity.KeyWordBridges.Select(p => p.Stern).ToArray();
 
-                model.Import(entity);
+                var notSelectedKeyWords = keyWordRepository.GetAll().ToArray();
 
-                return View(model);
-            }
-            return View(model);
-        }
-
-        private void PopulateKeyWords(Persistence.Entities.Program entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> expertsForSelecting)
-        {
-            var keyWords = keyWordRepository.GetAll();
-
-            if (keyWords.Count() > 0)
-            {
-                expertsForSelecting.AddRange(keyWords.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
+                if (keyWords.Count() != 0)
                 {
-                    Id = item.Id,
-                    Label = item.Name,
-                    Selected = entity.KeyWordBridges.Any(a => a.SternId == item.Id),
-                    Description = item.Description
-                }));
+                    notSelectedKeyWords = notSelectedKeyWords.Except(keyWords).ToArray();
+                }
+                var resultModel = new KeyWordProgramManagerViewModel
+                {
+                    Program = new ProgramDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Program.Import(entity);
+
+                resultModel.NotSelectedKeyWords = notSelectedKeyWords.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Name}"
+                }).ToArray();
+
+                resultModel.KeyWordss = keyWords.Select(item =>
+                {
+                    var model = new KeyWordDisplayViewModel
+                    {
+                        ProgramKeyWordDisplayViewModel = new ProgramKeyWordDisplayViewModel
+                        {
+                            ProgramId = key,
+                            KeyWordId = item.Id,
+                            KeyWordName = $"{item.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
             }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
         [HttpPost]
-        //[Route("edit/{key}/program/keyworlds/{modelInput}")]
-        [Route("edit/{key}/program/keyworlds")]
+        [Route("edit/KeyWorlds/add")]
         [RequirePermissions(Permission.ProgramEditor)]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditProgramKeyWorlds(System.Guid key, ProgramInputViewModel modelInput)
+        [ValidateAntiForgeryToken]        
+        public IActionResult AddProgramKeyWord([FromForm] ProgramKeyWordInputViewModel modelInput)
         {
             Persistence.Entities.Program entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.ProgramId);
             }
             catch { }
 
@@ -391,22 +418,140 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.KeyWordBridges.Clear();
-
-            foreach (var item in modelInput.KeyWordsToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.KeyWordBridges.Add(new ProgramKeyWordBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.KeyWordId,
+                    Prow = entity,
+                    Stern = keyWordRepository.Get(modelInput.KeyWordId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpGet]
+        [Route("edit/KeyWorlds/addUrlAction/{ProgramId}/{KeyWordId}")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        //[ValidateAntiForgeryToken]
+        public IActionResult AddOwnUrlAction(System.Guid ProgramId, System.Guid KeyWordId)
+        {
+            Persistence.Entities.Program entity = null;
+
+            try
+            {
+                entity = Repository.Get(ProgramId);
+            }
+            catch { }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            if (ModelState.IsValid)
+            {
+                entity.KeyWordBridges.Add(new ProgramKeyWordBridge
+                {
+                    ProwId = entity.Id,
+                    SternId = KeyWordId,
+                    Prow = entity,
+                    Stern = keyWordRepository.Get(KeyWordId)
+                });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
+            }
+
+            return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
+        }
+
+        [HttpPost]
+        [Route("edit/{key}/KeyWorlds/remove")]
+        [RequirePermissions(Permission.ProgramEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveProgramKeyWord( System.Guid key , System.Guid keyWordId)
+        {
+            Persistence.Entities.Program entity = null;
+
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.KeyWordBridges.FirstOrDefault(exp => exp.SternId == keyWordId);
+
+                entity.KeyWordBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
 
             return RedirectToAction("EditProgramKeyWorlds", new { key = entity.Id });
         }
@@ -430,9 +575,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                     result.Import(item.Stern);
 
                     return result;
-                    
+
                 }).ToArray()
-                
+
             };
 
             model.Program.Import(entity);
@@ -481,9 +626,9 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                                 ProwId = entity.Id,
                                 Prow = entity,
                                 Stern = document,
-                                SternId = document.Id                                
+                                SternId = document.Id
                             };
-                            
+
                             entity.DocumentBridges.Add(documentBridge);
 
                             Repository.Update(entity, User.Identity.Name);
@@ -563,7 +708,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         {
             try
             {
-                ModelState.Remove("File");                
+                ModelState.Remove("File");
 
                 if (ModelState.IsValid)
                 {
@@ -575,15 +720,15 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                         documentRepository.Update(val, User.Identity.Name);
 
                         SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
-                        
+
                         return RedirectToAction("EditProgramDocuments", new { key });
                     }
                     catch (System.Exception ex2)
                     {
                         logger.LogError(ex2.InnerException, ex2.Message);
-                        
+
                         SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
-                        
+
                         return RedirectToAction("EditProgramDocuments", new { key });
                     }
                 }

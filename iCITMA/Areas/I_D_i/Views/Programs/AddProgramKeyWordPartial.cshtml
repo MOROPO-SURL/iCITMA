@@ -1,0 +1,45 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramKeyWordInputViewModel
+
+<div class="modal fade" id="add-member" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-member-title">Agregar Palabra Clave</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("AddProgramKeyWord", "programs", null, FormMethod.Post, true, null))
+            {
+                <div class="modal-body">                   
+                    @Html.HiddenFor(model => model.ProgramId)
+
+                    @if (Model.NotSelectedKeyWords.Count > 0)
+                    {
+                        <div>
+                            @Html.LabelFor(model => model.NotSelectedKeyWords, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.KeyWordId, Model.NotSelectedKeyWords, "Escriba para buscar la palabra ...", new { @class = "form-control member-select" })
+                            @Html.ValidationMessageFor(model => model.KeyWordId, null, new { @class = "text-danger" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted font-italic">No hay más palabras que puedan ser agregadas al proyecto</div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    @if (Model.NotSelectedKeyWords.Count > 0)
+                    {
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                        <a class="btn btn-primary" href="@Url.Action("AddOwnUrlAction", "programs", new { ProgramId = Model.ProgramId, KeyWordId=Model.KeyWordId})">Documentos</a>
+                    }
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
