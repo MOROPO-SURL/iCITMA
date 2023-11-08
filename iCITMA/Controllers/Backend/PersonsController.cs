@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
 using MOROPO.Framework.Guama.Core.Persistence.Repositories;
@@ -791,47 +792,78 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
         [HttpGet]
         [Route("edit/{key}/personInstitutions")]
         [RequirePermissions(Permission.PersonEditor)]
-        public ActionResult EditPersonInstitutions(System.Guid key)
+        public IActionResult EditPersonInstitutions(System.Guid key)
         {
-            var entity = Repository.Get(key);
-
-            var model = new PersonInputViewModel();
-
-            PopulateInstitutions(entity, model.InstitutionsToSelect);
-
-            model.Import(entity);
-
-            return View(model);
-        }
-
-        private void PopulateInstitutions(Person entity, List<SelectionDescriptedItemInputViewModel<System.Guid>> institutionsForSelecting)
-        {
-            var institutions = institutionsRepository.GetAll();
-
-            if (institutions.Count() > 0)
+            try
             {
-                institutionsForSelecting.AddRange(institutions.ToList().Select(item => new SelectionDescriptedItemInputViewModel<System.Guid>
+                var entity = Repository.Get(key);
+
+                var institutions = entity.InstitutionBridges.Select(p => p.Stern).ToArray();
+
+                var notSelectedInstitutions = institutionsRepository.GetAll().ToArray();
+
+                if (institutions.Count() != 0)
                 {
-                    Id = item.Id,
-                    Label = item.Identity.Name,
-                    Selected = entity.InstitutionBridges.Any(a => a.SternId == item.Id),
-                    Description = string.IsNullOrWhiteSpace(item.Identity.About) ? "Sin Descripción" : item.Identity.About
-                }));
+                    notSelectedInstitutions = notSelectedInstitutions.Except(institutions).ToArray();
+                }
+
+                var resultModel = new PersonInstitutionManagerViewModel
+                {
+                    Person = new PersonDisplayViewModel
+                    {
+
+                    }
+                };
+
+                resultModel.Person.Import(entity);
+
+                resultModel.NotSelectedInstitutions = notSelectedInstitutions.Select(exp => new SelectListItem
+                {
+                    Value = exp.Id.ToString(),
+                    Text = $"{exp.Identity.Name}"
+                }).ToArray();
+
+                resultModel.Institutions = institutions.Select(item =>
+                {
+                    var model = new InstitutionDisplayViewModel
+                    {
+                        PersonInstitutionLogicViewModel = new PersonInstitutionLogicViewModel
+                        {
+                            PersonId = key,
+                            InstitutionId = item.Id,
+                            InstitutionName = $"{item.Identity.Name}"
+                        }
+                    };
+
+                    model.Import(item);
+
+                    return model;
+                }).ToArray();
+
+                return View(resultModel);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
             }
 
+            SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+            return GetDefaultActionResult();
         }
 
+        
         [HttpPost]
-        [Route("edit/{key}/personInstitutions")]
+        [Route("edit/{key}/personInstitutions/add")]
         [RequirePermissions(Permission.PersonEditor)]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPersonInstitutions(System.Guid key, PersonInputViewModel modelInput)
+        public IActionResult AddPersonInstitutions(PersonInstitutionInputViewModel modelInput)
         {
-            Person entity = null;
+            Persistence.Entities.Person entity = null;
 
             try
             {
-                entity = Repository.Get(key);
+                entity = Repository.Get(modelInput.PersonId);
             }
             catch { }
 
@@ -842,24 +874,87 @@ namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
                 return GetDefaultActionResult();
             }
 
-            entity.InstitutionBridges.Clear();
-
-            foreach (var item in modelInput.InstitutionsToSelect)
+            if (ModelState.IsValid)
             {
-                if (!item.Selected) continue;
-
                 entity.InstitutionBridges.Add(new PersonInstitutionBridge
                 {
                     ProwId = entity.Id,
-                    SternId = item.Id
+                    SternId = modelInput.InstitutionId,
+                    Prow = entity,
+                    Stern = institutionsRepository.Get(modelInput.InstitutionId)
                 });
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+            }
+            else
+            {
+                var messages = new List<string>();
+
+                foreach (var item in ModelState)
+                {
+                    if (ModelState.GetFieldValidationState(item.Key) != Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid) continue;
+
+                    foreach (var error in item.Value.Errors)
+                    {
+                        messages.Add(error.ErrorMessage);
+                    }
+                }
+
+                SetDefaultNotification(NotificationType.Danger, messages.ToArray());
             }
 
-            Repository.Update(entity, User.Identity.Name);
+            return RedirectToAction("EditPersonInstitutions", new { key = entity.Id });
+        }
 
-            SetDefaultNotification(NotificationType.Success, GetEditionSuccessMessage());
+        [HttpPost]
+        [Route("edit/{key}/personInstitutions/remove")]
+        [RequirePermissions(Permission.ProjectEditor)]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemovePersonInstitutionsn(System.Guid key, System.Guid InstitutionId)
+        {
+            Persistence.Entities.Person entity = null;
 
-            return RedirectToAction("editpersoninstitutions", new { key = entity.Id });
+            try
+            {
+                entity = Repository.Get(key);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            if (entity == null)
+            {
+                SetDefaultNotification(NotificationType.Danger, GetNotFoundMessage());
+
+                return GetDefaultActionResult();
+            }
+
+            try
+            {
+                var brigde = entity.InstitutionBridges.FirstOrDefault(exp => exp.SternId == InstitutionId);
+
+                entity.InstitutionBridges.Remove(brigde);
+
+                Repository.Update(entity, User.Identity.Name);
+
+                SetDefaultNotification(NotificationType.Success, GetDeletionSuccessMessage());
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+
+                SetDefaultNotification(NotificationType.Warning, GetOnDeletionDependecyConstrainErrorMessage());
+            }
+            catch (System.Exception e)
+            {
+                logger.LogError(e.InnerException, e.Message);
+            }
+
+            return RedirectToAction("EditPersonInstitutions", new { key = entity.Id });
         }
 
         #endregion
