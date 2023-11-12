@@ -29,6 +29,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
         public string Alias { get; set; }
 
         public InstitutionProjectLogicViewModel InstitutionProjectLogicViewModel { get; set; }
+        public PersonInstitutionLogicViewModel PersonInstitutionLogicViewModel { get; set; }
 
         public void Import(Institution entity)
         {

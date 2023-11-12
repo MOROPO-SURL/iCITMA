@@ -11,6 +11,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]
         public string Description { get; set; }
+        public PersonMasteryLogicViewModel PersonMasteryLogicViewModel { get; set; }
 
         public void Import(ResearchArea entity)
         {

@@ -1,4 +1,4 @@
-﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonInputViewModel
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PersonSpecializationsManagerViewModel
 
 @{
     ViewData["Title"] = "Modificar Persona (Áreas de Investigación de Especialidades)";
@@ -24,54 +24,138 @@
     Layout = "_BackendLayout";
 }
 
-    @using (Html.BeginForm("editpersonspecializations", "persons", new { key = Model.Id }, FormMethod.Post, true, null))
-{
-    var selectableIndex = 0;
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .member-img {
+            width: 85%;
+            max-height: 330px;
+        }
+
+        .dropdown-toggle {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin-left: -1px;
+            line-height: 36px;
+        }
+
+            .dropdown-toggle::after {
+                margin: 0 5px;
+            }
+
+        ul.dropdown-menu {
+            width: 100%;
+        }
+    </style>
+}
+
+@section scripts {
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+    <script type="text/javascript">
+        $('.member-select').combobox();
+    </script>
+
+}
+
+   
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-header">
             <h4 class="mb-0">@ViewData["Title"]</h4>
-            @await Html.PartialAsync("_ContextPartialInput.cshtml", Model)
+            @await Html.PartialAsync("_ContextPartial.cshtml", Model.Person)
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("edit", @Model.Id)">Generales</a>
+                    <a class="nav-link" href="@Url.Action("edit", @Model.Person.Id)">Generales</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("managecontacts", @Model.Id)">Contactos</a>
+                    <a class="nav-link" href="@Url.Action("managecontacts", @Model.Person.Id)">Contactos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("editpersoninstitutions", @Model.Id)">Instituciones</a>
+                    <a class="nav-link" href="@Url.Action("editpersoninstitutions", @Model.Person.Id)">Instituciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Especialidades</a>
                 </li>                
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("editpersondoctorates", @Model.Id)">Doctorados</a>
+                    <a class="nav-link" href="@Url.Action("editpersondoctorates", @Model.Person.Id)">Doctorados</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("editpersonmasterys", @Model.Id)">Maestrías</a>
+                    <a class="nav-link" href="@Url.Action("editpersonmasterys", @Model.Person.Id)">Maestrías</a>
                 </li>
             </ul>
         </div>
         <div class="card-body">
+        @if (Model.Specializations.Count() != 0)
+        {
             <div class="row">
-
-                @if (Model.SpecializationsToSelect != null || Model.SpecializationsToSelect.Count() > 0)
-                    {
-                    @foreach (var item in Model.SpecializationsToSelect)
-                        {
-                            <div class="col-md-4">
-                            @Html.EditorFor(model => item, "SelectionDescriptedGuidIDItemInputViewModel", string.Format("SpecializationsToSelect[{0}]", selectableIndex++))
+                @foreach (var item in Model.Specializations)
+                {
+                    <div class="col-xl-3 col-md-5 mb-3" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>@item.Name</div>
                             </div>
-                        }
-                    }
-                   
-            
+                            <div class="card-footer">
+                                <div class="btn-group btn-group-sm float-right">
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detalles</span></button>
+                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-key-word-program-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    await Html.RenderPartialAsync("_PersonSpecializationDetailPartial", @item);
+
+                    @**@
+                    <div class="modal fade" id="delete-key-word-program-@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete-member-@item.Id-title">Eliminar Palabra Clave</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @using (Html.BeginForm("RemovePersonSpecializations", "persons", new { key = Model.Person.Id }, FormMethod.Post, true, null))
+                                {
+
+
+                                    @Html.Hidden("ResearchAreaId", item.Id)
+
+                                    <div class="modal-body">
+                                        <p>Está seguro que desea eliminar la maestría <b>@item.Name</b>?</p>
+                                    </div>
+
+                                    <div class="modal-footer" style="margin-top: 0;">
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Modificar</button>
-            <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
-        </div>
+        }
+        else
+        {
+            <div class="text-muted font-italic">Aún no tiene palabras claves, haga clic en el botón agregar para comenzar ...</div>
+        }
     </div>
-}
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-member">Agregar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+    </div>
+    @await Html.PartialAsync("AddPersonSpecializationPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.PersonSpecializationInputViewModel
+    {
+    PersonId = Model.Person.Id,
+    NotSelectedSpecializations = Model.NotSelectedSpecializations
+    })
+</div>
 
