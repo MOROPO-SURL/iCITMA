@@ -117,7 +117,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="delete-member-@item.Id-title">Eliminar Palabra Clave</h5>
+                                    <h5 class="modal-title" id="delete-member-@item.Id-title">Eliminar Especialidades</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -129,7 +129,7 @@
                                     @Html.Hidden("ResearchAreaId", item.Id)
 
                                     <div class="modal-body">
-                                        <p>Está seguro que desea eliminar la maestría <b>@item.Name</b>?</p>
+                                        <p>Está seguro que desea eliminar la Especialidad <b>@item.Name</b>?</p>
                                     </div>
 
                                     <div class="modal-footer" style="margin-top: 0;">
@@ -145,7 +145,7 @@
         }
         else
         {
-            <div class="text-muted font-italic">Aún no tiene palabras claves, haga clic en el botón agregar para comenzar ...</div>
+        <div class="text-muted font-italic">Aún no tiene Especialidades, haga clic en el botón agregar para comenzar ...</div>
         }
     </div>
     <div class="card-footer">

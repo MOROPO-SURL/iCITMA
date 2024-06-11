@@ -789,4 +789,16 @@
   <data name="Goals" xml:space="preserve">
     <value>Objetivos</value>
   </data>
+  <data name="Masterys" xml:space="preserve">
+    <value>Maestrías</value>
+  </data>
+  <data name="Doctorates" xml:space="preserve">
+    <value>Doctorados</value>
+  </data>
+  <data name="Specializations" xml:space="preserve">
+    <value>Especialidades</value>
+  </data>
+  <data name="Institutions" xml:space="preserve">
+    <value>Instituciones</value>
+  </data>
 </root>
