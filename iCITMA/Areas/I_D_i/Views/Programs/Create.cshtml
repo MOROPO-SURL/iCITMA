@@ -1,0 +1,114 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramInputViewModel
+
+@{
+    ViewData["Title"] = "Agregar Programa";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Gestionar Programas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="~/lib/gijgo/combined/css/gijgo.css" />
+}
+
+@section scripts {
+    <script src="~/lib/gijgo/combined/js/gijgo.js"></script>
+    <script type="text/javascript">
+        $('#StartDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            modal: true,
+            header: true,
+            footer: true,
+            format: 'dd/mm/yyyy',
+            value: '@Model.StartDate.ToShortDateString()'
+        });
+
+        $('#EndAt').datepicker({
+            uiLibrary: 'bootstrap4',
+            modal: true,
+            header: true,
+            footer: true,
+            format: 'dd/mm/yyyy'
+        });       
+    </script>
+}
+
+@using (Html.BeginForm("create", "programs", new { Area = "I_D_i" }, FormMethod.Post, true, null))
+{
+    @Html.ValidationSummary(true)
+    <div class="card mb-3 mt-4">
+        <div class="card-header"><h4 class="mb-0">@ViewData["Title"]</h4></div>
+
+        <div class="card-body">            
+            <div class="mb-3">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Code, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Code, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.CategoryId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.StartDate, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.StartDate, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.EndAt, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.EndAt, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.EndAt, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.ManagerId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ManagerId, Model.InstitutionSelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.ManagerId, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(model => model.LeaderId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.LeaderId, Model.LeaderSelectedListItems, "-- Seleccionar --", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.LeaderId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Description, 12, 0, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Agregar</button>
+            <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+        </div>
+    </div>
+}
+
+

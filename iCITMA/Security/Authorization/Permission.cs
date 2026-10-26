@@ -135,5 +135,73 @@
         public const string KeyWordRemover = "key-word-remover";
 
         #endregion
+
+        #region ODSIndicator
+        public const string ODSIndicatorViewer = "ods-indicator-viewer";
+
+        public const string ODSIndicatorCreator = "ods-indicator-creator";
+
+        public const string ODSIndicatorEditor = "ods-indicator-editor";
+
+        public const string ODSIndicatorRemover = "ods-indicator-remover";
+        #endregion
+
+        #region Institution
+        public const string InstitusionViewer = "institusion-viewer";
+
+        public const string InstitusionCreator = "institusion-creator";
+
+        public const string InstitusionEditor = "institusion-editor";
+
+        public const string InstitusionRemover = "institusion-remover";
+        #endregion
+
+        #region Person
+
+        public const string PersonViewer = "person-viewer";
+
+        public const string PersonCreator = "person-creator";
+
+        public const string PersonEditor = "person-editor";
+
+        public const string PersonRemover = "person-remover";
+
+        #endregion
+   
+        #region Program
+
+        public const string ProgramViewer = "program-viewer";
+   
+        public const string ProgramCreator = "program-creator";
+
+        public const string ProgramEditor = "program-editor";
+
+        public const string ProgramRemover = "program-remover";
+
+        #endregion
+
+        #region Document
+
+        public const string DocumentViewer = "document-viewer";
+
+        public const string DocumentCreator = "document-creator";
+
+        public const string DocumentEditor = "document-editor";
+
+        public const string DocumentRemover = "document-remover";
+
+        #endregion
+
+        #region Project
+
+        public const string ProjectViewer = "project-viewer";
+
+        public const string ProjectCreator = "project-creator";
+
+        public const string ProjectEditor = "project-editor";
+
+        public const string ProjectRemover = "project-remover";
+
+        #endregion
     }
 }

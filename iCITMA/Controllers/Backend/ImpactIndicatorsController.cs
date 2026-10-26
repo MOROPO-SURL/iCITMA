@@ -1,25 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using MOROPO.SAPRESSC.Core.Common.Models.View;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
-using MOROPO.SAPRESSC.Core.Persistence.Entities;
-using MOROPO.SAPRESSC.Core.Web.Frontend;
-using MOROPO.CITMA.CMG.iCITMA.Models.View;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using System;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using MOROPO.SAPRESSC.Core.Web.Frontend.Controllers;
+using MOROPO.CITMA.CMG.iCITMA.Models.View;
+using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
-    [Area("Auxiliares")]
-    public class ImpactIndicatorsController : SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController <ImpactIndicator, System.Guid, ImpactIndicatorInputViewModel, ImpactIndicatorDisplayViewModel>
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
+    [Area("i_d_i")]
+    public class ImpactIndicatorsController : Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController <ImpactIndicator, System.Guid, ImpactIndicatorInputViewModel, ImpactIndicatorDisplayViewModel>
     {
-        public ImpactIndicatorsController(IEntityRepository<ImpactIndicator, Guid> repository, IStringLocalizer<ImpactIndicatorsController> localizer, ILogger<ImpactIndicatorsController> logger) : base(repository, localizer, logger)
+        public ImpactIndicatorsController(IEntityRepository<ImpactIndicator, System.Guid> repository, IStringLocalizer<ImpactIndicatorsController> localizer, ILogger<ImpactIndicatorsController> logger) : base(repository, localizer, logger)
         {
         }
 

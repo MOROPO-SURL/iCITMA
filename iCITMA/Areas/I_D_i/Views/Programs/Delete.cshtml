@@ -1,0 +1,68 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProgramDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Programa";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Gestionar Programas",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3 class="mb-3 mt-4">Está seguro que desea eliminar el programa detallado a continuación?</h3>
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Model.Name</dd>
+    <dd>Código</dd>
+    <dt>@Model.Leader</dt>
+    <dt>Categoría</dt>
+    <dd>@Model.Category</dd>
+    <dt>Fecha de Inicio</dt>
+    <dd>@Model.StartDate.ToShortDateString()</dd>
+    <dt>Fecha de Terminación</dt>
+    @if (Model.EndAt != null)
+    {
+        <dd>@Model.EndAt.Value.ToShortDateString()</dd>
+    }
+    else
+    {
+        <dd class="text-muted">---</dd>
+    }
+    <dt>Gestor</dt>
+    <dd>@Model.Manager</dd>
+    <dt>Jefe</dt>
+    <dd>@Model.Leader</dd>
+    <dt>Objetivos</dt>
+    @if (Model.Description != null)
+    {
+        <dd class="mb-0">@Model.Description</dd>
+    }
+    else
+    {
+        <dd class="mb-0 text-muted">---</dd>
+    }
+</dl>
+<hr />
+@using (Html.BeginForm("delete", "programs", new { Area = "I_D_i", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

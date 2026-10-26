@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
-namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
+﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class TeachingCategoryRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<TeachingCategory, System.Guid>
+    public class TeachingCategoryRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.TeachingCategory, System.Guid>
     {
-        public TeachingCategoryRepository(DbContext dbContext) : base(dbContext)
+        public TeachingCategoryRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
     }

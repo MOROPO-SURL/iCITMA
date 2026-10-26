@@ -1,11 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class SceneryKindRepository:  SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<SceneryKind, System.Guid>
+    public class SceneryKindRepository:  Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.SceneryKind, System.Guid>
     {
-        public SceneryKindRepository(DbContext dbContext) : base(dbContext)
+        public SceneryKindRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
         

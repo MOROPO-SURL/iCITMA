@@ -5,15 +5,15 @@ using Microsoft.Extensions.Logging;
 using MOROPO.CITMA.CMG.iCITMA.Models.View;
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 using MOROPO.CITMA.CMG.iCITMA.Security.Authorization;
-using MOROPO.SAPRESSC.Core.Persistence.Repositories;
-using MOROPO.SAPRESSC.Core.Web.Security.Attributes;
+using MOROPO.Framework.Guama.Core.Persistence.Repositories;
+using MOROPO.Framework.Guama.Core.Presentation.Web.Security.Attributes;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Controllers.Backend
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [RequirePermissions(SAPRESSC.Core.Security.Common.Web.Backend.Constants.Permission.ShellManager)]
+    [RequirePermissions(Framework.Guama.Core.Security.Presentation.Constants.Permissions.ShellManager)]
     [Area("Auxiliares")]
-    public class SceneryKindsController: SAPRESSC.Core.Web.Backend.Controllers.AbstractEntityManagementController<SceneryKind, System.Guid, SceneryKindInputViewModel, SceneryKindDisplayViewModel>
+    public class SceneryKindsController: Framework.Guama.Core.Presentation.Web.Backend.Controllers.AbstractEntityManagementController<SceneryKind, System.Guid, SceneryKindInputViewModel, SceneryKindDisplayViewModel>
     {
         public SceneryKindsController(IEntityRepository<SceneryKind, Guid> repository, IStringLocalizer<SceneryKindsController> localizer, ILogger<SceneryKindsController> logger) : base(repository, localizer, logger)
         {

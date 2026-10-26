@@ -2,11 +2,12 @@ using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class FundingSourceInputViewModel: SAPRESSC.Core.Persistence.Models.IEntityInputModel<FundingSource, System.Guid>
+    public class FundingSourceInputViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<FundingSource, System.Guid>
     {
         public System.Guid Id { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]

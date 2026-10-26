@@ -1,0 +1,42 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactProgramExpectResultInputViewModel
+
+<div class="modal fade" id="add-exps-projectimpact-@Model.ProjectImpactId" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-member-title">Agregar Resultado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("AddProjectImpactProgramExpectResult", "Projects", null, FormMethod.Post, true, null))
+            {
+                <div class="modal-body">
+                    @Html.HiddenFor(model => model.ProjectImpactId)
+
+                    @if (Model.NotSelectedProgramExpectResult.Count > 0)
+                    {
+                        <div>
+                            @Html.LabelFor(model => model.NotSelectedProgramExpectResult, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.ProgramExpectResultId, Model.NotSelectedProgramExpectResult, "Escriba para buscar Resultado ...", new { @class = "form-control member-select" })
+                            @Html.ValidationMessageFor(model => model.ProgramExpectResultId, null, new { @class = "text-danger" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted font-italic">No hay más resultados que puedan formar parte del proyecto</div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    @if (Model.NotSelectedProgramExpectResult.Count > 0)
+                    {
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    }
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

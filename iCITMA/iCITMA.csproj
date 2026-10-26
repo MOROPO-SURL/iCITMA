@@ -1,36 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-	  <AssemblyName>MOROPO.CITMA.CMG.iCITMA</AssemblyName>
-	  <RootNamespace>MOROPO.CITMA.CMG.iCITMA</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+	<AssemblyName>MOROPO.CITMA.CMG.iCITMA</AssemblyName>
+	<RootNamespace>MOROPO.CITMA.CMG.iCITMA</RootNamespace>
+	<Product>iCITMA</Product>
+	<Authors>MOROPO DotNet DevTeam</Authors>
+	<Company>MOROPO S.U.R.L.</Company>
+	<Copyright>© MOROPO 2023 - Todos los derechos reservados.</Copyright>
+	<Version>0.1.0</Version>
+	<PackageProjectUrl>https://www.moropo.cu/</PackageProjectUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Development)' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Console (Staging)' " />
   <ItemGroup>
+    <Compile Remove="Areas\Ecosistema\**" />
     <Compile Remove="dpkeys\**" />
     <Compile Remove="logs\**" />
+    <Content Remove="Areas\Ecosistema\**" />
     <Content Remove="dpkeys\**" />
     <Content Remove="logs\**" />
+    <EmbeddedResource Remove="Areas\Ecosistema\**" />
     <EmbeddedResource Remove="dpkeys\**" />
     <EmbeddedResource Remove="logs\**" />
+    <None Remove="Areas\Ecosistema\**" />
     <None Remove="dpkeys\**" />
     <None Remove="logs\**" />
+    <None Remove="Areas\Ecosistema\" />
+    <None Remove="Areas\I_D_i\Views\ProjectCategories\" />
+    <None Remove="Areas\I_D_i\Views\Projects\" />
+    <None Remove="Areas\I_D_i\Views\ProjectStates\" />
+    <None Remove="Areas\I_D_i\Views\ImpactIndicators\" />
+    <None Remove="Areas\I_D_i\Views\ResearchAreas\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-	<PackageReference Include="SAPRESSC.Core.Security.Common.Web.Backend" Version="2.2.6.6" />
-	<PackageReference Include="SAPRESSC.Core.Security.Common.Web.Frontend" Version="2.2.6.6" />
-	<PackageReference Include="SAPRESSC.Middleware.Media.Web.Common" Version="2.2.6.6" />
-	<PackageReference Include="SAPRESSC.Middleware.Region.Web.Backend" Version="2.2.6.5" />
-	<PackageReference Include="SAPRESSC.Middleware.Region.Web.SecurityLocal" Version="2.2.6.6" />
-	<PackageReference Include="SAPRESSC.Middleware.Security.Identity.Web.Backend" Version="2.2.6.6" />
-	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
-	<PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-	<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-	<PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-	<PackageReference Include="SkiaSharp" Version="2.80.3" />
+    <None Include="Views\Shared\EditorTemplates\SelectionDescriptedGuidIDItemInputViewModel.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\SelectionDescriptedIntIDItemInputViewModel.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\SelectionGuidIDItemInputViewModel.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\SelectionIntIDItemInputViewModel.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\SelectionLongIDItemInputViewModel.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\SelectionStringIDItemInputViewModel.cshtml" />
+    <None Include="wwwroot\lib\chartjs\chart.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GuamaFramework.Core.Presentation.Web.API" Version="6.0.0.12" />
+	<PackageReference Include="GuamaFramework.Core.Security.Common.Presentation.Web.Frontend" Version="6.0.0.12" />
+	<PackageReference Include="GuamaFramework.Location.Presentation.Web.Backend" Version="6.0.0.12" />
+	<PackageReference Include="GuamaFramework.Media.Presentation.Web.Common" Version="6.0.0.12" />
+	<PackageReference Include="GuamaFramework.Security.Personal.Presentation.Web.Backend" Version="6.0.0.12" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,9 +67,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\fonts\" />
+    <Folder Include="Areas\I_D_i\Views\ProjectCategories\" />
+    <Folder Include="Areas\I_D_i\Views\ProjectStates\" />
+    <Folder Include="Areas\I_D_i\Views\ImpactIndicators\" />
+    <Folder Include="Areas\I_D_i\Views\ResearchAreas\" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

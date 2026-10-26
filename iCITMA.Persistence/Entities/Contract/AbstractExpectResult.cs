@@ -1,7 +1,7 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities.Contract
 {
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public abstract class AbstractExpectResult : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public abstract class AbstractExpectResult : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public AbstractExpectResult()
         {

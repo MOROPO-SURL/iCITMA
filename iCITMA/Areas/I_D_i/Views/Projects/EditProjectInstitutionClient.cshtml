@@ -1,0 +1,154 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionClientManagerViewModel
+
+@{
+    ViewData["Title"] = "Editar Proyecto (Clientes)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración de Proyectos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/bootstrap-combobox/css/bootstrap-combobox.css" />
+    <style type="text/css">
+        #ImageFile {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .member-img {
+            width: 85%;
+            max-height: 330px;
+        }
+
+        .dropdown-toggle {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin-left: -1px;
+            line-height: 36px;
+        }
+
+            .dropdown-toggle::after {
+                margin: 0 5px;
+            }
+
+        ul.dropdown-menu {
+            width: 100%;
+        }
+    </style>
+}
+
+@section scripts {
+    <script src="~/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+    <script type="text/javascript">
+        $('.member-select').combobox();
+    </script>
+
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4 class="mb-0">@ViewData["Title"]</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Project.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Project.Id)">Participantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectKeyWorlds", Model.Project.Id)">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("SpecificObjectives", Model.Project.Id)">Objetivos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Results", Model.Project.Id)">Resultados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectImpact", Model.Project.Id)">Impactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Project.Id)">Salidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Investigadores </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        @if (Model.Clients.Count() != 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.Clients)
+                {
+                    <div class="col-lg-2 col-md-3 col-sm-4" style="margin-bottom: 20px;">
+                        @if (item.ImageId == System.Guid.Empty || item.ImageId == null)
+                        {
+                            <img src="~/img/default-organization-picture.png" class="card-img-top" id="ImageFilePreview" />
+                        }
+                        else
+                        {
+                            <img src="~/media/images/@item.ImageId.@item.ImageExtension" class="card-img-top" id="ImageFilePreview" />
+                        }
+                        <div class="text-center mt-2">
+                            <div>@item.Name</div>
+
+                            <div class="mt-2">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-light" data-toggle="modal" data-target="#descrip-@item.Id"><span class="mdi mdi-file-eye-outline"></span><span>Detalles</span></button>
+                                    <button role="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-participant-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    await Html.RenderPartialAsync("_ProjectInstitutionClientDetailPartial", @item);
+                    await Html.RenderPartialAsync("_DeleteProjectInstitutionClientPartial", @item.InstitutionProjectLogicViewModel);
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-muted font-italic">Aún no tiene clientes, haga clic en el botón agregar para comenzar ...</div>
+        }
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-member">Agregar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Regresar al listado</a>
+    </div>
+    @await Html.PartialAsync("AddProjectInstitutionClientPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.InstitutionClientInputViewModel
+    {
+    ProjectId = Model.Project.Id,
+    NotSelectedClients = Model.NotSelectedClients
+    })
+</div>
+
+
+
+
+

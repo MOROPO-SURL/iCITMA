@@ -2,11 +2,12 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Person : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Person : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Person()
         {
             Id = System.Guid.NewGuid();
+            Identity = new Framework.Guama.Identity.Persistence.Entities.PersonIdentity();
             ResearchAreaSpecializationBridges = new List<PersonResearchAreaSpecializationBridge>();
             ResearchAreaMasteryBridges = new List<PersonResearchAreaMasteryBridge>();
             ResearchAreaDoctorateBridges = new List<PersonResearchAreaDoctorateBridge>();
@@ -16,19 +17,17 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         [System.ComponentModel.DataAnnotations.Key]
         public System.Guid Id { get; set; }
 
-        public SAPRESSC.Middleware.Identity.Persistence.Entities.PersonIdentity Identity { get; set; }
+        public Framework.Guama.Identity.Persistence.Entities.PersonIdentity Identity { get; set; }
         public System.Guid? IdentityId { get; set; }
 
         public Enumerators.SchoolingLevel SchoolingLevel { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("ResearcherCategoryId")]
         public ResearcherCategory ResearcherCategory { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? ResearcherCategoryId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("TeachingCategoryId")]
         public TeachingCategory TeachingCategory { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? TeachingCategoryId { get; set; }
 
         public List<PersonResearchAreaSpecializationBridge> ResearchAreaSpecializationBridges { get; set; }

@@ -1,15 +1,12 @@
-﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
+﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+
+namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
 {
-    public class PersonInstitutionBridgeEntityTypeConfigurator : SAPRESSC.Core.Persistence.EF.Configurators.AbstractEntityTypeConfigurator<Entities.PersonInstitutionBridge>
+    public class PersonInstitutionBridgeEntityTypeConfigurator : Framework.Guama.Core.Persistence.ORM.EF.Configurators.AbstractBridgeEntityTypeConfigurator<PersonInstitutionBridge, Person, System.Guid, Institution, System.Guid>
     {
-        protected override void ApplayRules(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Entities.PersonInstitutionBridge> entityTypeBuilder)
+        public PersonInstitutionBridgeEntityTypeConfigurator()
         {
-            base.ApplayRules(entityTypeBuilder);
-
-            entityTypeBuilder.HasKey(bridge => new { bridge.PersonId, bridge.InstitutionId });
-
-            entityTypeBuilder.HasOne(bridge => bridge.Person).WithMany(entity => entity.InstitutionBridges).HasForeignKey(bridge => bridge.PersonId);
-            entityTypeBuilder.HasOne(bridge => bridge.Institution).WithMany().HasForeignKey(bridge => bridge.InstitutionId);
+            prowNavigationExpression = entity => entity.InstitutionBridges;
         }
     }
 }

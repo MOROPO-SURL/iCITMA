@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ProgramCategoryDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<ProgramCategory, System.Guid>
+    public class ProgramCategoryDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<ProgramCategory, System.Guid>
     {
         public System.Guid Id { get; set; }
 

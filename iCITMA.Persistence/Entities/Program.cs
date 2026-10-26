@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Program : SAPRESSC.Core.Persistence.Entities.INamedEntity<System.Guid>
+    public class Program : Framework.Guama.Core.Persistence.Entities.Contract.INamedEntity<System.Guid>
     {
         public Program()
         {
@@ -15,35 +16,35 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
             InstitutionResponsibleBridges = new List<ProgramInstitutionResponsibleBridge>();
         }
 
-        [System.ComponentModel.DataAnnotations.Key]
+        [Key]
         public System.Guid Id { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public string Name { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public string Code { get; set; }
 
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("CategoryId")]
         public ProgramCategory Category { get; set; }
-        public System.Guid? CategoryId { get; set; }
+        public System.Guid CategoryId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("ManagerId")]
         public Institution Manager { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Guid? ManagerId { get; set; }
+        public System.Guid ManagerId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("LeaderId")]
-        public Person Leader { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Guid? LeaderId { get; set; }
+        public Person Leader { get; set; }        
+        public System.Guid LeaderId { get; set; }
 
         public System.DateTime StartAt { get; set; }
 
         public System.DateTime? EndAt { get; set; }
 
         // Objetivos
+        [Required]
         public string Description { get; set; }
-
+        
         public List<ProgramImpactIndicatorBridge> ImpactIndicatorBridges { get; set; }
 
         public List<ProgramPersonExpertBridge> PersonExpertBridges { get; set; }

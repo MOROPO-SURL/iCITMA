@@ -1,22 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class ResearchAreaRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<ResearchArea, System.Guid>
+    public class ResearchAreaRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.ResearchArea, System.Guid>
     {
-        public ResearchAreaRepository(DbContext dbContext) : base(dbContext)
+        public ResearchAreaRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
 
-        public override System.Func<ResearchArea, object> GetPagingOrderSelector()
+        public override System.Func<Entities.ResearchArea, object> GetPagingOrderSelector()
         {
             return entity => entity.Name;
-        }
-
-        protected override System.Linq.IQueryable<ResearchArea> GetQueryableDbSet()
-        {
-            return base.GetQueryableDbSet();
         }
     }
 }

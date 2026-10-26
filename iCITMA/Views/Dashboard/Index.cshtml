@@ -1,4 +1,5 @@
-﻿@using MOROPO.CITMA.CMG.iCITMA.Extensions;
+﻿@using MOROPO.Framework.Guama.Core.Security.Common.Presentation.Web.Frontend.Extensions
+@using MOROPO.CITMA.CMG.iCITMA.Extensions;
 @using MOROPO.CITMA.CMG.iCITMA.Models.View;
 
 @model ManagementDashboardViewModel
@@ -10,7 +11,7 @@
     {
         new BreadcrumbViewModel
         {
-            Caption = "<span class=\"mdi mdi-cogs\"></span> " + ViewData["Title"].ToString()
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\"></span> " + ViewData["Title"].ToString()
         }
     };
 
@@ -19,25 +20,222 @@
 
 @section styles {
     <style type="text/css">
-        .card .mdi {
+        #management-sections .card .mdi {
             font-size: 48px;
         }
 
-        .nav-link .mdi {
+        #management-sections .nav-link .mdi {
             font-size: 18px;
+        }
+
+        .table.table-borderless.table-sm {
+            font-size: 0.85rem !important;
         }
     </style>
 }
 
+@section scripts {
+    <script type="text/javascript" src="~/lib/chartjs/chart.min.js"></script>
+
+    <script type="text/javascript">
+        const userActityDataLabels = JSON.parse(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Newtonsoft.Json.JsonConvert.SerializeObject(Model.UserActivityMap.Keys))));
+        const userActityDataValues = JSON.parse(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Newtonsoft.Json.JsonConvert.SerializeObject(Model.UserActivityMap.Values))));
+
+        const userActityData = {
+            labels: userActityDataLabels,
+            datasets: [{
+                data: userActityDataValues,
+                backgroundColor: [
+                    '#4dc9f6',
+                    '#f67019',
+                    '#528078',
+                    '#537bc4',
+                    '#63e792',
+                    '#acc236',
+                    '#166a8f',
+                    '#00a950',
+                    '#f53794',
+                    '#58595b'
+                ]
+            }]
+        };
+
+        const userActityChartConfig = {
+            type: 'polarArea',
+            data: userActityData,
+            options: {}
+        };
+
+        const userActityChart = new Chart(
+            document.getElementById('user-activity-chart'),
+            userActityChartConfig
+        );
+
+        const weekTracesDataLabels = JSON.parse(@Html.Raw(@Newtonsoft.Json.JsonConvert.SerializeObject(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekTracesMap.Keys))));
+        const weekTracesDataValues = JSON.parse(@Html.Raw(@Newtonsoft.Json.JsonConvert.SerializeObject(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WeekTracesMap.Values))));
+
+        const weekTracesData = {
+            labels: weekTracesDataLabels,
+            datasets: [{
+                label: 'registros por día',
+                data: weekTracesDataValues,
+                fill: true,
+                borderColor: '#63e792',
+                backgroundColor: '#63e792af',
+                tension: 0.3
+            }]
+        };
+
+        const weekTracesChartConfig = {
+            type: 'line',
+            data: weekTracesData,
+            options: {}
+        };
+
+        const weekStatisticsChart = new Chart(
+            document.getElementById('week-traces-chart'),
+            weekTracesChartConfig
+        );
+    </script>
+}
+
+<div class="row mt-4">
+    <div class="col-xl-3 col-lg-6 col-md-3 col-sm-6 mb-4">
+        <div class="card bg-info">
+            <div class="card-body pt-2 pb-2">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-48px mdi-folder-settings-variant"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;"> 
+                        <h5 class="mb-0">Programas</h5>
+                        <small>I + D + i</small>
+                    </div>
+                </div>
+                <div class="display-1">@Model.ProgramCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-3 col-sm-6 mb-4">
+        <div class="card bg-secondary">
+            <div class="card-body pt-2 pb-2">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-48px mdi-settings"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;">
+                        <h5 class="mb-0">Proyectos</h5>
+                        <small>I + D + i</small>
+                    </div>
+                </div>
+                <div class="display-1">@Model.ProjectCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-3 col-sm-6 mb-4">
+        <div class="card bg-success">
+            <div class="card-body pt-2 pb-2">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-48px mdi-bank"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;">
+                        <h5 class="mb-0">Instituciones</h5>
+                        <small>Ecosistema</small>
+                    </div>
+                </div>
+                <div class="display-1">@Model.InstitutionCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-3 col-sm-6 mb-4">
+        <div class="card bg-warning">
+            <div class="card-body pt-2 pb-2">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-48px mdi-face"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;">
+                        <h5 class="mb-0">Personas</h5>
+                        <small>Ecosistema</small>
+                    </div>
+                </div>
+                <div class="display-1">@Model.PersonCount</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
+    <div class="col-xl-4 col-lg-6 col-md-4 col-sm-6 mb-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-36px mdi-account"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;"> 
+                        <h5 class="mb-0">Usuarios</h5>
+                    </div>
+                    <div class="col-auto" style="align-self: center;">
+                        <table class="table table-borderless table-sm mb-0">
+                            <tr>
+                                <th class="pt-0 pb-0 text-right">Total:</th>
+                                <td class="pt-0 pb-0" style="width: 1px;">@Model.UserTotalCount</td>
+                            </tr>
+                            <tr>
+                                <th class="pt-0 pb-0 text-right">Desabilitados:</th>
+                                <td class="pt-0 pb-0" style="width: 1px;">@Model.UserDisabledCount</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr class="mt-1" />
+                <canvas id="user-activity-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-lg-12 col-md-8 col-sm-12 mb-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <span class="mdi mdi-36px mdi-timeline-clock"></span>
+                    </div>
+                    <div class="col pl-2" style="align-self: center;">
+                        <h5 class="mb-0">Registros</h5>
+                    </div>
+                    <div class="col-auto" style="align-self: center;">
+                        <table class="table table-borderless table-sm mb-0">
+                            <tr>
+                                <th class="pt-0 pb-0 text-right">Total:</th>
+                                <td class="pt-0 pb-0" style="width: 1px;">@Model.TraceTotalCount</td>
+                            </tr>
+                            <tr>
+                                <th class="pt-0 pb-0 text-right">Esta Semana:</th>
+                                <td class="pt-0 pb-0" style="width: 1px;">@Model.TraceWeekCount</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr class="mt-1" />
+                <canvas id="week-traces-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="mb-4 mt-0" />
+
+<div id="management-sections" class="row">
     <div class="col-sm-6">
     @for (int i = 0; i < Model.Sections.Count; i += 2)
     {
         var group = Model.Sections.ElementAt(i);
 
-        <div class="card mb-3">
-            <div class="card-header"><h5 style="margin-bottom: 0;">@group.Key</h5></div>
+        <div class="card mb-4">
             <div class="card-body">
+                <h5 class="card-title text-dark">@group.Key</h5>
                 @{
                     var total = group.Value.Count;
                     var count = 0;
@@ -50,7 +248,7 @@
                     @foreach (var item in subList)
                     {
                         <div class="col-sm-4" style="text-align: center; padding-bottom: 15px; padding-top: 15px;">
-                            @if (User.HasClaim(claim => claim.Type.Equals(MOROPO.SAPRESSC.Core.Web.Security.Constants.ClaimTypes.AccountWithFullAccess) && claim.Value.Equals(true.ToString())) || User.IsInRole(item.Role))
+                            @if (User.IsAuthorized(item.Role))
                             {
                                 <a href="@Url.Action(item.Action, item.Controller, new { item.Area })">
                                     @item.ToIconographyHtmlString()
@@ -82,9 +280,9 @@
         {
             var group = Model.Sections.ElementAt(i);
 
-            <div class="card mb-3">
-                <div class="card-header"><h5 style="margin-bottom: 0;">@group.Key</h5></div>
+            <div class="card mb-4">
                 <div class="card-body">
+                    <h5 class="card-title text-dark">@group.Key</h5>
                     @{
                         var total = group.Value.Count;
                         var count = 0;
@@ -97,7 +295,7 @@
                             @foreach (var item in subList)
                             {
                                 <div class="col-sm-4" style="text-align: center; padding-bottom: 15px; padding-top: 15px;">
-                                    @if (User.HasClaim(claim => claim.Type.Equals(MOROPO.SAPRESSC.Core.Web.Security.Constants.ClaimTypes.AccountWithFullAccess) && claim.Value.Equals(true.ToString())) || User.IsInRole(item.Role))
+                                    @if (User.IsAuthorized(item.Role))
                                     {
                                     <a href="@Url.Action(item.Action, item.Controller, new { item.Area })">
                                         @item.ToIconographyHtmlString()

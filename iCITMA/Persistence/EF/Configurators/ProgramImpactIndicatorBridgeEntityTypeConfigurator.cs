@@ -1,15 +1,12 @@
-﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
+﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+
+namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
 {
-    public class ProgramImpactIndicatorBridgeEntityTypeConfigurator : SAPRESSC.Core.Persistence.EF.Configurators.AbstractEntityTypeConfigurator<Entities.ProgramImpactIndicatorBridge>
+    public class ProgramImpactIndicatorBridgeEntityTypeConfigurator : Framework.Guama.Core.Persistence.ORM.EF.Configurators.AbstractBridgeEntityTypeConfigurator<ProgramImpactIndicatorBridge, Entities.Program, System.Guid, ImpactIndicator, System.Guid>
     {
-        protected override void ApplayRules(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Entities.ProgramImpactIndicatorBridge> entityTypeBuilder)
+        public ProgramImpactIndicatorBridgeEntityTypeConfigurator()
         {
-            base.ApplayRules(entityTypeBuilder);
-
-            entityTypeBuilder.HasKey(bridge => new { bridge.ProgramId, bridge.ImpactIndicatorId });
-
-            entityTypeBuilder.HasOne(bridge => bridge.Program).WithMany(entity => entity.ImpactIndicatorBridges).HasForeignKey(bridge => bridge.ProgramId);
-            entityTypeBuilder.HasOne(bridge => bridge.ImpactIndicator).WithMany().HasForeignKey(bridge => bridge.ImpactIndicatorId);
+            prowNavigationExpression = entity => entity.ImpactIndicatorBridges;
         }
     }
 }

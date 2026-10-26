@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ImpactIndicatorDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<ImpactIndicator, System.Guid>
+    public class ImpactIndicatorDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<ImpactIndicator, System.Guid>
     {
         public System.Guid Id { get; set; }
 

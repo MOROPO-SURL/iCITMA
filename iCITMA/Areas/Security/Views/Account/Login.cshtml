@@ -1,4 +1,4 @@
-﻿@model MOROPO.SAPRESSC.Core.Web.Security.Models.View.LoginViewModel
+﻿@model MOROPO.Framework.Guama.Core.Presentation.Web.Security.Models.View.LoginViewModel
 
 @{
     ViewData["Title"] = GlobalViewLocalizationHelper.Localize("Login", ViewLocalizer);
@@ -20,7 +20,8 @@
             align-items: center;
             padding-top: 40px;
             padding-bottom: 40px;
-            background-color: #f5f5f5;
+            background-color: #528078;
+            background-image: linear-gradient(7deg, rgba(156, 156, 156,0.06) 0%, rgba(156, 156, 156,0.06) 50%,rgba(52, 52, 52,0.06) 50%, rgba(52, 52, 52,0.06) 100%),linear-gradient(150deg, rgba(233, 233, 233,0.06) 0%, rgba(233, 233, 233,0.06) 50%,rgba(34, 34, 34,0.06) 50%, rgba(34, 34, 34,0.06) 100%),linear-gradient(165deg, rgba(97, 97, 97,0.06) 0%, rgba(97, 97, 97,0.06) 50%,rgba(98, 98, 98,0.06) 50%, rgba(98, 98, 98,0.06) 100%),linear-gradient(145deg, rgba(246, 246, 246,0.06) 0%, rgba(246, 246, 246,0.06) 50%,rgba(76, 76, 76,0.06) 50%, rgba(76, 76, 76,0.06) 100%),linear-gradient(9deg, rgba(122, 122, 122,0.06) 0%, rgba(122, 122, 122,0.06) 50%,rgba(211, 211, 211,0.06) 50%, rgba(211, 211, 211,0.06) 100%),linear-gradient(307deg, rgba(86, 86, 86,0.06) 0%, rgba(86, 86, 86,0.06) 50%,rgba(150, 150, 150,0.06) 50%, rgba(150, 150, 150,0.06) 100%),linear-gradient(113deg, rgba(166, 166, 166,0.06) 0%, rgba(166, 166, 166,0.06) 50%,rgba(15, 15, 15,0.06) 50%, rgba(15, 15, 15,0.06) 100%),linear-gradient(347deg, rgba(21, 21, 21,0.06) 0%, rgba(21, 21, 21,0.06) 50%,rgba(254, 254, 254,0.06) 50%, rgba(254, 254, 254,0.06) 100%),linear-gradient(230deg, rgba(168, 168, 168,0.06) 0%, rgba(168, 168, 168,0.06) 50%,rgba(251, 251, 251,0.06) 50%, rgba(251, 251, 251,0.06) 100%),radial-gradient(circle at center center, rgb(145, 225, 49),rgb(27, 239, 112));
             text-align: center;
         }
 
@@ -33,30 +34,6 @@
 
             .form-signin .checkbox {
                 font-weight: 400;
-            }
-
-            .form-signin .form-control {
-                position: relative;
-                box-sizing: border-box;
-                height: auto;
-                padding: 10px;
-                font-size: 16px;
-            }
-
-                .form-signin .form-control:focus {
-                    z-index: 2;
-                }
-
-            .form-signin #UserName {
-                margin-bottom: -1px;
-                border-bottom-right-radius: 0;
-                border-bottom-left-radius: 0;
-            }
-
-            .form-signin #Password {
-                margin-bottom: 10px;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
             }
     </style>
 }
@@ -93,27 +70,46 @@
 
     @Html.ValidationSummary(true)
 
-    <h1 class="h3 mb-3 font-weight-normal">Control de Acceso</h1>
-
-    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Usuario" })
-
-    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Contraseña" })
-
-    @if (Context.Session.Keys.Contains(MOROPO.SAPRESSC.Core.Web.Security.Constants.HttpSessionMapKeys.CaptchaCodeKey))
-    {
-        <div style="margin:20px 0; text-align: left;">
-            @Html.LabelFor(model => model.CaptchaCode, new { @class = "control-label", style = "text-align: left;" })
-            <img class="img-thumbnail mb-2" src="@Url.Action("captcha")" width="180" height="60" />
-            @Html.TextBoxFor(model => model.CaptchaCode, new { @class = "form-control", placeholder = "Entre aquí las 8 letras en la imagen" })
-            @Html.ValidationMessageFor(model => model.CaptchaCode, null, new { @class = "text-danger" })
+    <div class="card bg-light text-center">
+        <div class="card-header">
+            <h5 class="mb-0">Control de Acceso</h5>
         </div>
-    }
+        <div class="card-body">
+            <img class="w-75 mb-3" src="~/img/citma-logo.png" />
 
-    <div class="checkbox mb-3">
-        <label>
-            @Html.CheckBoxFor(m => m.RememberMe) Recordar en este dispositivo
-        </label>
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control mb-3", placeholder = "Usuario" })
+
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control mb-3", placeholder = "Contraseña" })
+
+            @if (Context.Session.Keys.Contains(MOROPO.Framework.Guama.Core.Presentation.Web.Security.Constants.HttpSessionMapKeys.CaptchaCodeKey))
+            {
+                <div class="mb3" style="text-align: left;">
+                    @Html.LabelFor(model => model.CaptchaCode, new { @class = "control-label", style = "text-align: left;" })
+                    <img class="img-thumbnail mb-2" src="@Url.Action("captcha")" width="180" height="60" />
+                    @Html.TextBoxFor(model => model.CaptchaCode, new { @class = "form-control", placeholder = "Entre aquí las 8 letras en la imagen" })
+                    @Html.ValidationMessageFor(model => model.CaptchaCode, null, new { @class = "text-danger" })
+                </div>
+            }
+
+            <div class="checkbox mb-3">
+                <label>
+                    @Html.CheckBoxFor(m => m.RememberMe) Recordar en este dispositivo
+                </label>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Iniciar Sesión</button>
+        </div>
     </div>
-    <button class="btn btn-primary btn-block" type="submit">Iniciar Sesión</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2022-@DateTime.Now.Year</p>
+
+    <div class="mt-4 text-light text-center" style="font-size: 0.85rem;">
+        <p class="mb-1">Delegación Provincial del CITMA Camagüey</p>
+        <p class="mb-2">MOROPO S.U.R.L.</p>
+        @if (System.DateTime.Now.Year == 2023)
+        {
+            <p class="mb-0">&copy; 2023</p>
+        }
+        else
+        {        
+            <p class="mb-0">&copy; 2022-@DateTime.Now.Year</p>
+        }
+    </div>
 }

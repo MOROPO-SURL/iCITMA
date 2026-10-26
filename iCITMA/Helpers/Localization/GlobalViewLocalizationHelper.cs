@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
-using MOROPO.CITMA.CMG.iCITMA;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Helpers.Localization
 {
@@ -34,11 +33,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Helpers.Localization
             }
 
             return htmlLocalizer[key, arguments].Value;
-        }
-
-        public IStringLocalizer WithCulture(System.Globalization.CultureInfo culture)
-        {
-            return stringLocalizer.WithCulture(culture);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class TeachingCategoryDisplayViewModel : SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<TeachingCategory, System.Guid>
+    public class TeachingCategoryDisplayViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<TeachingCategory, System.Guid>
     {
         public System.Guid Id { get; set; }
 

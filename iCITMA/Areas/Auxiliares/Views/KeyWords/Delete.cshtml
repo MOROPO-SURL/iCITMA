@@ -4,15 +4,15 @@
     ViewData["Title"] = "Eliminar Palabra Clave";
 
     ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
-    {
+{
         new BreadcrumbViewModel
         {
-            Caption = "<span class=\"mdi mdi-cogs\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
             Url = "/"
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Palabras Claves",
+            Caption = "Gestionar Palabras Claves",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel
@@ -24,22 +24,21 @@
     Layout = "_BackendLayout";
 }
 
-@section styles {
-    <style type="text/css">
-        dd {
-            word-wrap: break-word;
-        }
-    </style>
-}
-
-    <h3>Esta seguro que desea eliminar la palabra clave detallada a continuación?</h3>
+<h3 class="mb-3 mt-4">Está seguro que desea eliminar la palabra clave detallada a continuación?</h3>
 <dl>
-
-    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dt>Nombre</dt>
     <dd>@Html.DisplayFor(model => model.Name)</dd>
-    <dt>@Html.DisplayNameFor(model => model.Description)</dt>
-    <dd>@Html.DisplayFor(model => model.Description)</dd>    
+    <dt>Descripción</dt>
+    @if (Model.Description != null)
+    {
+        <dd class="mb-0 text-wrap">@Model.Description</dd>
+    }
+    else
+    {
+        <dd class="mb-0 text-muted">---</dd>
+    }
 </dl>
+<hr />
 
 @using (Html.BeginForm("delete", "keywords", new { Area = "Auxiliares", key = string.Empty }, FormMethod.Post, true, null))
 {

@@ -1,6 +1,4 @@
-﻿@using MOROPO.SAPRESSC.Core.Common.Models.View;
-
-@model MOROPO.SAPRESSC.Middleware.Security.Identity.Web.Backend.Models.View.UserDisplayViewModel
+﻿@model MOROPO.Framework.Guama.Security.Personal.Presentation.Web.Backend.Models.View.UserDisplayViewModel
 
 @{
     ViewData["Title"] = "Eliminar Usuario";
@@ -9,12 +7,12 @@
     {
         new BreadcrumbViewModel
         {
-            Caption = "<span class=\"mdi mdi-cogs\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
             Url = "/"
         },
         new BreadcrumbViewModel
         {
-            Caption = "Administración de Usuarios",
+            Caption = "Gestionar Usuarios",
             Url = Url.Action("index")
         },
         new BreadcrumbViewModel

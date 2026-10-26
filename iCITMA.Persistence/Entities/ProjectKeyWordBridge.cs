@@ -1,13 +1,13 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class ProjectKeyWordBridge
+    public class ProjectKeyWordBridge : Framework.Guama.Core.Persistence.Entities.Contract.IBridge<Project, System.Guid, KeyWord, System.Guid>
     {
-        public System.Guid ProjectId { get; set; }
+        public System.Guid ProwId { get; set; }
 
-        public System.Guid KeyWordId { get; set; }
+        public System.Guid SternId { get; set; }
 
-        public Project Project { get; set; }
+        public Project Prow { get; set; }
 
-        public KeyWord KeyWord { get; set; }
+        public KeyWord Stern { get; set; }
     }
 }

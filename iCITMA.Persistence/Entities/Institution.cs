@@ -1,16 +1,18 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Institution : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Institution : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Institution()
         {
-            Id = System.Guid.NewGuid();
+            Id = System.Guid.NewGuid();            
+            Identity = new Framework.Guama.Identity.Persistence.Entities.OrganizationIdentity();              
         }
 
         [System.ComponentModel.DataAnnotations.Key]
         public System.Guid Id { get; set; }
 
-        public SAPRESSC.Middleware.Identity.Persistence.Entities.OrganizationIdentity Identity { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("IdentityId")]
+        public Framework.Guama.Identity.Persistence.Entities.OrganizationIdentity Identity { get; set; }
         public System.Guid? IdentityId { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("OwnerId")]
@@ -19,7 +21,7 @@
 
         [System.ComponentModel.DataAnnotations.Schema.ForeignKey("RepresentativeId")]
         public Person Representative { get; set; }
-        [System.ComponentModel.DataAnnotations.Required]
         public System.Guid? RepresentativeId { get; set; }
+        public string Alia { get; set; }
     }
 }

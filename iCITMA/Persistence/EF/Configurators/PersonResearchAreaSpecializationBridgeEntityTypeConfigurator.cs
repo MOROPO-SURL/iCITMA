@@ -1,15 +1,12 @@
-﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
+﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
+
+namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Configurators
 {
-    public class PersonResearchAreaSpecializationBridgeEntityTypeConfigurator : SAPRESSC.Core.Persistence.EF.Configurators.AbstractEntityTypeConfigurator<Entities.PersonResearchAreaSpecializationBridge>
+    public class PersonResearchAreaSpecializationBridgeEntityTypeConfigurator : Framework.Guama.Core.Persistence.ORM.EF.Configurators.AbstractBridgeEntityTypeConfigurator<PersonResearchAreaSpecializationBridge, Person, System.Guid, ResearchArea, System.Guid>
     {
-        protected override void ApplayRules(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Entities.PersonResearchAreaSpecializationBridge> entityTypeBuilder)
+        public PersonResearchAreaSpecializationBridgeEntityTypeConfigurator()
         {
-            base.ApplayRules(entityTypeBuilder);
-
-            entityTypeBuilder.HasKey(bridge => new { bridge.PersonId, bridge.ResearchAreaId });
-
-            entityTypeBuilder.HasOne(bridge => bridge.Person).WithMany(entity => entity.ResearchAreaSpecializationBridges).HasForeignKey(bridge => bridge.PersonId);
-            entityTypeBuilder.HasOne(bridge => bridge.ResearchArea).WithMany().HasForeignKey(bridge => bridge.ResearchAreaId);
+            prowNavigationExpression = entity => entity.ResearchAreaSpecializationBridges;
         }
     }
 }

@@ -370,7 +370,7 @@
     <value>Código de Verificación</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Control de Acceso</value>
+    <value>Identificador de Usuario</value>
   </data>
   <data name="business-award-creator" xml:space="preserve">
     <value>Crear Galardones</value>
@@ -619,7 +619,7 @@
     <value>Periodistas</value>
   </data>
   <data name="SociaMedia" xml:space="preserve">
-    <value>Pespecialistas de los Medios</value>
+    <value>Especialistas de los Medios</value>
   </data>
   <data name="SoundManagement" xml:space="preserve">
     <value>Sonido</value>
@@ -635,5 +635,170 @@
   </data>
   <data name="VideoLibraryManagement" xml:space="preserve">
     <value>Videoteca</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Región</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Provincia</value>
+  </data>
+  <data name="Municipality" xml:space="preserve">
+    <value>Municipio</value>
+  </data>
+  <data name="Reference" xml:space="preserve">
+    <value>Referencia</value>
+  </data>
+  <data name="SchoolLevel" xml:space="preserve">
+    <value>Nivel de Escolaridad</value>
+  </data>
+  <data name="ResearcherCategory" xml:space="preserve">
+    <value>Categoría de Investigador</value>
+  </data>
+  <data name="TeachingCategory" xml:space="preserve">
+    <value>Categoría Docente</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primaria</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medio</value>
+  </data>
+  <data name="UpperMiddle" xml:space="preserve">
+    <value>Medio Superior</value>
+  </data>
+  <data name="Higher" xml:space="preserve">
+    <value>Superior</value>
+  </data>
+  <data name="Ultimate" xml:space="preserve">
+    <value>Quinto Nivel de Educación</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Fecha de Creación</value>
+  </data>
+  <data name="Representative" xml:space="preserve">
+    <value>Representante</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Entidad Rectora</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Etiqueta</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Número</value>
+  </data>
+  <data name="ZipCode" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitud</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitud</value>
+  </data>
+  <data name="WebSocial" xml:space="preserve">
+    <value>Web Social</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Gestor</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>Jefe</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="EndAt" xml:space="preserve">
+    <value>Fecha de Terminación</value>
+  </data>
+  <data name="FundingSource" xml:space="preserve">
+    <value>Fuente de Presupuesto</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Monto</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Selecionar</value>
+  </data>
+  <data name="UserProfileEditSuccessMessage" xml:space="preserve">
+    <value>Cambios aplicados con éxito.</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="Beneficiary" xml:space="preserve">
+    <value>Beneficiarios</value>
+  </data>
+  <data name="Budget" xml:space="preserve">
+    <value>Presupuesto</value>
+  </data>
+  <data name="Context" xml:space="preserve">
+    <value>Contexto</value>
+  </data>
+  <data name="MainExecutor" xml:space="preserve">
+    <value>Entidad Ejecutora Principal</value>
+  </data>
+  <data name="MainObjetive" xml:space="preserve">
+    <value>Objetivo Principal</value>
+  </data>
+  <data name="Problem" xml:space="preserve">
+    <value>Problema</value>
+  </data>
+  <data name="StartAt" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Resumen</value>
+  </data>
+  <data name="Program" xml:space="preserve">
+    <value>Programa</value>
+  </data>
+  <data name="Participan" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="ImpactIndicators" xml:space="preserve">
+    <value>Indicadores de Impacto</value>
+  </data>
+  <data name="keyWord" xml:space="preserve">
+    <value>Palabra Clave</value>
+  </data>
+  <data name="Objective" xml:space="preserve">
+    <value>Objetivo</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Resultado</value>
+  </data>
+  <data name="Goals" xml:space="preserve">
+    <value>Objetivos</value>
+  </data>
+  <data name="Masterys" xml:space="preserve">
+    <value>Maestrías</value>
+  </data>
+  <data name="Doctorates" xml:space="preserve">
+    <value>Doctorados</value>
+  </data>
+  <data name="Specializations" xml:space="preserve">
+    <value>Especialidades</value>
+  </data>
+  <data name="Institutions" xml:space="preserve">
+    <value>Instituciones</value>
   </data>
 </root>

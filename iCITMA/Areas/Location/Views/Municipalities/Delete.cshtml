@@ -1,0 +1,47 @@
+﻿@model MOROPO.Framework.Guama.Location.Presentation.Web.Backend.Models.View.MunicipalityDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Municipio";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Gestionar Municipios",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3>Está seguro que desea eliminar el municipio detallado a continuación?</h3>
+<dl>
+
+    <dt>Nombre</dt>
+    <dd>@Model.Name</dd>
+    <dt>Provincia</dt>
+    <dd>@Model.State.Name</dd>
+    <dt>Región</dt>
+    <dd>@Model.State.Region.Name</dd>
+    <dt>País</dt>
+    <dd>@Model.State.Region.Country.Name</dd>    
+</dl>
+
+@using (Html.BeginForm("delete", "municipalities", new { Area = "location", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

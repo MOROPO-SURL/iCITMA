@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-
-namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
+﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Repositories
 {
-    public class ProjectCategoryRepository : SAPRESSC.Core.Persistence.EF.Repositories.AbstractEntityRepository<ProjectCategory, System.Guid>
+    public class ProjectCategoryRepository : Framework.Guama.Core.Persistence.ORM.EF.Repositories.AbstractEntityRepository<Entities.ProjectCategory, System.Guid>
     {
-        public ProjectCategoryRepository(DbContext dbContext) : base(dbContext)
+        public ProjectCategoryRepository(Microsoft.EntityFrameworkCore.DbContext dbContext) : base(dbContext)
         {
         }
     }

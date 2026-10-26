@@ -1,8 +1,8 @@
-﻿using MOROPO.SAPRESSC.Core.Persistence.EF.Configurators;
+﻿using MOROPO.Framework.Guama.Core.Persistence.ORM.EF.Configurators;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Providers
 {
-    public class ApplicationDbSchemaConfigurationProvider : SAPRESSC.Core.Persistence.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade
+    public class ApplicationDbSchemaConfigurationProvider : Framework.Guama.Core.Persistence.ORM.EF.Providers.Facade.IDbSchemaConfigurationProviderFacade
     {
         public string DefaultPersistenceSchema => null;
 
@@ -34,7 +34,12 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.EF.Providers
                     new Configurators.InstitutionEntityTypeConfigurator(),
                     new Configurators.PersonEntityTypeConfigurator(),
                     new Configurators.ProgramEntityTypeConfigurator(),
-                    new Configurators.ProjectEntityTypeConfigurator()
+                    new Configurators.ProjectEntityTypeConfigurator(),
+                    new Configurators.ProjectCategoryEntityTypeConfigurator(),
+                    new Configurators.OutputKindEntityTypeConfigurator(),
+                    new Configurators.SceneryKindEntityTypeConfigurator(),
+                    new Configurators.ResearcherCategoryEntityTypeConfigurator(),
+                    new Configurators.TeachingCategoryEntityTypeConfigurator()
                 };
             }
         }

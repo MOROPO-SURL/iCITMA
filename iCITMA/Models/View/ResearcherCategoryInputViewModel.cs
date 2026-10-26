@@ -1,13 +1,14 @@
 ﻿using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class ResearcherCategoryInputViewModel : SAPRESSC.Core.Persistence.Models.IEntityInputModel<ResearcherCategory, System.Guid>
+    public class ResearcherCategoryInputViewModel : Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<ResearcherCategory, System.Guid>
     {
         public System.Guid Id { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
+        [Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]

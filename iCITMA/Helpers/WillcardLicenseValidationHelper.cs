@@ -1,6 +1,6 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Helpers
 {
-    public class WillcardLicenseValidationHelper : SAPRESSC.Core.Web.Security.Helpers.Facade.ILicenseValidationHelperFacade
+    public class WillcardLicenseValidationHelper : Framework.Guama.Core.Presentation.Web.Security.Helpers.Facade.ILicenseValidationHelperFacade
     {
         public void Validate()
         {

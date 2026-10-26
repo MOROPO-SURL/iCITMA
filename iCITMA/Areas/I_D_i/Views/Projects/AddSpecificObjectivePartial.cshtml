@@ -1,0 +1,34 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.SpecificObjectiveInputViewModel
+
+<div class="modal fade" id="add-member" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-member-title">Agregar Objetivo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>            
+            @using (Html.BeginForm("AddSpecificObjectives", "projects", new { Area = "I_D_i" }, FormMethod.Post))
+            {
+                @Html.ValidationSummary(true)
+                <div class="modal-body">
+                    @Html.HiddenFor(model => model.ProjectId)                        
+                        <div>
+                            @Html.LabelFor(model => model.Objective, new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.Objective, new { @class = "form-control " })
+                            @Html.ValidationMessageFor(model => model.Objective, null, new { @class = "text-danger" })
+                        </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

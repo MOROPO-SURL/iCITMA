@@ -2,7 +2,7 @@
 
 namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class Project : SAPRESSC.Core.Persistence.Entities.IEntity<System.Guid>
+    public class Project : Framework.Guama.Core.Persistence.Entities.Contract.IEntity<System.Guid>
     {
         public Project()
         {
@@ -13,7 +13,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
             CurrencyBudgetBridges = new List<ProjectCurrencyBudgetBridge>();
             KeyWordBridges = new List<ProjectKeyWordBridge>();
             InstitutionClientBridges = new List<ProjectInstitutionClientBridge>();
-            PersonParticipationBridges = new List<ProjectPersonParticipationBridge>();
+            PersonParticipationBridges = new List<ProjectPersonParticipationBridge>();            
         }
 
         [System.ComponentModel.DataAnnotations.Key]
@@ -52,6 +52,8 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 
         public System.DateTime? EndAt { get; set; }
 
+        public decimal? Budget { get; set; }
+
         [System.ComponentModel.DataAnnotations.Required]
         public string Summary { get; set; }
 
@@ -65,7 +67,7 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
         public string Beneficiary { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
-        public string MainObjetive { get; set; }
+        public string MainObjetive { get; set; }        
 
         public List<ProjectProgramExpectResultBridge> ProgramExpectResultBridges { get; set; }
 
@@ -77,6 +79,6 @@ namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 
         public List<ProjectInstitutionClientBridge> InstitutionClientBridges { get; set; }
 
-        public List<ProjectPersonParticipationBridge> PersonParticipationBridges { get; set; }
+        public List<ProjectPersonParticipationBridge> PersonParticipationBridges { get; set; }        
     }
 }

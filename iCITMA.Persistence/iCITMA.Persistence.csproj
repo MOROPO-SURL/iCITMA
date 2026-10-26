@@ -1,13 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>MOROPO.CITMA.CMG.iCITMA.Persistence</AssemblyName>
     <RootNamespace>MOROPO.CITMA.CMG.iCITMA.Persistence</RootNamespace>
+	<Product>iCITMA</Product>
+	<Authors>MOROPO DotNet DevTeam</Authors>
+	<Company>MOROPO S.U.R.L.</Company>
+	<Copyright>© MOROPO 2023 - Todos los derechos reservados.</Copyright>
+	<Version>0.1.0</Version>
+	<PackageProjectUrl>https://www.moropo.cu/</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAPRESSC.Middleware.Identity.Persistence" Version="2.2.6.7" />
+    <PackageReference Include="GuamaFramework.Identity.Persistence" Version="6.0.0.12" />
   </ItemGroup>
 
 </Project>

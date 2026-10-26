@@ -2,7 +2,7 @@ using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class SceneryKindDisplayViewModel: SAPRESSC.Core.Persistence.Models.IEntityDisplayModel<SceneryKind, System.Guid>
+    public class SceneryKindDisplayViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityDisplayModel<SceneryKind, System.Guid>
     {
         public System.Guid Id { get; set; }
 

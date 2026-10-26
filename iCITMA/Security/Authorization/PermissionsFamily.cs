@@ -23,5 +23,17 @@
         internal const string ProgramCategoryManagement = "program-category-management";
 
         internal const string KeyWordManagement = "key-word-management";
+
+        internal const string ODSIndicatorManagement = "ods-indicator-management";
+
+        internal const string InstitusionManagement = "institusion-management";
+
+        internal const string PersonManagement = "person-management";
+
+        internal const string ProgramManagement = "program-management";
+
+        internal const string DocumentManagement = "document-management";
+
+        internal const string ProjectManagement = "project-management";
     }
 }

@@ -1,0 +1,147 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactManagerViewModel
+
+@{
+    ViewData["Title"] = "Editar Proyecto (Impactos)";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Administración de Proyectos",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h4>Editar Proyecto</h4>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("edit", @Model.Project.Id)">Generales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProgramExpectResults", Model.Project.Id)">Prioridades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionParticipation", Model.Project.Id)">Participantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectKeyWorlds", Model.Project.Id)">Palabras Claves</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectInstitutionClient", Model.Project.Id)">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("SpecificObjectives", Model.Project.Id)">Objetivos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Results", Model.Project.Id)">Resultados</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Impactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ProjectOutputKinds", Model.Project.Id)">Salidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("EditProjectParticipan", Model.Project.Id)">Investigadores </a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <div class="page-header">
+                    <h4>Agregar<a class="btn btn-primary btn-sm float-right" href="#" data-toggle="modal" data-target="#add-expectresult"><span class="mdi mdi-plus"></span> Agregar</a></h4>
+                </div>
+
+                @await Html.PartialAsync("AddProjectImpactPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactInputViewModel
+                {
+                ProjectId = Model.Project.Id,
+                ImpactIndicatorSelected = ViewBag.ImpactIndicator
+                })
+                <table class="table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>@GlobalViewLocalizationHelper.Localize("Indicador de Impacto")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Resultado Esperado")</th>
+                            <th>@GlobalViewLocalizationHelper.Localize("Indicador ODS")</th>
+                            <th style="width: 1px; white-space: nowrap;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ProjectImpacts.Count() > 0)
+                        {
+                            @foreach (var item in Model.ProjectImpacts)
+                            {
+                                var modelInput = new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactInputViewModel();
+                                var modelDisplay = new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactDisplayViewModel();
+
+                                modelInput.Import(item);
+                                modelDisplay.Import(item);
+
+                                <tr>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")">@item.Indicator.Name</td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")">
+                                        @if (item.ProgramExpectResultBridges.Count() > 0)
+                                        {
+                                            @foreach (var programExpectResultBridge in item.ProgramExpectResultBridges)
+                                            {
+                                                <p>@programExpectResultBridge.Stern.Title - @programExpectResultBridge.Stern.Program.Name</p>
+                                            }
+                                        }
+                                    </td>
+                                    <td style="vertical-align: middle;" title="@GlobalViewLocalizationHelper.Localize("Title")">
+                                        @if (item.ODSIndicatorBridges.Count() > 0)
+                                        {
+                                            @foreach (var ODSIndicatorBridge in item.ODSIndicatorBridges)
+                                            {
+                                                <p>@ODSIndicatorBridge.Stern.Name</p>
+                                            }
+                                        }
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        <div class="btn-group btn-group-sm">
+                                            <a role="button" href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add-exps-projectimpact-@item.Id"><span class="mdi mdi mdi-plus"></span>Agregar Resultados</a>
+                                            <a role="button" href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add-ods-projectimpact-@item.Id"><span class="mdi mdi mdi-plus"></span>Agregar ODS</a>
+                                            <a role="button" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-projectimpact-@item.Id"><span class="mdi mdi-trash-can-outline"></span>Eliminar</a>
+                                            @await Html.PartialAsync("DeleteProjectImpactPartial", modelDisplay)
+                                            @await Html.PartialAsync("AddProjectImpactProgramExpectResultPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactProgramExpectResultInputViewModel
+                                    {
+                                    ProjectImpactId = item.Id,
+                                    NotSelectedProgramExpectResult = ViewBag.ProgramExpectResults
+                                    })
+                                            @await Html.PartialAsync("AddProjectImpactODSIndicatorPartial", new MOROPO.CITMA.CMG.iCITMA.Models.View.ProjectImpactODSIndicatorInputViewModel
+                                    {
+                                    ProjectImpactId = item.Id,
+                                    NotSelectedODS = ViewBag.ODSIndicators
+                                    })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"><p style="margin: 0 5px;" class="text-muted">Sin elementos que mostrar</p></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

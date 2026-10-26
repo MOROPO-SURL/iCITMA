@@ -1,13 +1,13 @@
 using MOROPO.CITMA.CMG.iCITMA.Persistence.Entities;
-using System;
 
 namespace MOROPO.CITMA.CMG.iCITMA.Models.View
 {
-    public class SceneryKindInputViewModel: SAPRESSC.Core.Persistence.Models.IEntityInputModel<SceneryKind, System.Guid>
+    public class SceneryKindInputViewModel: Framework.Guama.Core.Persistence.Presentation.Models.Contract.IEntityInputModel<SceneryKind, System.Guid>
     {
         public System.Guid Id { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Name")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "RequiredValidationErrorMessage")]
         public string Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.Display(Name = "Description")]

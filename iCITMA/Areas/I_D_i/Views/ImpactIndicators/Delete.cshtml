@@ -1,0 +1,50 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.ImpactIndicatorDisplayViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Indicadores de Impacto";
+
+    ViewData[BreadcrumbViewModel.BREADCRUMBS_MAP_KEY] = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel
+        {
+            Caption = "<span class=\"mdi mdi-desktop-mac-dashboard\" style=\"margin-right: 4px;\"></span>" + GlobalViewLocalizationHelper.Localize("Dashboard", ViewLocalizer),
+            Url = "/"
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = "Gestionar Indicadores de Impacto",
+            Url = Url.Action("index")
+        },
+        new BreadcrumbViewModel
+        {
+            Caption = ViewData["Title"].ToString()
+        }
+    };
+
+    Layout = "_BackendLayout";
+}
+
+<h3 class="mb-3 mt-4">Está seguro que desea eliminar el indicador de impacto detallado a continuación?</h3>
+<dl>
+    <dt>Nombre</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+    <dt>Descripción</dt>
+    @if (Model.Description != null)
+    {
+        <dd class="mb-0 text-wrap">@Model.Description</dd>
+    }
+    else
+    {
+        <dd class="mb-0 text-muted">---</dd>
+    }
+</dl>
+<hr />
+
+@using (Html.BeginForm("delete", "impactindicators", new { Area = "i_d_i", key = string.Empty }, FormMethod.Post, true, null))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-light" href="@Url.Action("index")">Cancelar</a>
+    </div>
+}

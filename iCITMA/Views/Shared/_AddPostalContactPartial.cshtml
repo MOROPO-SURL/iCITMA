@@ -1,0 +1,70 @@
+﻿@model MOROPO.CITMA.CMG.iCITMA.Models.View.PostalContactInputViewModel
+
+<div class="modal fade" id="add-postaladdress" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-postaladdress-title">Agregar Dirección Postal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="addpostalcontact" asp-antiforgery="true" method="post">
+                <div class="modal-body">
+                    @Html.HiddenFor(model => model.ContextId)
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.Label, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Label, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Label, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">                        
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.StateId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.StateId, Model.SelectStates, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.StateId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            @Html.LabelFor(model => model.MunicipalityId, new { @class = "control-label" })
+                            @Html.DropDownListFor(model => model.MunicipalityId, Model.SelectMunicipalities, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.MunicipalityId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Address, 4, 0, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.ZipCode, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.ZipCode, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.ZipCode, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.Latitude, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Latitude, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Latitude, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(model => model.Longitude, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Longitude, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Longitude, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <p class="mb-1 text-secondary text-md-center"><span class="mdi mdi-information-outline"></span> Utilice coma (,) para las posiciones decimales</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

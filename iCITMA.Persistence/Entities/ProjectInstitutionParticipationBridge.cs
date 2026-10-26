@@ -1,13 +1,13 @@
 ﻿namespace MOROPO.CITMA.CMG.iCITMA.Persistence.Entities
 {
-    public class ProjectInstitutionParticipationBridge
+    public class ProjectInstitutionParticipationBridge : Framework.Guama.Core.Persistence.Entities.Contract.IBridge<Project, System.Guid, Institution, System.Guid>
     {
-        public System.Guid ProjectId { get; set; }
+        public System.Guid ProwId { get; set; }
 
-        public System.Guid InstitutionId { get; set; }
+        public System.Guid SternId { get; set; }
 
-        public Project Project { get; set; }
+        public Project Prow { get; set; }
 
-        public Institution Institution { get; set; }
+        public Institution Stern { get; set; }
     }
 }
